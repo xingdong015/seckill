@@ -15,7 +15,7 @@ import static com.baomidou.mybatisplus.annotation.FieldFill.UPDATE;
  * @date 2021/9/19
  */
 @SuppressWarnings("all")
-@TableName("user")
+@TableName("t_user")
 public class User {
     @Id
     @TableId(value = "user_id", type = IdType.AUTO)
@@ -32,5 +32,11 @@ public class User {
 
     @TableField(value = "ip_address", jdbcType = JdbcType.VARCHAR)
     private String ipAddress;
+
+    @TableField(value = "create_time", fill = INSERT, jdbcType = JdbcType.DATE)
+    private Long createTime;
+
+    @TableField(value = "update_time", fill = INSERT, jdbcType = JdbcType.DATE)
+    private Long updateTime;
 
 }
