@@ -2,7 +2,6 @@ package com.system.design.seckill.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.system.design.seckill.bean.SeckillPo;
 import com.system.design.seckill.bean.SeckillResultStatus;
 import com.system.design.seckill.service.SeckillBuzService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author chengzhengzheng
@@ -28,17 +28,17 @@ public class SeckillController {
     private ObjectMapper      mapper;
 
     @GetMapping(value = "/list/all")
-    public List<SeckillPo> getSeckillList() throws JsonProcessingException {
+    public List<Map<String, Object>> getSeckillList() throws JsonProcessingException {
         return seckillBuzService.getSeckillList();
     }
 
     @GetMapping(value = "/list")
-    public SeckillPo getSeckillById(@RequestParam String id) throws JsonProcessingException {
+    public Map<String, Object> getSeckillById(@RequestParam String id) throws JsonProcessingException {
         return seckillBuzService.getById(id);
     }
 
     @GetMapping(value = "/execute")
     public SeckillResultStatus executeSeckill(@RequestParam long seckillId, @RequestParam long phone) {
-        return seckillBuzService.executeSeckill(seckillId, phone);
+        return seckillBuzService.executeKill(seckillId, phone);
     }
 }

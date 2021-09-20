@@ -19,7 +19,7 @@ public interface RedisKeysWrapper {
      *
      * @return
      */
-    public static String allSeckillIdZset() {
+    static String allSeckillIdZset() {
         return "seck:all:list";
     }
 
@@ -31,12 +31,7 @@ public interface RedisKeysWrapper {
      * @param id
      * @return
      */
-    public static String getSeckillHash(String id) {
+    static String getSeckillHash(String id) {
         return String.format("seck:%s:info", id);
-    }
-
-
-    public static String getSeckillInfoLock(long seckillId) {
-        return null;
     }
 }

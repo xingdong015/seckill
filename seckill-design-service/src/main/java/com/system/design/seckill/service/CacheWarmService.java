@@ -41,11 +41,6 @@ public class CacheWarmService {
                 for (Seckill seckill : infoList) {
                     tuples.add(ZSetOperations.TypedTuple.of(String.valueOf(seckill.getSeckillId()), (double) seckill.getStartTime()));
                     final Map<String, Object> values = new HashMap<>();
-//                    values.put(RedisKeysWrapper.STOCK_COUNT, String.valueOf(seckill.getCount()));
-//                    values.put(RedisKeysWrapper.STOCK_SALE, String.valueOf(seckill.getLockCount()));
-//                    values.put(RedisKeysConstant.STOCK_VERSION, String.valueOf(seckill.getVersion()));
-//                    values.put(RedisKeysWrapper.STOCK_ID, String.valueOf(seckill.getSeckillId()));
-//                    values.put(RedisKeysWrapper.STOCK_NAME, String.valueOf(seckill.getSeckillName()));
                     redisTemplate.opsForHash().putAll(RedisKeysWrapper.getSeckillHash(String.valueOf(seckill.getSeckillId())), values);
                 }
                 redisTemplate.opsForZSet().add(RedisKeysWrapper.allSeckillIdZset(), tuples);

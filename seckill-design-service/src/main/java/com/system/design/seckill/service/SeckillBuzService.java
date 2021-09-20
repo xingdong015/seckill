@@ -3,12 +3,12 @@ package com.system.design.seckill.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.system.design.seckill.bean.Exposer;
 import com.system.design.seckill.bean.SeckillResultStatus;
-import com.system.design.seckill.bean.SeckillPo;
 import com.system.design.seckill.exception.RepeatKillException;
 import com.system.design.seckill.exception.SeckillCloseException;
 import com.system.design.seckill.exception.SeckillException;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author chengzhengzheng
@@ -21,7 +21,7 @@ public interface SeckillBuzService {
      * 查询全部的秒杀记录
      * @return
      */
-    List<SeckillPo> getSeckillList();
+    List<Map<String, Object>> getSeckillList();
 
     /**
      * 查询单个秒杀记录
@@ -29,7 +29,7 @@ public interface SeckillBuzService {
      * @param seckillId
      * @return
      */
-    SeckillPo getById(String seckillId) throws JsonProcessingException;
+    Map<String, Object> getById(String seckillId) throws JsonProcessingException;
 
 
     /**
@@ -37,7 +37,7 @@ public interface SeckillBuzService {
      *
      * @param seckillId
      */
-    Exposer exportSeckillUrl(long seckillId);
+    Exposer exportKillUrl(long seckillId);
 
 
     /**
@@ -47,5 +47,5 @@ public interface SeckillBuzService {
      * @param userPhone
      * @return
      */
-    SeckillResultStatus executeSeckill(long seckillId, long userPhone) throws SeckillException, RepeatKillException, SeckillCloseException;
+    SeckillResultStatus executeKill(long seckillId, long userPhone) ;
 }

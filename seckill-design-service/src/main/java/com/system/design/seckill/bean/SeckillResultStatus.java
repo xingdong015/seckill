@@ -25,4 +25,8 @@ public class SeckillResultStatus implements Serializable {
     public static SeckillResultStatus buildFailureExecute(long seckillId) {
         return new SeckillResultStatus(seckillId, -1L, SeckillStatEnum.END);
     }
+
+    public static SeckillResultStatus buildErrorExecute(long seckillId) {
+        return new SeckillResultStatus(seckillId, -1L, SeckillStatEnum.INNER_ERROR);
+    }
 }
