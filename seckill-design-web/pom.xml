@@ -35,10 +35,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
-        <dependency>
-            <groupId>net.sf.dozer</groupId>
-            <artifactId>dozer</artifactId>
-        </dependency>
         <!--  mybatis-plus通过bean建设表     -->
         <dependency>
             <groupId>com.gitee.sunchenbin.mybatis.actable</groupId>
