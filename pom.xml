@@ -17,6 +17,12 @@
     <modules>
         <module>seckill-design-service</module>
         <module>seckill-design-web</module>
+        <module>seckill-service</module>
+        <module>order-service</module>
+        <module>payment-service</module>
+        <module>stock-service</module>
+        <module>product-service</module>
+        <module>common</module>
     </modules>
 
     <properties>
