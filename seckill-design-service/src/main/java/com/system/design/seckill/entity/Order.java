@@ -21,7 +21,7 @@ public class Order {
     @TableId(value = "order_id", type = IdType.AUTO)
     private Long    orderId;
 
-    @TableField(value = "ctime", fill = INSERT, jdbcType = JdbcType.DATE)
+    @TableField(value = "create_time", fill = INSERT, jdbcType = JdbcType.DATE)
     private Long createTime;
 
     @TableField(value = "product_id", jdbcType = JdbcType.BIGINT)
