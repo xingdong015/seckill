@@ -2,8 +2,8 @@ package com.system.design.seckill.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.system.design.seckill.bean.Exposer;
+import com.system.design.seckill.bean.SeckillResultStatus;
 import com.system.design.seckill.bean.SeckillPo;
-import com.system.design.seckill.bean.SeckillExecution;
 import com.system.design.seckill.exception.RepeatKillException;
 import com.system.design.seckill.exception.SeckillCloseException;
 import com.system.design.seckill.exception.SeckillException;
@@ -47,5 +47,5 @@ public interface SeckillBuzService {
      * @param userPhone
      * @return
      */
-    SeckillExecution executeSeckill(long seckillId, long userPhone) throws SeckillException, RepeatKillException, SeckillCloseException;
+    SeckillResultStatus executeSeckill(long seckillId, long userPhone) throws SeckillException, RepeatKillException, SeckillCloseException;
 }

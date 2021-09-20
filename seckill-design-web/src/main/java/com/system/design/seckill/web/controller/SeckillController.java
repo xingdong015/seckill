@@ -2,8 +2,8 @@ package com.system.design.seckill.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.system.design.seckill.bean.SeckillExecution;
 import com.system.design.seckill.bean.SeckillPo;
+import com.system.design.seckill.bean.SeckillResultStatus;
 import com.system.design.seckill.service.SeckillBuzService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +38,7 @@ public class SeckillController {
     }
 
     @GetMapping(value = "/execute")
-    public SeckillExecution executeSeckill(@RequestParam long seckillId, @RequestParam long phone) {
+    public SeckillResultStatus executeSeckill(@RequestParam long seckillId, @RequestParam long phone) {
         return seckillBuzService.executeSeckill(seckillId, phone);
     }
 }

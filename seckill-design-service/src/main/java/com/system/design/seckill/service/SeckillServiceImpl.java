@@ -5,22 +5,23 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.system.design.seckill.bean.Exposer;
-import com.system.design.seckill.bean.SeckillExecution;
 import com.system.design.seckill.bean.SeckillPo;
-import com.system.design.seckill.bean.SeckillStatEnum;
+import com.system.design.seckill.bean.SeckillResultStatus;
 import com.system.design.seckill.entity.Seckill;
 import com.system.design.seckill.exception.RepeatKillException;
 import com.system.design.seckill.exception.SeckillCloseException;
 import com.system.design.seckill.exception.SeckillException;
 import com.system.design.seckill.mapper.SeckillInfoMapper;
-import com.system.design.seckill.utils.RedisKeysConstant;
+import com.system.design.seckill.utils.RedisKeysWrapper;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -51,12 +52,12 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
     @Override
     public List<SeckillPo> getSeckillList() {
         //获取所有的秒杀id
-        final Set<String> members = redisTemplate.opsForZSet().reverseRange(RedisKeysConstant.allSeckillInfo(), 0, -1);
+        final Set<String> members = redisTemplate.opsForZSet().reverseRange(RedisKeysWrapper.allSeckillIdZset(), 0, -1);
         final List<Object> list = redisTemplate.executePipelined(new RedisCallback<String>() {
             @Override
             public String doInRedis(RedisConnection connection) throws DataAccessException {
                 for (String member : members) {
-                    String key = RedisKeysConstant.getSeckillInfo(member);
+                    String key = RedisKeysWrapper.getSeckillHash(member);
                     connection.hGetAll(key.getBytes(StandardCharsets.UTF_8));
                 }
                 return null;
@@ -66,11 +67,9 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
         list.forEach(map -> {
             Map<String, String> valMap    = (Map<String, String>) map;
             SeckillPo           seckillPo = new SeckillPo();
-            seckillPo.setId(Long.parseLong(valMap.get(RedisKeysConstant.STOCK_ID)));
-            seckillPo.setCount(Long.parseLong(valMap.get(RedisKeysConstant.STOCK_COUNT)));
-            seckillPo.setVersion(valMap.get(RedisKeysConstant.STOCK_VERSION));
-            seckillPo.setSale(Long.parseLong(valMap.get(RedisKeysConstant.STOCK_SALE)));
-            seckillPo.setName(valMap.get(RedisKeysConstant.STOCK_NAME));
+            seckillPo.setId(Long.parseLong(valMap.get(RedisKeysWrapper.StockInfo.STOCK_ID)));
+            seckillPo.setCount(Long.parseLong(valMap.get(RedisKeysWrapper.StockInfo.STOCK_COUNT)));
+            seckillPo.setName(valMap.get(RedisKeysWrapper.StockInfo.STOCK_NAME));
             seckillPos.add(seckillPo);
         });
         return seckillPos;
@@ -80,12 +79,10 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
     public SeckillPo getById(String seckillId) throws JsonProcessingException {
         try {
             while (true) {
-                List<String> stockInfo = redisTemplate.opsForHash().multiGet(RedisKeysConstant.getSeckillInfo(seckillId),
+                List<String> stockInfo = redisTemplate.opsForHash().multiGet(RedisKeysWrapper.getSeckillHash(seckillId),
                         Lists.newArrayList(
-                                RedisKeysConstant.STOCK_COUNT,
-                                RedisKeysConstant.STOCK_SALE,
-                                RedisKeysConstant.STOCK_VERSION,
-                                RedisKeysConstant.STOCK_NAME));
+                                RedisKeysWrapper.StockInfo.STOCK_COUNT,
+                                RedisKeysWrapper.StockInfo.STOCK_NAME));
                 stockInfo = stockInfo.stream().filter(Objects::nonNull).collect(Collectors.toList());
                 if (CollectionUtils.isNotEmpty(stockInfo)) {
                     SeckillPo seckillPo = new SeckillPo();
@@ -100,17 +97,14 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
                 if (getLock) {
                     Seckill             seckill = seckillInfoMapper.selectById(seckillId);
                     Map<String, String> map     = new HashMap<>();
-                    map.put(RedisKeysConstant.STOCK_COUNT, String.valueOf(seckill.getCount()));
-                    map.put(RedisKeysConstant.STOCK_SALE, String.valueOf(seckill.getLockCount()));
-                    map.put(RedisKeysConstant.STOCK_ID, String.valueOf(seckill.getSeckillId()));
-                    map.put(RedisKeysConstant.STOCK_NAME, String.valueOf(seckill.getSeckillName()));
-//                    map.put(RedisKeysConstant.STOCK_VERSION, String.valueOf(seckill.getVersion()));
-                    redisTemplate.opsForHash().putAll(RedisKeysConstant.getSeckillInfo(seckillId), map);
+                    map.put(RedisKeysWrapper.StockInfo.STOCK_COUNT, String.valueOf(seckill.getCount()));
+                    map.put(RedisKeysWrapper.StockInfo.STOCK_ID, String.valueOf(seckill.getSeckillId()));
+                    map.put(RedisKeysWrapper.StockInfo.STOCK_NAME, String.valueOf(seckill.getSeckillName()));
+                    redisTemplate.opsForHash().putAll(RedisKeysWrapper.getSeckillHash(seckillId), map);
                     SeckillPo seckillPo = new SeckillPo();
                     seckillPo.setId(Long.parseLong(seckillId));
                     seckillPo.setCount(seckill.getCount());
                     seckillPo.setSale(seckill.getLockCount());
-//                    seckillPo.setVersion(String.valueOf(seckill.getVersion()));
                     return seckillPo;
                 }
                 try {
@@ -153,43 +147,19 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
      * @throws SeckillCloseException
      */
     @Override
-    public SeckillExecution executeSeckill(long seckillId, long userPhone) throws SeckillException,
+    public SeckillResultStatus executeSeckill(long seckillId, long userPhone) throws SeckillException,
             RepeatKillException, SeckillCloseException {
-        while (true) {
-            //1. 检查库存是否足够 redis中检查库存是否足够、不够直接拒绝
-
-            final List list = redisTemplate.opsForHash().multiGet(RedisKeysConstant.getSeckillInfo(String.valueOf(seckillId)),
-                    Lists.newArrayList(RedisKeysConstant.STOCK_COUNT, RedisKeysConstant.STOCK_SALE, RedisKeysConstant.STOCK_VERSION));
-            if (CollectionUtils.isNotEmpty(list)) {
-                long stockCount   = NumberUtils.toLong(String.valueOf(list.get(0)), 0);
-                long stockSale    = NumberUtils.toLong(String.valueOf(list.get(1)), 0);
-                long stockVersion = NumberUtils.toLong(String.valueOf(list.get(2)), -1);
-                if (stockCount <= stockSale) {
-                    return new SeckillExecution(seckillId, SeckillStatEnum.END);
-                }
-                boolean updateSuccess = seckillInfoMapper.update(seckillId, stockVersion);
-                if (updateSuccess) {
-                    //3. 扣减库存成功、更新redis中的库存信息、以及 version信息  -----》这里实际上就是先更新数据库和先更新缓存的问题。  https://juejin
-                    //.cn/post/6844903604998914055#heading-11
-
-                    //加入执行完数据库的操作之后、系统死掉、那么后续都没有请求了，设置一个过期时间
-                    Map<String, String> infos = new HashMap<>();
-                    infos.put(RedisKeysConstant.STOCK_SALE, String.valueOf(stockSale + 1));
-                    infos.put(RedisKeysConstant.STOCK_VERSION, String.valueOf(stockVersion + 1));
-                    redisTemplate.opsForHash().putAll(RedisKeysConstant.getSeckillInfo(String.valueOf(seckillId)), infos);
-                    //5. 生成订单信息
-                    createOrderInfo(seckillId);
-                    return new SeckillExecution(seckillId, SeckillStatEnum.SUCCESS);
-                } else {
-                    //4. 扣减库存失败、重试
-                    try {
-                        Thread.sleep(50);
-                    } catch (InterruptedException ignore) {
-                    }
-                }
-            }
-
+        DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>();
+        redisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("stock.lua")));
+        redisScript.setResultType(Long.class);
+        //1. redis扣减库存
+        Long result = (Long) redisTemplate.execute(redisScript, Lists.newArrayList(RedisKeysWrapper.getSeckillHash(String.valueOf(seckillId)), "count"));
+        if (result < 0) {
+            //3. 扣减失败、返回已经抢空给端上
+            return SeckillResultStatus.buildFailureExecute(seckillId);
         }
+        //2. 扣减成功、发送mq消息
+        return SeckillResultStatus.buildSuccessExecute(seckillId,result);
     }
 
     private void createOrderInfo(Long seckillPo) {
