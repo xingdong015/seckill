@@ -35,6 +35,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.dianping.cat</groupId>
+            <artifactId>cat-client</artifactId>
+        </dependency>
         <!--  mybatis-plus通过bean建设表     -->
         <dependency>
             <groupId>com.gitee.sunchenbin.mybatis.actable</groupId>
