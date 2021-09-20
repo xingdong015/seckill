@@ -18,7 +18,7 @@ public class BeanConfig {
         return new ObjectMapper();
     }
 
-    @Bean
+    @Bean("doZerBeanMapper")
     public Mapper doZerBeanMapper() {
         return new DozerBeanMapper();
     }

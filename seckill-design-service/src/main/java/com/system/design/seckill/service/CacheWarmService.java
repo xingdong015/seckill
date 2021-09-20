@@ -5,6 +5,8 @@ import com.system.design.seckill.mapper.SeckillInfoMapper;
 import com.system.design.seckill.utils.JsonUtils;
 import com.system.design.seckill.utils.RedisKeysWrapper;
 import org.apache.commons.collections4.CollectionUtils;
+import org.dozer.Mapper;
+import org.dozer.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -25,6 +28,8 @@ public class CacheWarmService {
     private SeckillInfoMapper seckillInfoMapper;
     @Autowired
     private RedisTemplate     redisTemplate;
+    @Autowired
+    private Mapper doZerBeanMapper;
 
     @PostConstruct
     public void init() {
@@ -42,7 +47,7 @@ public class CacheWarmService {
                     tuples.add(ZSetOperations.TypedTuple.of(String.valueOf(seckill.getSeckillId()), (double) seckill.getStartTime()));
                     String key = RedisKeysWrapper.getSeckillHash(String.valueOf(seckill.getSeckillId()));
                     redisTemplate.delete(key);
-                    redisTemplate.opsForHash().putAll(key, JsonUtils.objectToMap(seckill));
+                    redisTemplate.opsForHash().putAll(key, doZerBeanMapper.map(seckill, Map.class));
                 }
                 redisTemplate.opsForZSet().add(RedisKeysWrapper.allSeckillIdZset(), tuples);
             }
