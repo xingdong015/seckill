@@ -15,7 +15,7 @@ import java.util.Map;
  * @date 2021/9/19
  */
 @SuppressWarnings("all")
-public interface SeckillBuzService {
+public interface KillBuzService {
 
     /**
      * 查询全部的秒杀记录

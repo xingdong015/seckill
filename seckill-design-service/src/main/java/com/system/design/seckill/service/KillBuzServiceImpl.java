@@ -1,14 +1,10 @@
 package com.system.design.seckill.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.system.design.seckill.bean.Exposer;
 import com.system.design.seckill.bean.SeckillResultStatus;
 import com.system.design.seckill.entity.Seckill;
-import com.system.design.seckill.exception.RepeatKillException;
-import com.system.design.seckill.exception.SeckillCloseException;
-import com.system.design.seckill.exception.SeckillException;
 import com.system.design.seckill.mapper.SeckillInfoMapper;
 import com.system.design.seckill.utils.RedisKeysWrapper;
 import lombok.extern.slf4j.Slf4j;
@@ -33,15 +29,9 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class SeckillServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> implements SeckillBuzService {
-
+public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> implements KillBuzService {
     @Autowired
     private RedisTemplate     redisTemplate;
-    @Autowired
-    private ObjectMapper      mapper;
-    @Autowired
-    private SeckillInfoMapper seckillInfoMapper;
-
 
     @Override
     public List<Map<String, Object>> getSeckillList() {
@@ -80,9 +70,6 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
      * @param killId
      * @param userPhone
      * @return
-     * @throws SeckillException
-     * @throws RepeatKillException
-     * @throws SeckillCloseException
      */
     @Override
     public SeckillResultStatus executeKill(long killId, long userPhone)  {

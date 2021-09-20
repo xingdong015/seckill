@@ -2,6 +2,7 @@ package com.system.design.seckill.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -10,6 +11,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.system.design.seckill.entity.Seckill;
 
 public class JsonUtils {
 
@@ -88,6 +90,19 @@ public class JsonUtils {
         try {
             return MAPPER.readValue(jsonData, javaType);
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    public static Map<String,Object> objectToMap(Object data){
+        String s = null;
+        try {
+            s = MAPPER.writeValueAsString(data);
+            Map<String,Object> map = MAPPER.readValue(s, Map.class);
+            return map;
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
         return null;
