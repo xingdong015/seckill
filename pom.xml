@@ -27,91 +27,110 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <spring-boot-starter.version>2.5.4</spring-boot-starter.version>
+        <mysql-connector-java.version>8.0.26</mysql-connector-java.version>
+        <druid.version>1.2.6</druid.version>
+        <mybatis-plus-boot-starter.version>3.4.3.3</mybatis-plus-boot-starter.version>
+        <lombok.version>1.18.20</lombok.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <guava.version>30.1.1-jre</guava.version>
+        <tomcat-jni.version>8.0.8</tomcat-jni.version>
+        <commons-pool2.version>2.6.2</commons-pool2.version>
+        <swagger-spring-boot-starter.version>1.9.1.RELEASE</swagger-spring-boot-starter.version>
+        <commons-collections4.version>4.4</commons-collections4.version>
+        <dubbo.version>3.0.2</dubbo.version>
     </properties>
+    
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter</artifactId>
-                <version>2.5.4</version>
+                <version>${spring-boot-starter.version}</version>
             </dependency>
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
-                <version>8.0.26</version>
+                <version>${mysql-connector-java.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-jdbc</artifactId>
-                <version>2.5.4</version>
+                <version>${spring-boot-starter.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid</artifactId>
-                <version>1.2.6</version>
+                <version>${druid.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>3.4.3.3</version>
+                <version>${mybatis-plus-boot-starter.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-data-redis</artifactId>
-                <version>2.5.4</version>
+                <version>${spring-boot-starter.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
-                <version>2.5.4</version>
+                <version>${spring-boot-starter.version}</version>
             </dependency>
             <!--引入thymeleaf依赖-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-thymeleaf</artifactId>
-                <version>2.5.4</version>
+                <version>${spring-boot-starter.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.18.20</version>
+                <version>${lombok.version}</version>
                 <optional>true</optional>
             </dependency>
             <!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 &ndash;&gt;-->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>3.12.0</version>
+                <version>${commons-lang3.version}</version>
             </dependency>
             <!--        &lt;!&ndash; https://mvnrepository.com/artifact/com.google.guava/guava &ndash;&gt;-->
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>30.1.1-jre</version>
+                <version>${guava.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.tomcat</groupId>
                 <artifactId>tomcat-jni</artifactId>
-                <version>8.0.8</version>
+                <version>${tomcat-jni.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-pool2</artifactId>
-                <version>2.6.2</version>
+                <version>${commons-pool2.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.spring4all</groupId>
                 <artifactId>swagger-spring-boot-starter</artifactId>
-                <version>1.9.1.RELEASE</version>
+                <version>${swagger-spring-boot-starter.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.system.design.seckill</groupId>
                 <artifactId>seckill-design-service</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
+            </dependency>
+    
+            <dependency>
+                <groupId>com.system.design.seckill</groupId>
+                <artifactId>common</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
 
@@ -120,7 +139,13 @@
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-collections4</artifactId>
-                <version>4.4</version>
+                <version>${commons-collections4.version}</version>
+            </dependency>
+    
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo</artifactId>
+                <version>${dubbo.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
