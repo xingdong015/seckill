@@ -1,6 +1,6 @@
 package com.system.design.seckill.service;
 
-import com.system.design.seckill.entity.SeckillInfo;
+import com.system.design.seckill.entity.Seckill;
 import com.system.design.seckill.mapper.SeckillInfoMapper;
 import com.system.design.seckill.utils.RedisKeysConstant;
 import org.apache.commons.collections4.CollectionUtils;
@@ -21,37 +21,35 @@ import java.util.Set;
  * @date 2021/9/20
  */
 @Service
-public class InitService {
-
+public class CacheWarmService {
     @Autowired
     private SeckillInfoMapper seckillInfoMapper;
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate     redisTemplate;
+
     @PostConstruct
     public void init() {
-//        doInit();
+        doInit();
     }
 
     private void doInit() {
         Set members = redisTemplate.opsForZSet().range(RedisKeysConstant.allSeckillInfo(), 0, -1);
         if (CollectionUtils.isEmpty(members)) {
-            final List<SeckillInfo> infoList = seckillInfoMapper.selctAll();
+            final List<Seckill> infoList = seckillInfoMapper.selctAll();
             if (CollectionUtils.isNotEmpty(infoList)) {
                 Set<ZSetOperations.TypedTuple<String>> tuples = new HashSet<>();
-                for (SeckillInfo seckillInfo : infoList) {
-                    tuples.add(ZSetOperations.TypedTuple.of(String.valueOf(seckillInfo.getSeckillId()), (double) seckillInfo.getCtime()));
+                for (Seckill seckill : infoList) {
+                    tuples.add(ZSetOperations.TypedTuple.of(String.valueOf(seckill.getSeckillId()), (double) seckill.getStartTime()));
                     final Map<String, Object> values = new HashMap<>();
-                    values.put(RedisKeysConstant.STOCK_COUNT, String.valueOf(seckillInfo.getCount()));
-                    values.put(RedisKeysConstant.STOCK_SALE, String.valueOf(seckillInfo.getLockCount()));
-                    values.put(RedisKeysConstant.STOCK_VERSION, String.valueOf(seckillInfo.getVersion()));
-                    values.put(RedisKeysConstant.STOCK_ID, String.valueOf(seckillInfo.getSeckillId()));
-                    values.put(RedisKeysConstant.STOCK_NAME, String.valueOf(seckillInfo.getSeckillName()));
-                    redisTemplate.opsForHash().putAll(RedisKeysConstant.getSeckillInfo(String.valueOf(seckillInfo.getSeckillId())), values);
+                    values.put(RedisKeysConstant.STOCK_COUNT, String.valueOf(seckill.getCount()));
+                    values.put(RedisKeysConstant.STOCK_SALE, String.valueOf(seckill.getLockCount()));
+//                    values.put(RedisKeysConstant.STOCK_VERSION, String.valueOf(seckill.getVersion()));
+                    values.put(RedisKeysConstant.STOCK_ID, String.valueOf(seckill.getSeckillId()));
+                    values.put(RedisKeysConstant.STOCK_NAME, String.valueOf(seckill.getSeckillName()));
+                    redisTemplate.opsForHash().putAll(RedisKeysConstant.getSeckillInfo(String.valueOf(seckill.getSeckillId())), values);
                 }
                 redisTemplate.opsForZSet().add(RedisKeysConstant.allSeckillInfo(), tuples);
             }
         }
-
     }
-
 }

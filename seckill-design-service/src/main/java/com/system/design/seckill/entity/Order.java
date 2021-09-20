@@ -14,35 +14,22 @@ import static com.baomidou.mybatisplus.annotation.FieldFill.UPDATE;
  * @author chengzhengzheng
  * @date 2021/9/19
  */
-@TableName("seckill_order_info")
+@TableName("order")
 @SuppressWarnings("all")
-public class SeckillOrderInfo {
-    /**
-     * 订单id
-     */
+public class Order {
     @Id
     @TableId(value = "order_id", type = IdType.AUTO)
     private Long    orderId;
 
     @TableField(value = "ctime", fill = INSERT, jdbcType = JdbcType.DATE)
-    private Long ctime;
+    private Long createTime;
 
-    @TableField(value = "utime", fill = UPDATE, jdbcType = JdbcType.DATE)
-    private Long utime;
-
-    /**
-     * 商品id
-     */
     @TableField(value = "product_id", jdbcType = JdbcType.BIGINT)
     private String  productId;
-    /**
-     * 秒杀id
-     */
+
     @TableField(value = "seckill_id", jdbcType = JdbcType.BIGINT)
     private Long    seckillId;
-    /**
-     * 用户id
-     */
+
     @TableField(value = "user_id",  jdbcType = JdbcType.BIGINT)
     private String  userId;
     /**

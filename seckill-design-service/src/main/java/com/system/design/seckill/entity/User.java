@@ -14,18 +14,12 @@ import static com.baomidou.mybatisplus.annotation.FieldFill.UPDATE;
  * @author chengzhengzheng
  * @date 2021/9/19
  */
+@SuppressWarnings("all")
 @TableName("user")
 public class User {
-
     @Id
     @TableId(value = "user_id", type = IdType.AUTO)
     private String userId;
-
-    @TableField(value = "ctime", fill = INSERT, jdbcType = JdbcType.DATE)
-    private Long ctime;
-
-    @TableField(value = "utime", fill = UPDATE, jdbcType = JdbcType.DATE)
-    private Long utime;
 
     @TableField(value = "phone", jdbcType = JdbcType.VARCHAR)
     private String phone;

@@ -8,7 +8,7 @@ import com.system.design.seckill.bean.Exposer;
 import com.system.design.seckill.bean.SeckillExecution;
 import com.system.design.seckill.bean.SeckillPo;
 import com.system.design.seckill.bean.SeckillStatEnum;
-import com.system.design.seckill.entity.SeckillInfo;
+import com.system.design.seckill.entity.Seckill;
 import com.system.design.seckill.exception.RepeatKillException;
 import com.system.design.seckill.exception.SeckillCloseException;
 import com.system.design.seckill.exception.SeckillException;
@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
@@ -39,7 +38,7 @@ import java.util.stream.Collectors;
  */
 @SuppressWarnings("all")
 @Service
-public class SeckillServiceImpl extends ServiceImpl<SeckillInfoMapper, SeckillInfo> implements SeckillBuzService {
+public class SeckillServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> implements SeckillBuzService {
 
     @Autowired
     private RedisTemplate     redisTemplate;
@@ -99,19 +98,19 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillInfoMapper, SeckillIn
                 }
                 boolean getLock = getLock(seckillId);
                 if (getLock) {
-                    SeckillInfo         seckillInfo = seckillInfoMapper.selectById(seckillId);
-                    Map<String, String> map         = new HashMap<>();
-                    map.put(RedisKeysConstant.STOCK_COUNT, String.valueOf(seckillInfo.getCount()));
-                    map.put(RedisKeysConstant.STOCK_SALE, String.valueOf(seckillInfo.getLockCount()));
-                    map.put(RedisKeysConstant.STOCK_ID, String.valueOf(seckillInfo.getSeckillId()));
-                    map.put(RedisKeysConstant.STOCK_NAME, String.valueOf(seckillInfo.getSeckillName()));
-                    map.put(RedisKeysConstant.STOCK_VERSION, String.valueOf(seckillInfo.getVersion()));
+                    Seckill             seckill = seckillInfoMapper.selectById(seckillId);
+                    Map<String, String> map     = new HashMap<>();
+                    map.put(RedisKeysConstant.STOCK_COUNT, String.valueOf(seckill.getCount()));
+                    map.put(RedisKeysConstant.STOCK_SALE, String.valueOf(seckill.getLockCount()));
+                    map.put(RedisKeysConstant.STOCK_ID, String.valueOf(seckill.getSeckillId()));
+                    map.put(RedisKeysConstant.STOCK_NAME, String.valueOf(seckill.getSeckillName()));
+//                    map.put(RedisKeysConstant.STOCK_VERSION, String.valueOf(seckill.getVersion()));
                     redisTemplate.opsForHash().putAll(RedisKeysConstant.getSeckillInfo(seckillId), map);
                     SeckillPo seckillPo = new SeckillPo();
                     seckillPo.setId(Long.parseLong(seckillId));
-                    seckillPo.setCount(seckillInfo.getCount());
-                    seckillPo.setSale(seckillInfo.getLockCount());
-                    seckillPo.setVersion(String.valueOf(seckillInfo.getVersion()));
+                    seckillPo.setCount(seckill.getCount());
+                    seckillPo.setSale(seckill.getLockCount());
+//                    seckillPo.setVersion(String.valueOf(seckill.getVersion()));
                     return seckillPo;
                 }
                 try {
@@ -158,6 +157,7 @@ public class SeckillServiceImpl extends ServiceImpl<SeckillInfoMapper, SeckillIn
             RepeatKillException, SeckillCloseException {
         while (true) {
             //1. 检查库存是否足够 redis中检查库存是否足够、不够直接拒绝
+
             final List list = redisTemplate.opsForHash().multiGet(RedisKeysConstant.getSeckillInfo(String.valueOf(seckillId)),
                     Lists.newArrayList(RedisKeysConstant.STOCK_COUNT, RedisKeysConstant.STOCK_SALE, RedisKeysConstant.STOCK_VERSION));
             if (CollectionUtils.isNotEmpty(list)) {
