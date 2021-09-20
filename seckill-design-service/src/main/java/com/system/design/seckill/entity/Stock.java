@@ -4,34 +4,35 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 import org.apache.ibatis.type.JdbcType;
 import org.springframework.data.annotation.Id;
 
 import static com.baomidou.mybatisplus.annotation.FieldFill.INSERT;
-import static com.baomidou.mybatisplus.annotation.FieldFill.UPDATE;
 
 /**
  * @author chengzhengzheng
- * @date 2021/9/19
+ * @date 2021/9/20
  */
 @SuppressWarnings("all")
-@TableName("t_user")
-public class User {
+@TableName("t_stock")
+@Data
+public class Stock {
     @Id
-    @TableId(value = "user_id", type = IdType.AUTO)
-    private String userId;
+    @TableId(value = "stock_id", type = IdType.AUTO)
+    private Long stockId;
 
-    @TableField(value = "phone", jdbcType = JdbcType.VARCHAR)
-    private String phone;
+    @TableField(value = "product_id", jdbcType = JdbcType.BIGINT)
+    private Long productId;
 
-    @TableField(value = "address", jdbcType = JdbcType.VARCHAR)
-    private String address;
+    @TableField(value = "seckill_id", jdbcType = JdbcType.BIGINT)
+    private Long seckillId;
 
-    @TableField(value = "email", jdbcType = JdbcType.VARCHAR)
-    private String email;
+    @TableField(value = "stock_count", jdbcType = JdbcType.BIGINT)
+    private Long stockCount;
 
-    @TableField(value = "ip_address", jdbcType = JdbcType.VARCHAR)
-    private String ipAddress;
+    @TableField(value = "stock_lock_count", jdbcType = JdbcType.BIGINT)
+    private Long lockCount;
 
     @TableField(value = "create_time", fill = INSERT, jdbcType = JdbcType.DATE)
     private Long createTime;

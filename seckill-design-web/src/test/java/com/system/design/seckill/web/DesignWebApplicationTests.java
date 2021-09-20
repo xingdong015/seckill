@@ -1,7 +1,7 @@
 package com.system.design.seckill.web;
 
-import com.system.design.seckill.entity.SeckillInfo;
-import com.system.design.seckill.service.SeckillServiceImpl;
+import com.system.design.seckill.entity.Seckill;
+import com.system.design.seckill.service.KillBuzServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,22 +10,22 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class DesignWebApplicationTests {
 
     @Autowired
-    private SeckillServiceImpl seckillService;
+    private KillBuzServiceImpl seckillService;
 
     @Test
     public void test() {
-        SeckillInfo seckillInfo = new SeckillInfo();
-        seckillInfo.setCount(9999L);
-        seckillInfo.setSeckillId(3L);
-        seckillService.updateById(seckillInfo);
+        Seckill seckill = new Seckill();
+        seckill.setCount(9999L);
+        seckill.setSeckillId(3L);
+        seckillService.updateById(seckill);
     }
 
     @Test
     public void save() {
-        SeckillInfo seckillInfo = new SeckillInfo();
-        seckillInfo.setCount(888L);
-        seckillInfo.setSeckillId(3L);
-        seckillService.save(seckillInfo);
+        Seckill seckill = new Seckill();
+        seckill.setCount(888L);
+        seckill.setSeckillId(3L);
+        seckillService.save(seckill);
     }
 
 }
