@@ -54,7 +54,6 @@ public class CacheWarmService {
         seckill.setCount(1000L);
         seckill.setUpdateTime(System.currentTimeMillis());
         seckill.setProductId(1L);
-        seckill.setSaleCount(0L);
         seckillInfoMapper.insert(seckill);
 
         Seckill seckill1 = new Seckill();
@@ -65,7 +64,6 @@ public class CacheWarmService {
         seckill1.setCount(2000L);
         seckill1.setUpdateTime(System.currentTimeMillis());
         seckill1.setProductId(2L);
-        seckill1.setSaleCount(0L);
         seckillInfoMapper.insert(seckill1);
     }
 

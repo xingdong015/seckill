@@ -43,9 +43,6 @@ public class Seckill {
     @TableField(value = "count", jdbcType = JdbcType.BIGINT)
     private Long count;
 
-    @TableField(value = "sale_count", jdbcType = JdbcType.BIGINT)
-    private Long saleCount;
-
     @TableField(value = "create_time", fill = INSERT, jdbcType = JdbcType.DATE)
     private Long createTime;
 
