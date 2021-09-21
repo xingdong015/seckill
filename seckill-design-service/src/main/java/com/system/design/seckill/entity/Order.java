@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 import org.apache.ibatis.type.JdbcType;
 import org.springframework.data.annotation.Id;
 
@@ -16,6 +17,7 @@ import static com.baomidou.mybatisplus.annotation.FieldFill.UPDATE;
  */
 @TableName("t_order")
 @SuppressWarnings("all")
+@Data
 public class Order {
     @Id
     @TableId(value = "order_id", type = IdType.AUTO)
@@ -25,7 +27,7 @@ public class Order {
     private Long createTime;
 
     @TableField(value = "product_id", jdbcType = JdbcType.BIGINT)
-    private String  productId;
+    private Long  productId;
 
     @TableField(value = "seckill_id", jdbcType = JdbcType.BIGINT)
     private Long    seckillId;
