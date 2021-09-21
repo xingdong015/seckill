@@ -2,7 +2,7 @@ package com.system.design.seckill.bean;
 
 public enum SeckillStatusEnum {
 
-    SUCCESS(1,"秒杀成功"),
+    SUCCESS(1,"进入候选队列，秒杀结果等待后续通知"),
     END(0,"秒杀结束"),
     REPEAT_KILL(-1,"重复秒杀"),
     INNER_ERROR(-2,"系统异常"),

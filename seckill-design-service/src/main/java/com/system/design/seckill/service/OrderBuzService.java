@@ -6,9 +6,10 @@ import com.system.design.seckill.dbservice.SeckillService;
 import com.system.design.seckill.entity.Order;
 import com.system.design.seckill.job.ScheduleJob;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Random;
 
 /**
  * @author chengzhengzheng
@@ -30,7 +31,7 @@ public class OrderBuzService {
      * @param killId
      * @param userId
      */
-    public Long createOrder(long killId, String userId) throws NotFoundException {
+    public Long createOrder(long killId, String userId) {
         //扣减库存、锁定库存
         Boolean success = seckillService.deductStock(killId);
         if (success) {
@@ -43,7 +44,11 @@ public class OrderBuzService {
             });
             return orderId;
         } else {
-            seckillService.incCount(killId, 1);
+            //这里失败的原因如下： 由于有可能消息投递过程中会出现部分失败的情况下，导致redis中扣减了库存而数据库却没有扣减库存
+            //所以通常来说会给redis的库存中多放1.5倍的量、这样情况下，进入到mysql的有可能会大于实际的库存量。所以mysql中需要在通过
+            //乐观锁的形式来判断库存是否小于0了
+
+            //扣减库存失败。说明已经卖光了、此时无需在给redis的库存+1，直接返回秒杀失败就行。
             return null;
         }
     }
@@ -73,7 +78,11 @@ public class OrderBuzService {
         seckillService.incCount(seckillId, 1);
     }
     private boolean doPay(Order orderInfo, long userId) {
-        System.out.println(userId + " 开始支付成功,订单id " + orderInfo.getOrderId());
-        return true;
+        if (new Random().nextInt(100) < 50) {
+            System.out.println(userId + " 支付成功,订单id " + orderInfo.getOrderId());
+            return true;
+        }
+        System.out.println(userId + " 支付失败,订单id " + orderInfo.getOrderId());
+        return false;
     }
 }
