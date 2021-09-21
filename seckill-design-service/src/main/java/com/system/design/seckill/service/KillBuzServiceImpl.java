@@ -15,6 +15,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -33,6 +34,9 @@ import java.util.stream.Collectors;
 public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> implements KillBuzService {
     @Autowired
     private RedisTemplate<String,String>     redisTemplate;
+
+    //加入一个混淆字符串(秒杀接口)的salt，为了我避免用户猜出我们的md5值，值任意给，越复杂越好
+    private final String salt = "cjy20200922czz0708";
 
     @Override
     public List<Map<String, Object>> getSeckillList() {
@@ -63,9 +67,23 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
     @Override
     public Exposer exportKillUrl(long killId) {
         final Map<String, Object> killInfoMap = getById(String.valueOf(killId));
+        //若是秒杀未开启
+        long startTime = (long) killInfoMap.get(CacheKey.StockInfo.START_TIME);
+        long endTime   = (long) killInfoMap.get(CacheKey.StockInfo.END_TIME);
+        //系统当前时间
+        long now     = System.currentTimeMillis();
+        if (startTime > now || endTime < now) {
+            return Exposer.buildNotStaredExposer(killId, startTime, endTime);
+        }
+        //秒杀开启，返回秒杀商品的id、用给接口加密的md5
+        String md5 = getMD5(killId);
+        return Exposer.buildHasStaredExpos(killId, md5, startTime, endTime);
+    }
 
-
-        return null;
+    private String getMD5(long killId) {
+        String base = killId + "/" + salt;
+        String md5 = DigestUtils.md5DigestAsHex(base.getBytes());
+        return md5;
     }
 
     /**
