@@ -56,10 +56,7 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
     public Map<String, Object> getById(String killId) {
         Map<byte[], byte[]> map     = Objects.requireNonNull(redisTemplate.getConnectionFactory()).getConnection().hGetAll(CacheKey.getSeckillHash(killId).getBytes(StandardCharsets.UTF_8));
         Map<String, Object> results = new HashMap<>();
-        assert map != null;
-        map.forEach((bytes, bytes2) -> {
-            results.put(new String(bytes), new String(bytes2));
-        });
+        map.forEach((bytes, bytes2) -> results.put(new String(bytes), new String(bytes2)));
         return results;
     }
 
@@ -108,7 +105,7 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
             //2. 扣减成功、发送mq消息 TODO
             return SeckillResultStatus.buildSuccessExecute(killId, result);
         } catch (Throwable e) {
-            log.error("SeckillServiceImpl#executeKill error:{} {}", killId, userPhone, e);
+            log.error("KillBuzServiceImpl#executeKill error:{} {}", killId, userPhone, e);
             return SeckillResultStatus.buildErrorExecute(killId);
         }
     }
