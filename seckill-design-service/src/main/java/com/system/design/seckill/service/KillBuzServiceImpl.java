@@ -12,7 +12,6 @@ import com.system.design.seckill.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.common.message.Message;
-import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisCallback;
@@ -100,13 +99,13 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
      */
     @Override
     public SeckillResultStatus executeKill(long killId, long userId, String md5) {
-//        if (md5 == null || !md5.equals(getMD5(killId))) {
-//            return SeckillResultStatus.buildIllegalExecute(killId);
-//        }
-//        if (redisTemplate.opsForSet().isMember(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userId)) {
-//            //重复秒杀、一个用户只允许秒杀一次
-//            return SeckillResultStatus.buildRepeatKillExecute(killId);
-//        }
+        if (md5 == null || !md5.equals(getMD5(killId))) {
+            return SeckillResultStatus.buildIllegalExecute(killId);
+        }
+        if (redisTemplate.opsForSet().isMember(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userId)) {
+            //重复秒杀、一个用户只允许秒杀一次
+            return SeckillResultStatus.buildRepeatKillExecute(killId);
+        }
         DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>();
         redisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("stock.lua")));
         redisScript.setResultType(Long.class);
