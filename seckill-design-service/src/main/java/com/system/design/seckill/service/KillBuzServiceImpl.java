@@ -91,7 +91,10 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
      * @return
      */
     @Override
-    public SeckillResultStatus executeKill(long killId, long userPhone) {
+    public SeckillResultStatus executeKill(long killId, long userPhone, String md5) {
+        if (md5 == null || !md5.equals(getMD5(killId))) {
+            return SeckillResultStatus.buildIllegalExecute(killId);
+        }
         if (redisTemplate.opsForSet().isMember(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userPhone)) {
             //重复秒杀、一个用户只允许秒杀一次
             return SeckillResultStatus.buildRepeatKillExecute(killId);

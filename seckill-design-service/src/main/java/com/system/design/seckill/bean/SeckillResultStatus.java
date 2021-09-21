@@ -33,4 +33,8 @@ public class SeckillResultStatus implements Serializable {
     public static SeckillResultStatus buildRepeatKillExecute(long seckillId) {
         return new SeckillResultStatus(seckillId, -1L, SeckillStatEnum.REPEAT_KILL);
     }
+
+    public static SeckillResultStatus buildIllegalExecute(long seckillId) {
+        return new SeckillResultStatus(seckillId, -1L, SeckillStatEnum.DATE_REWRITE);
+    }
 }

@@ -38,7 +38,7 @@ public class SeckillController {
     }
 
     @GetMapping(value = "/execute")
-    public SeckillResultStatus executeSeckill(@RequestParam long seckillId, @RequestParam long phone) {
-        return killBuzService.executeKill(seckillId, phone);
+    public SeckillResultStatus executeSeckill(@RequestParam long seckillId, @RequestParam long phone,@RequestParam String md5) {
+        return killBuzService.executeKill(seckillId, phone,md5);
     }
 }
