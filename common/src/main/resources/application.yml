@@ -3,12 +3,11 @@ rocketmq:
   name-server:
   access-channel: LOCAL
   producer:
-    access-key:
-    secret-key:
     retry-next-server: true
     enable-msg-trace: true
     send-message-timeout: 3000
+    group: seckill-order
+    customized-trace-topic:
   consumer:
     group:
-    access-key:
-    secret-key:
+    customized-trace-topic:

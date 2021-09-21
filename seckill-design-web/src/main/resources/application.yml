@@ -50,3 +50,15 @@ swagger:
   base-package: com.system.design.seckill.service.web.controller
   #需排除的接口路径
   exclude-path: /error/**
+
+## rocketmq
+rocketmq:
+  isEnable: true
+  name-server: localhost:9876
+  access-channel: LOCAL
+  producer:
+    retry-next-server: true
+    enable-msg-trace: true
+    send-message-timeout: 3000
+    group: SECKILL_ORDER
+    customized-trace-topic: topic_order
