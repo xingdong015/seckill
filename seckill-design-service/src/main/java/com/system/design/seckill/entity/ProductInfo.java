@@ -10,7 +10,7 @@ import static com.baomidou.mybatisplus.annotation.FieldFill.INSERT;
 import static com.baomidou.mybatisplus.annotation.FieldFill.UPDATE;
 
 @Data
-@TableName("product")
+@TableName("t_product")
 public class ProductInfo {
     @Id
     @TableId(value = "id", type = IdType.AUTO)
@@ -24,4 +24,10 @@ public class ProductInfo {
 
     @TableField(value = "price", jdbcType = JdbcType.DECIMAL)
     private BigDecimal price;
+
+    @TableField(value = "create_time", fill = INSERT, jdbcType = JdbcType.DATE)
+    private Long createTime;
+
+    @TableField(value = "update_time", fill = INSERT, jdbcType = JdbcType.DATE)
+    private Long updateTime;
 }

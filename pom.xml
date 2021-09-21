@@ -40,6 +40,9 @@
         <commons-collections4.version>4.4</commons-collections4.version>
         <dubbo.version>3.0.2</dubbo.version>
         <protobuf-java.version>3.11.0</protobuf-java.version>
+        <rocketmq-spring-boot-starter.version>2.2.1</rocketmq-spring-boot-starter.version>
+        <rocketmq-tools.version>4.8.0</rocketmq-tools.version>
+        <dozer.version>5.5.1</dozer.version>
     </properties>
     
     <dependencyManagement>
@@ -148,11 +151,23 @@
                 <artifactId>dubbo</artifactId>
                 <version>${dubbo.version}</version>
             </dependency>
-    
+
+            <!-- https://mvnrepository.com/artifact/org.apache.rocketmq/rocketmq-spring-boot-starter -->
             <dependency>
-                <groupId>com.google.protobuf</groupId>
-                <artifactId>protobuf-java</artifactId>
-                <version>${protobuf-java.version}</version>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-spring-boot-starter</artifactId>
+                <version>${rocketmq-spring-boot-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-tools</artifactId>
+                <version>${rocketmq-tools.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/net.sf.dozer/dozer -->
+            <dependency>
+                <groupId>net.sf.dozer</groupId>
+                <artifactId>dozer</artifactId>
+                <version>${dozer.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

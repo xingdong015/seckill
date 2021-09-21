@@ -18,7 +18,7 @@ import static com.baomidou.mybatisplus.annotation.FieldFill.INSERT_UPDATE;
  * @date 2021/9/19
  */
 @SuppressWarnings("all")
-@TableName("seckill")
+@TableName("t_seckill")
 @Data
 public class Seckill {
     @Id
@@ -45,5 +45,11 @@ public class Seckill {
 
     @TableField(value = "lock_count", jdbcType = JdbcType.BIGINT)
     private Long lockCount;
+
+    @TableField(value = "create_time", fill = INSERT, jdbcType = JdbcType.DATE)
+    private Long createTime;
+
+    @TableField(value = "update_time", fill = INSERT, jdbcType = JdbcType.DATE)
+    private Long updateTime;
 
 }

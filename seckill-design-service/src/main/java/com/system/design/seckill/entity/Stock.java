@@ -8,12 +8,14 @@ import lombok.Data;
 import org.apache.ibatis.type.JdbcType;
 import org.springframework.data.annotation.Id;
 
+import static com.baomidou.mybatisplus.annotation.FieldFill.INSERT;
+
 /**
  * @author chengzhengzheng
  * @date 2021/9/20
  */
 @SuppressWarnings("all")
-@TableName("stock")
+@TableName("t_stock")
 @Data
 public class Stock {
     @Id
@@ -31,5 +33,11 @@ public class Stock {
 
     @TableField(value = "stock_lock_count", jdbcType = JdbcType.BIGINT)
     private Long lockCount;
+
+    @TableField(value = "create_time", fill = INSERT, jdbcType = JdbcType.DATE)
+    private Long createTime;
+
+    @TableField(value = "update_time", fill = INSERT, jdbcType = JdbcType.DATE)
+    private Long updateTime;
 
 }

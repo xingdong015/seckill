@@ -14,7 +14,7 @@ import static com.baomidou.mybatisplus.annotation.FieldFill.UPDATE;
  * @author chengzhengzheng
  * @date 2021/9/19
  */
-@TableName("order")
+@TableName("t_order")
 @SuppressWarnings("all")
 public class Order {
     @Id
@@ -37,4 +37,8 @@ public class Order {
      */
     @TableField(value = "status", jdbcType = JdbcType.TINYINT)
     private Integer status;
+
+    @TableField(value = "update_time", fill = INSERT, jdbcType = JdbcType.DATE)
+    private Long updateTime;
+
 }
