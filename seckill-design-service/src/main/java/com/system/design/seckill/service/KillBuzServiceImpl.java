@@ -17,10 +17,7 @@ import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -31,7 +28,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> implements KillBuzService {
     @Autowired
-    private RedisTemplate     redisTemplate;
+    private RedisTemplate<String,String>     redisTemplate;
 
     @Override
     public List<Map<String, Object>> getSeckillList() {
@@ -49,8 +46,9 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
 
     @Override
     public Map<String, Object> getById(String killId) {
-        Map<byte[], byte[]> map     = redisTemplate.getConnectionFactory().getConnection().hGetAll(RedisKeysWrapper.getSeckillHash(killId).getBytes(StandardCharsets.UTF_8));
+        Map<byte[], byte[]> map     = Objects.requireNonNull(redisTemplate.getConnectionFactory()).getConnection().hGetAll(RedisKeysWrapper.getSeckillHash(killId).getBytes(StandardCharsets.UTF_8));
         Map<String, Object> results = new HashMap<>();
+        assert map != null;
         map.forEach((bytes, bytes2) -> {
             results.put(new String(bytes), new String(bytes2));
         });
@@ -78,8 +76,8 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
         redisScript.setResultType(Long.class);
         try {
             //1. redis扣减库存
-            Long result = (Long) redisTemplate.execute(redisScript, Lists.newArrayList(RedisKeysWrapper.getSeckillHash(String.valueOf(killId)), "count"));
-            if (result < 0) {
+            Long result = redisTemplate.execute(redisScript, Lists.newArrayList(RedisKeysWrapper.getSeckillHash(String.valueOf(killId)), "count"));
+            if (result != null && result < 0) {
                 //3. 扣减失败、返回已经抢空给端上
                 return SeckillResultStatus.buildFailureExecute(killId);
             }
