@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+	<include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+	
+	<property name="FILE_LOG_PATTERN" value="%d{HH:mm:ss.SSS} %-5level %logger{80} - %msg%n"/>
+	
+	<root level="INFO">
+		<appender-ref ref="CONSOLE"/>
+	</root>
+	
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>${FILE_LOG_PATTERN}</Pattern>
+		</encoder>
+	</appender>
+	
+</configuration>
