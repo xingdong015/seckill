@@ -1,6 +1,6 @@
 package com.system.design.seckill.web.controller;
 
-import com.system.design.seckill.entity.SeckillInfo;
+import com.system.design.seckill.entity.Seckill;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 import org.springframework.stereotype.Controller;
@@ -21,7 +21,7 @@ public class IndexController {
 
     public static void main(String[] args) {
         Mapper mapper = new DozerBeanMapper();
-        SeckillInfo seckillInfo = new SeckillInfo();
+        Seckill seckillInfo = new Seckill();
         seckillInfo.setSeckillId(123L);
         seckillInfo.setCount(989L);
         Map    map    = mapper.map(seckillInfo, Map.class);
