@@ -3,11 +3,16 @@ package com.system.design.seckill.service;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 import com.system.design.seckill.bean.Exposer;
+import com.system.design.seckill.bean.RocketMqMessageBean;
 import com.system.design.seckill.bean.SeckillResultStatus;
 import com.system.design.seckill.entity.Seckill;
 import com.system.design.seckill.mapper.SeckillInfoMapper;
 import com.system.design.seckill.utils.CacheKey;
+import com.system.design.seckill.utils.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.common.message.Message;
+import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisCallback;
@@ -34,6 +39,9 @@ import java.util.stream.Collectors;
 public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> implements KillBuzService {
     @Autowired
     private RedisTemplate redisTemplate;
+
+    @Autowired
+    private DefaultMQProducer defaultMQProducer;
 
     //加入一个混淆字符串(秒杀接口)的salt，为了我避免用户猜出我们的md5值，值任意给，越复杂越好
     private final String salt = "cjy20200922czz0708";
@@ -87,18 +95,18 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
      * 开始秒杀活动
      *
      * @param killId
-     * @param userPhone
+     * @param userId
      * @return
      */
     @Override
-    public SeckillResultStatus executeKill(long killId, long userPhone, String md5) {
-        if (md5 == null || !md5.equals(getMD5(killId))) {
-            return SeckillResultStatus.buildIllegalExecute(killId);
-        }
-        if (redisTemplate.opsForSet().isMember(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userPhone)) {
-            //重复秒杀、一个用户只允许秒杀一次
-            return SeckillResultStatus.buildRepeatKillExecute(killId);
-        }
+    public SeckillResultStatus executeKill(long killId, long userId, String md5) {
+//        if (md5 == null || !md5.equals(getMD5(killId))) {
+//            return SeckillResultStatus.buildIllegalExecute(killId);
+//        }
+//        if (redisTemplate.opsForSet().isMember(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userId)) {
+//            //重复秒杀、一个用户只允许秒杀一次
+//            return SeckillResultStatus.buildRepeatKillExecute(killId);
+//        }
         DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>();
         redisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("stock.lua")));
         redisScript.setResultType(Long.class);
@@ -107,11 +115,15 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
             if (result != null && result < 0) {
                 return SeckillResultStatus.buildFailureExecute(killId);
             }
-            redisTemplate.opsForSet().add(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userPhone);
-            // 扣减成功、发送mq消息 TODO
+            redisTemplate.opsForSet().add(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userId);
+            Message message = new Message();
+            message.setTopic("topic_order");
+            RocketMqMessageBean bean = new RocketMqMessageBean((userId + "-"+killId),System.currentTimeMillis());
+            message.setBody(JsonUtils.objectToJson(bean).getBytes(StandardCharsets.UTF_8));
+            defaultMQProducer.send(message);
             return SeckillResultStatus.buildSuccessExecute(killId, result);
         } catch (Throwable e) {
-            log.error("KillBuzServiceImpl#executeKill error:{} {}", killId, userPhone, e);
+            log.error("KillBuzServiceImpl#executeKill error:{} {}", killId, userId, e);
             return SeckillResultStatus.buildErrorExecute(killId);
         }
     }
