@@ -57,7 +57,6 @@ public class OrderBuzService {
         } else {
             payFail(orderId, orderInfo.getSeckillId());
         }
-
     }
 
     private void payFail(long orderId, long seckillId) {
