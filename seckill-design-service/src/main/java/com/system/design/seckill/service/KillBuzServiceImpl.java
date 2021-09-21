@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> implements KillBuzService {
     @Autowired
-    private RedisTemplate<String,String>     redisTemplate;
+    private RedisTemplate redisTemplate;
 
     //加入一个混淆字符串(秒杀接口)的salt，为了我避免用户猜出我们的md5值，值任意给，越复杂越好
     private final String salt = "cjy20200922czz0708";
@@ -91,18 +91,21 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
      * @return
      */
     @Override
-    public SeckillResultStatus executeKill(long killId, long userPhone)  {
+    public SeckillResultStatus executeKill(long killId, long userPhone) {
+        if (redisTemplate.opsForSet().isMember(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userPhone)) {
+            //重复秒杀、一个用户只允许秒杀一次
+            return SeckillResultStatus.buildRepeatKillExecute(killId);
+        }
         DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>();
         redisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("stock.lua")));
         redisScript.setResultType(Long.class);
         try {
-            //1. redis扣减库存
-            Long result = redisTemplate.execute(redisScript, Lists.newArrayList(CacheKey.getSeckillHash(String.valueOf(killId)), "count"));
+            Long result = (Long) redisTemplate.execute(redisScript, Lists.newArrayList(CacheKey.getSeckillHash(String.valueOf(killId)), "count"));
             if (result != null && result < 0) {
-                //3. 扣减失败、返回已经抢空给端上
                 return SeckillResultStatus.buildFailureExecute(killId);
             }
-            //2. 扣减成功、发送mq消息 TODO
+            redisTemplate.opsForSet().add(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userPhone);
+            // 扣减成功、发送mq消息 TODO
             return SeckillResultStatus.buildSuccessExecute(killId, result);
         } catch (Throwable e) {
             log.error("KillBuzServiceImpl#executeKill error:{} {}", killId, userPhone, e);

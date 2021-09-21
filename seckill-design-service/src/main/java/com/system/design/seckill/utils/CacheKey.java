@@ -36,4 +36,8 @@ public interface CacheKey {
     static String getSeckillHash(String id) {
         return String.format("seck:%s:info", id);
     }
+
+    static String getSeckillBuyPhones(String id) {
+        return String.format("seck:%s:buy:ids", id);
+    }
 }
