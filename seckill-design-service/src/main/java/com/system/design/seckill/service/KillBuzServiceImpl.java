@@ -6,7 +6,7 @@ import com.system.design.seckill.bean.Exposer;
 import com.system.design.seckill.bean.SeckillResultStatus;
 import com.system.design.seckill.entity.Seckill;
 import com.system.design.seckill.mapper.SeckillInfoMapper;
-import com.system.design.seckill.utils.RedisKeysWrapper;
+import com.system.design.seckill.utils.CacheKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -17,7 +17,11 @@ import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -33,10 +37,10 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
     @Override
     public List<Map<String, Object>> getSeckillList() {
         //获取所有的秒杀id
-        final Set<String> members = redisTemplate.opsForZSet().reverseRange(RedisKeysWrapper.allSeckillIdZset(), 0, -1);
+        final Set<String> members = redisTemplate.opsForZSet().reverseRange(CacheKey.allSeckillIdZset(), 0, -1);
         final List<Object> killInfos = redisTemplate.executePipelined((RedisCallback<String>) connection -> {
             for (String member : members) {
-                String key = RedisKeysWrapper.getSeckillHash(member);
+                String key = CacheKey.getSeckillHash(member);
                 connection.hGetAll(key.getBytes(StandardCharsets.UTF_8));
             }
             return null;
@@ -46,7 +50,7 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
 
     @Override
     public Map<String, Object> getById(String killId) {
-        Map<byte[], byte[]> map     = Objects.requireNonNull(redisTemplate.getConnectionFactory()).getConnection().hGetAll(RedisKeysWrapper.getSeckillHash(killId).getBytes(StandardCharsets.UTF_8));
+        Map<byte[], byte[]> map     = Objects.requireNonNull(redisTemplate.getConnectionFactory()).getConnection().hGetAll(CacheKey.getSeckillHash(killId).getBytes(StandardCharsets.UTF_8));
         Map<String, Object> results = new HashMap<>();
         assert map != null;
         map.forEach((bytes, bytes2) -> {
@@ -58,6 +62,8 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
 
     @Override
     public Exposer exportKillUrl(long killId) {
+        final Map<String, Object> killInfoMap = getById(String.valueOf(killId));
+
 
         return null;
     }
@@ -76,7 +82,7 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
         redisScript.setResultType(Long.class);
         try {
             //1. redis扣减库存
-            Long result = redisTemplate.execute(redisScript, Lists.newArrayList(RedisKeysWrapper.getSeckillHash(String.valueOf(killId)), "count"));
+            Long result = redisTemplate.execute(redisScript, Lists.newArrayList(CacheKey.getSeckillHash(String.valueOf(killId)), "count"));
             if (result != null && result < 0) {
                 //3. 扣减失败、返回已经抢空给端上
                 return SeckillResultStatus.buildFailureExecute(killId);

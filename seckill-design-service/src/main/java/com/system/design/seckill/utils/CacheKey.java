@@ -4,7 +4,7 @@ package com.system.design.seckill.utils;
  * @author chengzhengzheng
  * @date 2021/9/18
  */
-public interface RedisKeysWrapper {
+public interface CacheKey {
 
     interface StockInfo{
         String STOCK_COUNT   = "sock_count";
