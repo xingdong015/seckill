@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class SeckillService extends ServiceImpl<SeckillInfoMapper, Seckill> {
 
-    public Boolean deduct(Long productId) {
+    public Boolean deductStock(Long killId) {
         return true;
     }
 

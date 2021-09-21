@@ -1,6 +1,6 @@
 package com.system.design.seckill.bean;
 
-public enum SeckillStatEnum {
+public enum SeckillStatusEnum {
 
     SUCCESS(1,"秒杀成功"),
     END(0,"秒杀结束"),
@@ -11,7 +11,7 @@ public enum SeckillStatEnum {
     private int state;
     private String info;
 
-    SeckillStatEnum(int state, String info) {
+    SeckillStatusEnum(int state, String info) {
         this.state = state;
         this.info = info;
     }
@@ -26,9 +26,9 @@ public enum SeckillStatEnum {
     }
 
 
-    public static SeckillStatEnum stateOf(int index)
+    public static SeckillStatusEnum stateOf(int index)
     {
-        for (SeckillStatEnum state : values())
+        for (SeckillStatusEnum state : values())
         {
             if (state.getState()==index)
             {

@@ -1,9 +1,11 @@
 package com.system.design.seckill.service;
 
+import com.system.design.seckill.bean.PayResultStatus;
 import com.system.design.seckill.dbservice.OrderService;
 import com.system.design.seckill.dbservice.SeckillService;
 import com.system.design.seckill.entity.Order;
 import com.system.design.seckill.job.ScheduleJob;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
  * @date 2021/9/21
  */
 @Service
+@Slf4j
 public class OrderBuzService {
     @Autowired
     private OrderService   orderService;
@@ -29,7 +32,7 @@ public class OrderBuzService {
      */
     public Long createOrder(long killId, String userId) throws NotFoundException {
         //扣减库存、锁定库存
-        Boolean success = seckillService.deduct(killId);
+        Boolean success = seckillService.deductStock(killId);
         if (success) {
             Long orderId = orderService.createOrder(killId, userId);
             scheduleJob.addTask(30, () -> {
@@ -38,7 +41,6 @@ public class OrderBuzService {
                     payFail(orderInfo.getOrderId(), orderInfo.getSeckillId());
                 }
             });
-            pay(orderId, userId);
             return orderId;
         } else {
             seckillService.incCount(killId, 1);
@@ -46,16 +48,22 @@ public class OrderBuzService {
         }
     }
 
-    public void pay(long orderId, String userId) throws NotFoundException {
-        Order orderInfo = orderService.getOrderInfo(orderId);
-        if (orderInfo == null) {
-            throw new NotFoundException("order not found");
-        }
-        boolean success = doPay(orderInfo, userId);
-        if (success) {
-            paySuccess(orderInfo.getOrderId(), orderInfo.getProductId());
-        } else {
+    public PayResultStatus pay(long orderId, long userId) {
+        try{
+            Order orderInfo = orderService.getOrderInfo(orderId);
+            if (orderInfo == null) {
+                return PayResultStatus.buildOrderExistedException(orderId, userId);
+            }
+            boolean success = doPay(orderInfo, userId);
+            if (success) {
+                orderService.updateOrderStatus(orderId, "1");
+                return PayResultStatus.buildSuccessPay(orderId, userId);
+            }
             payFail(orderId, orderInfo.getSeckillId());
+            return PayResultStatus.buildPayFail(orderId, userId);
+        }catch (Throwable e){
+            log.error("OrderBuzService#pay error {} {}",orderId,userId,e);
+            return PayResultStatus.buildException(orderId, userId);
         }
     }
 
@@ -64,13 +72,7 @@ public class OrderBuzService {
         orderService.updateOrderStatus(orderId, "-1");
         seckillService.incCount(seckillId, 1);
     }
-
-    private void paySuccess(long orderId, Long productId) {
-        seckillService.deduct(productId);
-        orderService.updateOrderStatus(orderId, "1");
-    }
-
-    private boolean doPay(Order orderInfo, String userId) {
+    private boolean doPay(Order orderInfo, long userId) {
         System.out.println(userId + " 开始支付成功,订单id " + orderInfo.getOrderId());
         return true;
     }
