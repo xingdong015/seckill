@@ -12,6 +12,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 public class RocketMqMessageBean implements Serializable {
-    private String body;
-    private long currentTime;
+    private String  body;
+    private Integer type;
+    private long    currentTime;
 }

@@ -9,6 +9,7 @@ import com.system.design.seckill.entity.Seckill;
 import com.system.design.seckill.mapper.SeckillInfoMapper;
 import com.system.design.seckill.utils.CacheKey;
 import com.system.design.seckill.utils.JsonUtils;
+import com.system.design.seckill.utils.KillEventTopiEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.common.message.Message;
@@ -116,7 +117,7 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
             }
             redisTemplate.opsForSet().add(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userId);
             Message message = new Message();
-            message.setTopic("topic_order");
+            message.setTopic(KillEventTopiEnum.KILL_SUCCESS.getTopic());
             RocketMqMessageBean bean = new RocketMqMessageBean((userId + "-"+killId),System.currentTimeMillis());
             message.setBody(JsonUtils.objectToJson(bean).getBytes(StandardCharsets.UTF_8));
             defaultMQProducer.send(message);
