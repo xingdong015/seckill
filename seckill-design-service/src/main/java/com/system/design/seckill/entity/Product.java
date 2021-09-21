@@ -1,17 +1,20 @@
 package com.system.design.seckill.entity;
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.apache.ibatis.type.JdbcType;
 import org.springframework.data.annotation.Id;
 
 import java.math.BigDecimal;
+
 import static com.baomidou.mybatisplus.annotation.FieldFill.INSERT;
-import static com.baomidou.mybatisplus.annotation.FieldFill.UPDATE;
 
 @Data
 @TableName("t_product")
-public class ProductInfo {
+public class Product {
     @Id
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;

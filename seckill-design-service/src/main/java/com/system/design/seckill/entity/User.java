@@ -19,7 +19,7 @@ import static com.baomidou.mybatisplus.annotation.FieldFill.UPDATE;
 public class User {
     @Id
     @TableId(value = "user_id", type = IdType.AUTO)
-    private String userId;
+    private Long userId;
 
     @TableField(value = "phone", jdbcType = JdbcType.VARCHAR)
     private String phone;

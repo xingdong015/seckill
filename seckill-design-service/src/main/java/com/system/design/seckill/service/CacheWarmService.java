@@ -1,6 +1,6 @@
 package com.system.design.seckill.service;
 
-import com.system.design.seckill.entity.ProductInfo;
+import com.system.design.seckill.entity.Product;
 import com.system.design.seckill.entity.Seckill;
 import com.system.design.seckill.mapper.ProductInfoMapper;
 import com.system.design.seckill.mapper.SeckillInfoMapper;
@@ -36,7 +36,7 @@ public class CacheWarmService {
 
     @PostConstruct
     public void init() {
-        mockData();
+//        mockData();
         doInit();
     }
 
@@ -70,38 +70,35 @@ public class CacheWarmService {
     }
 
     private void mockProduct() {
-        ProductInfo productInfo = new ProductInfo();
-        productInfo.setProductDesc("iphone13真香");
-        productInfo.setProductName("iphone13");
-        productInfo.setPrice(new BigDecimal(6999));
-        productInfo.setCreateTime(System.currentTimeMillis());
-        productInfo.setUpdateTime(System.currentTimeMillis());
-        productInfoMapper.insert(productInfo);
+        Product product = new Product();
+        product.setProductDesc("iphone13真香");
+        product.setProductName("iphone13");
+        product.setPrice(new BigDecimal(6999));
+        product.setCreateTime(System.currentTimeMillis());
+        product.setUpdateTime(System.currentTimeMillis());
+        productInfoMapper.insert(product);
 
-        ProductInfo productInfo1 = new ProductInfo();
-        productInfo1.setProductDesc("iphone12 也真香");
-        productInfo1.setProductName("iphone12");
-        productInfo1.setPrice(new BigDecimal(2999));
-        productInfo1.setCreateTime(System.currentTimeMillis());
-        productInfo1.setUpdateTime(System.currentTimeMillis());
-        productInfoMapper.insert(productInfo1);
+        Product product1 = new Product();
+        product1.setProductDesc("iphone12 也真香");
+        product1.setProductName("iphone12");
+        product1.setPrice(new BigDecimal(2999));
+        product1.setCreateTime(System.currentTimeMillis());
+        product1.setUpdateTime(System.currentTimeMillis());
+        productInfoMapper.insert(product1);
     }
 
     private void doInit() {
         redisTemplate.delete(CacheKey.allSeckillIdZset());
-        Set members = redisTemplate.opsForZSet().range(CacheKey.allSeckillIdZset(), 0, -1);
-        if (CollectionUtils.isEmpty(members)) {
-            final List<Seckill> infoList = seckillInfoMapper.selctAll();
-            if (CollectionUtils.isNotEmpty(infoList)) {
-                Set<ZSetOperations.TypedTuple<String>> tuples = new HashSet<>();
-                for (Seckill seckill : infoList) {
-                    tuples.add(ZSetOperations.TypedTuple.of(String.valueOf(seckill.getSeckillId()), (double) seckill.getStartTime()));
-                    String key = CacheKey.getSeckillHash(String.valueOf(seckill.getSeckillId()));
-                    redisTemplate.delete(key);
-                    redisTemplate.opsForHash().putAll(key, doZerBeanMapper.map(seckill, Map.class));
-                }
-                redisTemplate.opsForZSet().add(CacheKey.allSeckillIdZset(), tuples);
+        final List<Seckill> infoList = seckillInfoMapper.selctAll();
+        if (CollectionUtils.isNotEmpty(infoList)) {
+            Set<ZSetOperations.TypedTuple<Long>> tuples = new HashSet<>();
+            for (Seckill seckill : infoList) {
+                tuples.add(ZSetOperations.TypedTuple.of(seckill.getSeckillId(), (double) seckill.getStartTime()));
+                String key = CacheKey.getSeckillHash(String.valueOf(seckill.getSeckillId()));
+                redisTemplate.delete(key);
+                redisTemplate.opsForHash().putAll(key, doZerBeanMapper.map(seckill, Map.class));
             }
+            redisTemplate.opsForZSet().add(CacheKey.allSeckillIdZset(), tuples);
         }
     }
 }
