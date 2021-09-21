@@ -15,11 +15,11 @@ import static com.baomidou.mybatisplus.annotation.FieldFill.UPDATE;
  * @date 2021/9/19
  */
 @SuppressWarnings("all")
-@TableName("t_user")
-public class User {
+@TableName("t_account")
+public class Account {
     @Id
-    @TableId(value = "user_id", type = IdType.AUTO)
-    private String userId;
+    @TableId(value = "account_id", type = IdType.AUTO)
+    private Long accountId;
 
     @TableField(value = "phone", jdbcType = JdbcType.VARCHAR)
     private String phone;

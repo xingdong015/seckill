@@ -35,16 +35,13 @@ public class Seckill {
     private String seckillName;
 
     @TableField(value = "product_id", jdbcType = JdbcType.BIGINT)
-    private String productId;
+    private Long productId;
 
     @TableField(value = "price", jdbcType = JdbcType.DECIMAL)
     private BigDecimal price;
 
     @TableField(value = "count", jdbcType = JdbcType.BIGINT)
     private Long count;
-
-    @TableField(value = "lock_count", jdbcType = JdbcType.BIGINT)
-    private Long lockCount;
 
     @TableField(value = "create_time", fill = INSERT, jdbcType = JdbcType.DATE)
     private Long createTime;

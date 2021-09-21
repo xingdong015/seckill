@@ -4,12 +4,14 @@ package com.system.design.seckill.utils;
  * @author chengzhengzheng
  * @date 2021/9/18
  */
-public interface RedisKeysWrapper {
+public interface CacheKey {
 
-    interface StockInfo{
-        String STOCK_COUNT   = "sock_count";
-        String STOCK_ID      = "stock_id";
-        String STOCK_NAME    = "stock_name";
+    interface StockInfo {
+        String STOCK_COUNT = "sock_count";
+        String STOCK_ID    = "stock_id";
+        String STOCK_NAME  = "stock_name";
+        String START_TIME  = "startTime";
+        String END_TIME    = "endTime";
     }
 
 
@@ -33,5 +35,9 @@ public interface RedisKeysWrapper {
      */
     static String getSeckillHash(String id) {
         return String.format("seck:%s:info", id);
+    }
+
+    static String getSeckillBuyPhones(String id) {
+        return String.format("seck:%s:buy:ids", id);
     }
 }
