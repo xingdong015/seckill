@@ -56,14 +56,8 @@ public class OrderBuzService {
                     message.setBody(JsonUtils.objectToJson(bean).getBytes(StandardCharsets.UTF_8));
                     try {
                         defaultMQProducer.send(message);
-                    } catch (MQClientException e) {
-                        e.printStackTrace();
-                    } catch (RemotingException e) {
-                        e.printStackTrace();
-                    } catch (MQBrokerException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                    }  catch (Throwable t) {
+                        t.printStackTrace();
                     }
                 }
             });
