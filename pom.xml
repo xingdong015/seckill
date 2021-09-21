@@ -39,6 +39,7 @@
         <swagger-spring-boot-starter.version>1.9.1.RELEASE</swagger-spring-boot-starter.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <dubbo.version>3.0.2</dubbo.version>
+        <protobuf-java.version>3.11.0</protobuf-java.version>
     </properties>
     
     <dependencyManagement>
@@ -146,6 +147,12 @@
                 <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo</artifactId>
                 <version>${dubbo.version}</version>
+            </dependency>
+    
+            <dependency>
+                <groupId>com.google.protobuf</groupId>
+                <artifactId>protobuf-java</artifactId>
+                <version>${protobuf-java.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
