@@ -125,7 +125,9 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
             while (true) {
                 SendResult send = defaultMQProducer.send(message);
                 if (send.getSendStatus() == SendStatus.SEND_OK) {
-                    //消费端需要做幂等处理  指数退避重试、最大重试次数  TODO
+                    //指数退避重试、
+                    //最大重试次数
+                    //消费端需要做幂等处理 TODO
                     break;
                 }
                 Thread.sleep(50);
