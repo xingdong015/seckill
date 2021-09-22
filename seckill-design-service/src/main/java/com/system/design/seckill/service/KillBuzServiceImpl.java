@@ -12,6 +12,8 @@ import com.system.design.seckill.utils.JsonUtils;
 import com.system.design.seckill.utils.KillEventTopiEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.client.producer.SendResult;
+import org.apache.rocketmq.client.producer.SendStatus;
 import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -100,13 +102,13 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
      */
     @Override
     public SeckillResultStatus executeKill(long killId, long userId, String md5) {
-        if (md5 == null || !md5.equals(getMD5(killId))) {
-            return SeckillResultStatus.buildIllegalExecute(killId);
-        }
-        if (redisTemplate.opsForSet().isMember(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userId)) {
-            //重复秒杀、一个用户只允许秒杀一次
-            return SeckillResultStatus.buildRepeatKillExecute(killId);
-        }
+//        if (md5 == null || !md5.equals(getMD5(killId))) {
+//            return SeckillResultStatus.buildIllegalExecute(killId);
+//        }
+//        if (redisTemplate.opsForSet().isMember(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userId)) {
+//            //重复秒杀、一个用户只允许秒杀一次
+//            return SeckillResultStatus.buildRepeatKillExecute(killId);
+//        }
         DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>();
         redisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("stock.lua")));
         redisScript.setResultType(Long.class);
@@ -118,9 +120,16 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
             redisTemplate.opsForSet().add(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userId);
             Message message = new Message();
             message.setTopic(KillEventTopiEnum.KILL_SUCCESS.getTopic());
-            RocketMqMessageBean bean = new RocketMqMessageBean((userId + "-"+killId),System.currentTimeMillis());
+            RocketMqMessageBean bean = new RocketMqMessageBean((userId + "-" + killId), null, System.currentTimeMillis());
             message.setBody(JsonUtils.objectToJson(bean).getBytes(StandardCharsets.UTF_8));
-            defaultMQProducer.send(message);
+            while (true) {
+                SendResult send = defaultMQProducer.send(message);
+                if (send.getSendStatus() == SendStatus.SEND_OK) {
+                    //消费端需要做幂等处理  指数退避重试、最大重试次数  TODO
+                    break;
+                }
+                Thread.sleep(50);
+            }
             return SeckillResultStatus.buildSuccessExecute(killId, result);
         } catch (Throwable e) {
             log.error("KillBuzServiceImpl#executeKill error:{} {}", killId, userId, e);

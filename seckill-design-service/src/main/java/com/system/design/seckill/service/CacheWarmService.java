@@ -36,7 +36,7 @@ public class CacheWarmService {
 
     @PostConstruct
     public void init() {
-//        mockData();
+        mockData();
         doInit();
     }
 
