@@ -122,16 +122,12 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
             message.setTopic(KillEventTopiEnum.KILL_SUCCESS.getTopic());
             RocketMqMessageBean bean = new RocketMqMessageBean((userId + "-" + killId), null, System.currentTimeMillis());
             message.setBody(JsonUtils.objectToJson(bean).getBytes(StandardCharsets.UTF_8));
-            while (true) {
-                SendResult send = defaultMQProducer.send(message);
-                if (send.getSendStatus() == SendStatus.SEND_OK) {
-                    //指数退避重试、
-                    //最大重试次数
-                    //消费端需要做幂等处理 TODO
-                    break;
-                }
-                Thread.sleep(50);
-            }
+//            defaultMQProducer.sendOneway(message);
+//            if (send.getSendStatus() == SendStatus.SEND_OK) {
+                //指数退避重试、
+                //最大重试次数
+                //消费端需要做幂等处理 TODO
+//            }
             return SeckillResultStatus.buildSuccessExecute(killId, result);
         } catch (Throwable e) {
             log.error("KillBuzServiceImpl#executeKill error:{} {}", killId, userId, e);
