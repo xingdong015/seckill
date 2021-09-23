@@ -70,24 +70,24 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
 
 
     @Override
-    public Exposer exportKillUrl(long killId) {
+    public Exposer exportKillUrl(long killId, long userId) {
         final Map<String, Object> killInfoMap = getById(String.valueOf(killId));
         //若是秒杀未开启
         long startTime = (long) killInfoMap.get(CacheKey.StockInfo.START_TIME);
         long endTime   = (long) killInfoMap.get(CacheKey.StockInfo.END_TIME);
         //系统当前时间
-        long now     = System.currentTimeMillis();
+        long now = System.currentTimeMillis();
         if (startTime > now || endTime < now) {
             return Exposer.buildNotStaredExposer(killId, startTime, now - startTime);
         }
         //秒杀开启，返回秒杀商品的id、用给接口加密的md5
-        String md5 = getMD5(killId);
+        String md5 = getMD5(killId, userId);
         return Exposer.buildHasStaredExpos(killId, md5, startTime, 0);
     }
 
-    private String getMD5(long killId) {
-        String base = killId + "/" + salt;
-        String md5 = DigestUtils.md5DigestAsHex(base.getBytes());
+    private String getMD5(long killId, long userId) {
+        String base = killId + "/" + salt + "/" + userId;
+        String md5  = DigestUtils.md5DigestAsHex(base.getBytes());
         return md5;
     }
 
@@ -100,7 +100,7 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
      */
     @Override
     public SeckillResultStatus executeKill(long killId, long userId, String md5) {
-        if (md5 == null || !md5.equals(getMD5(killId))) {
+        if (md5 == null || !md5.equals(getMD5(killId, userId))) {
             return SeckillResultStatus.buildIllegalExecute(killId);
         }
         if (redisTemplate.opsForSet().isMember(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userId)) {
