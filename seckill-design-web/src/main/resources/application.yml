@@ -54,7 +54,7 @@ swagger:
 ## rocketmq
 rocketmq:
   isEnable: true
-  name-server: 192.168.0.101:9876
+  name-server: 192.168.0.100:9876
   access-channel: LOCAL
   producer:
     retry-next-server: true

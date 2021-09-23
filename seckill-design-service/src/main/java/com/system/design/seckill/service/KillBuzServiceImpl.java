@@ -12,8 +12,6 @@ import com.system.design.seckill.utils.JsonUtils;
 import com.system.design.seckill.utils.KillEventTopiEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.apache.rocketmq.client.producer.SendResult;
-import org.apache.rocketmq.client.producer.SendStatus;
 import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -80,11 +78,11 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
         //系统当前时间
         long now     = System.currentTimeMillis();
         if (startTime > now || endTime < now) {
-            return Exposer.buildNotStaredExposer(killId, startTime, endTime);
+            return Exposer.buildNotStaredExposer(killId, startTime, now - startTime);
         }
         //秒杀开启，返回秒杀商品的id、用给接口加密的md5
         String md5 = getMD5(killId);
-        return Exposer.buildHasStaredExpos(killId, md5, startTime, endTime);
+        return Exposer.buildHasStaredExpos(killId, md5, startTime, 0);
     }
 
     private String getMD5(long killId) {
@@ -102,13 +100,13 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
      */
     @Override
     public SeckillResultStatus executeKill(long killId, long userId, String md5) {
-//        if (md5 == null || !md5.equals(getMD5(killId))) {
-//            return SeckillResultStatus.buildIllegalExecute(killId);
-//        }
-//        if (redisTemplate.opsForSet().isMember(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userId)) {
-//            //重复秒杀、一个用户只允许秒杀一次
-//            return SeckillResultStatus.buildRepeatKillExecute(killId);
-//        }
+        if (md5 == null || !md5.equals(getMD5(killId))) {
+            return SeckillResultStatus.buildIllegalExecute(killId);
+        }
+        if (redisTemplate.opsForSet().isMember(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userId)) {
+            //重复秒杀、一个用户只允许秒杀一次
+            return SeckillResultStatus.buildRepeatKillExecute(killId);
+        }
         DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>();
         redisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("stock.lua")));
         redisScript.setResultType(Long.class);
@@ -122,12 +120,9 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
             message.setTopic(KillEventTopiEnum.KILL_SUCCESS.getTopic());
             RocketMqMessageBean bean = new RocketMqMessageBean((userId + "-" + killId), null, System.currentTimeMillis());
             message.setBody(JsonUtils.objectToJson(bean).getBytes(StandardCharsets.UTF_8));
-//            defaultMQProducer.sendOneway(message);
-//            if (send.getSendStatus() == SendStatus.SEND_OK) {
-                //指数退避重试、
-                //最大重试次数
-                //消费端需要做幂等处理 TODO
-//            }
+            //这里有可能会投递失败、导致下单失败、所以实际情况下、redis的库存比数据库的库存多、
+            //MySQL在真正扣减库存的时候需要通过乐观锁防止超卖
+            defaultMQProducer.sendOneway(message);
             return SeckillResultStatus.buildSuccessExecute(killId, result);
         } catch (Throwable e) {
             log.error("KillBuzServiceImpl#executeKill error:{} {}", killId, userId, e);

@@ -20,15 +20,15 @@ public class Exposer {
     //系统当前时间(毫秒)
     private long    now;
     //秒杀的开启时间
-    private long    start;
-    //秒杀的结束时间
-    private long    end;
+    private long start;
+    //距离秒杀开始的时间差
+    private long reverseTime;
 
-    public static Exposer buildNotStaredExposer(long seckillId, long startTime, long endTime) {
-        return new Exposer(false, "", seckillId, System.currentTimeMillis(), startTime, endTime);
+    public static Exposer buildNotStaredExposer(long seckillId, long startTime, long reverseTime) {
+        return new Exposer(false, "", seckillId, System.currentTimeMillis(), startTime, reverseTime);
     }
 
-    public static Exposer buildHasStaredExpos(long seckillId, String md5,long startTime, long endTime) {
-        return new Exposer(true, md5, seckillId, System.currentTimeMillis(), startTime, endTime);
+    public static Exposer buildHasStaredExpos(long seckillId, String md5,long startTime, long reverseTime) {
+        return new Exposer(true, md5, seckillId, System.currentTimeMillis(), startTime, reverseTime);
     }
 }
