@@ -17,7 +17,7 @@ import static com.baomidou.mybatisplus.annotation.FieldFill.*;
  * @date 2021/9/19
  */
 @SuppressWarnings("all")
-@TableName("seckill_info")
+@TableName("t_seckill")
 @Data
 public class SeckillInfo {
     /**
@@ -27,10 +27,12 @@ public class SeckillInfo {
     @TableId(value = "seckill_id", type = IdType.AUTO)
     private Long seckillId;
 
-    @TableField(value = "ctime", fill = INSERT, jdbcType = JdbcType.DATE)
+//    @TableField(value = "create_time", fill = INSERT, jdbcType = JdbcType.BIGINT)
+    @TableField(value = "create_time", jdbcType = JdbcType.BIGINT)
     private Long ctime;
 
-    @TableField(value = "utime", fill = INSERT_UPDATE, jdbcType = JdbcType.DATE)
+//    @TableField(value = "update_time", fill = INSERT_UPDATE, jdbcType = JdbcType.BIGINT)
+    @TableField(value = "update_time", jdbcType = JdbcType.BIGINT)
     private Long utime;
     /**
      * 秒杀名称
