@@ -118,7 +118,7 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
             redisTemplate.opsForSet().add(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userId);
             Message message = new Message();
             message.setTopic(KillEventTopiEnum.KILL_SUCCESS.getTopic());
-            RocketMqMessageBean bean = new RocketMqMessageBean((userId + "-"+killId),System.currentTimeMillis());
+            RocketMqMessageBean bean = new RocketMqMessageBean((userId + "-"+killId),-1,System.currentTimeMillis());
             message.setBody(JsonUtils.objectToJson(bean).getBytes(StandardCharsets.UTF_8));
             defaultMQProducer.send(message);
             return SeckillResultStatus.buildSuccessExecute(killId, result);
