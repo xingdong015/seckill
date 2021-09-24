@@ -43,8 +43,8 @@ public class SeckillController {
     }
 
     @GetMapping(value = "/exposeUrl")
-    public Exposer exposeKillUrl(@RequestParam long killId) {
-        return killBuzService.exportKillUrl(killId);
+    public Exposer exposeKillUrl(@RequestParam long killId,@RequestParam long userId) {
+        return killBuzService.exportKillUrl(killId, userId);
     }
 
     @GetMapping(value = "/execute")
