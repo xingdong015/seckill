@@ -10,10 +10,10 @@ spring:
   # redis配置
   redis:
     # 地址
-    host: 192.168.0.101
+    host: rgb-fk.com
     # 端口，默认为6379
     port: 6379
-    password: qweasd
+    password: blogo
     # 连接超时时间
     timeout: 10s
     lettuce:
@@ -54,7 +54,7 @@ swagger:
 ## rocketmq
 rocketmq:
   isEnable: true
-  name-server: 192.168.0.101:9876
+  name-server: 192.168.0.100:9876
   access-channel: LOCAL
   producer:
     retry-next-server: true
