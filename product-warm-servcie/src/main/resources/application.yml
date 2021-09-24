@@ -1,20 +1,49 @@
 server:
   port: 8082
 
+spring:
+  # mysql 配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://rgb-fk.com:3306/seckill?useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: blogo
+    type: com.alibaba.druid.pool.DruidDataSource
 
-###swagger���¶��ǷǱ�������ã�ʵ��ʹ��ʱ�����ʵ��������ã�
+  # redis配置
+  redis:
+    # 地址
+    host: rgb-fk.com
+    # 端口，默认为6379
+    port: 6379
+    password: blogo
+    # 连接超时时间
+    timeout: 10s
+    lettuce:
+      pool:
+        # 连接池中的最小空闲连接
+        min-idle: 0
+        # 连接池中的最大空闲连接
+        max-idle: 8
+        # 连接池的最大数据库连接数
+        max-active: 8
+        # #连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1m
+
+
+###swagger如下都是非必须的配置（实际使用时请根据实际情况配置）
 swagger:
   enabled: true
-  title: API�ĵ�
-  description: ��ɱԤ�ȷ���
+  title: API文档
+  description: 秒杀系统设计
   #  termsOfServiceUrl: https://meander.net.cn
   #  contact:
   #    name: sage
   #    url: www.meander.net.cn
   #    email: sage@meander.net.cn
-  #�ӿڰ�ɨ��·��
+  #接口包扫描路径
   base-package: com.system.design.seckill.productwarmservcie.controller
-  #���ų��Ľӿ�·��
+  #需排除的接口路径
   exclude-path: /error/**
   version: ${project.version}
 
