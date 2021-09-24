@@ -1,0 +1,20 @@
+server:
+  port: 8082
+
+
+###swagger如下都是非必须的配置（实际使用时请根据实际情况配置）
+swagger:
+  enabled: true
+  title: API文档
+  description: 秒杀预热服务
+  #  termsOfServiceUrl: https://meander.net.cn
+  #  contact:
+  #    name: sage
+  #    url: www.meander.net.cn
+  #    email: sage@meander.net.cn
+  #接口包扫描路径
+  base-package: com.system.design.seckill.productwarmservcie.controller
+  #需排除的接口路径
+  exclude-path: /error/**
+  version: ${project.version}
+
