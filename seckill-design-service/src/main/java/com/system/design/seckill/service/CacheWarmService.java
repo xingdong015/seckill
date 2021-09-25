@@ -36,7 +36,7 @@ public class CacheWarmService {
 
     @PostConstruct
     public void init() {
-        mockData();
+//        mockData();
         doInit();
     }
 
@@ -54,12 +54,14 @@ public class CacheWarmService {
         seckill.setCount(1000L);
         seckill.setUpdateTime(System.currentTimeMillis());
         seckill.setProductId(1L);
+        seckill.setPrice(new BigDecimal(8888));
         seckillInfoMapper.insert(seckill);
 
         Seckill seckill1 = new Seckill();
         seckill1.setSeckillName("iphone12 秒杀");
         seckill1.setCreateTime(System.currentTimeMillis());
         seckill1.setStartTime(System.currentTimeMillis());
+        seckill.setPrice(new BigDecimal(666));
         seckill1.setEndTime(System.currentTimeMillis() + 10 * 3600 * 1000 * 24);
         seckill1.setCount(2000L);
         seckill1.setUpdateTime(System.currentTimeMillis());

@@ -1,10 +1,14 @@
 package com.system.design.seckill.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.system.design.seckill.bean.Exposer;
 import com.system.design.seckill.bean.PayResultStatus;
 import com.system.design.seckill.bean.SeckillResultStatus;
 import com.system.design.seckill.service.KillBuzService;
 import com.system.design.seckill.service.OrderBuzService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +40,11 @@ public class SeckillController {
     @GetMapping(value = "/list")
     public Map<String, Object> getSeckillById(@RequestParam String id) throws JsonProcessingException {
         return killBuzService.getById(id);
+    }
+
+    @GetMapping(value = "/exposeUrl")
+    public Exposer exposeKillUrl(@RequestParam long killId,@RequestParam long userId) {
+        return killBuzService.exportKillUrl(killId,userId);
     }
 
     @GetMapping(value = "/execute")

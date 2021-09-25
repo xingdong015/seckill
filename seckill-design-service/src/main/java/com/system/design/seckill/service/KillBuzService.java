@@ -35,7 +35,7 @@ public interface KillBuzService {
      *
      * @param seckillId
      */
-    Exposer exportKillUrl(long seckillId);
+    Exposer exportKillUrl(long seckillId,long userId);
 
 
     /**

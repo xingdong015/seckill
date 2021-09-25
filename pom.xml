@@ -22,6 +22,7 @@
         <module>payment-service</module>
         <module>stock-service</module>
         <module>product-service</module>
+        <module>product-warm-servcie</module>
         <module>common</module>
     </modules>
 
@@ -189,7 +190,18 @@
                 <artifactId>logback-classic</artifactId>
                 <version>${logback-classic.version}</version>
             </dependency>
-            <!--logback -->
+
+            <dependency>
+                <groupId>com.dianping.cat</groupId>
+                <artifactId>cat-client</artifactId>
+                <version>3.0.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.csp</groupId>
+                <artifactId>sentinel-core</artifactId>
+                <version>1.8.2</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

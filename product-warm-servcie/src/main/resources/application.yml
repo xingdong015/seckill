@@ -1,3 +1,6 @@
+server:
+  port: 8082
+
 spring:
   # mysql 配置
   datasource:
@@ -27,38 +30,20 @@ spring:
         # #连接池最大阻塞等待时间（使用负值表示没有限制）
         max-wait: -1m
 
-  #### thymeleaf 配置
-  thymeleaf:
-    enabled: true  #开启thymeleaf视图解析
-    encoding: utf-8  #编码
-    prefix: classpath:/templates/  #前缀
-    cache: false  #是否使用缓存
-    mode: HTML  #严格的HTML语法模式
-    suffix: .html  #后缀名
 
 ###swagger如下都是非必须的配置（实际使用时请根据实际情况配置）
 swagger:
   enabled: true
   title: API文档
   description: 秒杀系统设计
-#  termsOfServiceUrl: https://meander.net.cn
-#  contact:
-#    name: sage
-#    url: www.meander.net.cn
-#    email: sage@meander.net.cn
+  #  termsOfServiceUrl: https://meander.net.cn
+  #  contact:
+  #    name: sage
+  #    url: www.meander.net.cn
+  #    email: sage@meander.net.cn
   #接口包扫描路径
-  base-package: com.system.design.seckill.service.web.controller
+  base-package: com.system.design.seckill.productwarmservcie.controller
   #需排除的接口路径
   exclude-path: /error/**
+  version: ${project.version}
 
-## rocketmq
-rocketmq:
-  isEnable: true
-  name-server: 192.168.0.100:9876
-  access-channel: LOCAL
-  producer:
-    retry-next-server: true
-    enable-msg-trace: true
-    send-message-timeout: 3000
-    group: SECKILL_ORDER
-    customized-trace-topic: topic_order
