@@ -1,12 +1,13 @@
-package com.system.design.seckill.common.transaction.starter;
+package com.system.design.seckill.common;
 
 import org.apache.curator.test.TestingServer;
+import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ImportResource;
 
+@EnableDubbo
 @SpringBootApplication
-//@ImportResource("classpath:provider/*.xml")
 public class SpringbootTccProviderApplication {
 
     private static TestingServer server;

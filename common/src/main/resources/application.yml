@@ -1,3 +1,14 @@
 spring:
   application:
-    name:springboot-tcc-sample:
+    name: service-impl
+
+dubbo:
+  application:
+    name: consumer-demo
+    qos-enable: true
+  registry:
+    address: zookeeper://127.0.0.1:2181
+  protocol:
+    name: dubbo
+  scan:
+    basePackages: com.system.design.seckill.common

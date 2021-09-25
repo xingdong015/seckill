@@ -3,9 +3,11 @@ package com.system.design.seckill.common.transaction.action.impl;
 import com.system.design.seckill.common.transaction.action.ResultHolder;
 import com.system.design.seckill.common.transaction.action.TccActionOne;
 import io.seata.rm.tcc.api.BusinessActionContext;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 
 @Component
+@DubboService(version = "1.0",interfaceClass = TccActionOne.class)
 public class TccActionOneImpl implements TccActionOne {
 
     @Override
