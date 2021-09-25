@@ -1,14 +1,14 @@
 spring:
   application:
-    name: service-impl
-
+    name: common
 dubbo:
   application:
-    name: consumer-demo
+    name: dubbo-test
     qos-enable: true
   registry:
     address: zookeeper://127.0.0.1:2181
   protocol:
     name: dubbo
+    port: 21880
   scan:
     basePackages: com.system.design.seckill.common

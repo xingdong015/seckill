@@ -48,10 +48,10 @@
         <logback-classic.version>1.2.3</logback-classic.version>
         <seata.version>1.4.2</seata.version>
         <dubbo.version>3.0.2.1</dubbo.version>
-        <dubbo.curator.version>3.2.0</dubbo.curator.version>
-        <zoo.version>3.5.6</zoo.version>
-        <curator.version>3.2.0</curator.version>
-        <recipes.version>3.2.0</recipes.version>
+        <dubbo.curator.version>5.2.0</dubbo.curator.version>
+        <zoo.version>3.7.0</zoo.version>
+        <curator.version>5.2.0</curator.version>
+        <recipes.version>4.2.0</recipes.version>
     </properties>
     
     <dependencyManagement>
