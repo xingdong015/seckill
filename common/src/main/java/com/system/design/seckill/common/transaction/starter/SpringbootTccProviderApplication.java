@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication
-@ImportResource("classpath:provider/*.xml")
+//@ImportResource("classpath:provider/*.xml")
 public class SpringbootTccProviderApplication {
 
     private static TestingServer server;
@@ -19,7 +19,7 @@ public class SpringbootTccProviderApplication {
      */
     public static void main(String[] args) throws Exception {
         //mock zk server
-        mockZKServer();
+//        mockZKServer();
         SpringApplication.run(SpringbootTccProviderApplication.class, args);
     }
 

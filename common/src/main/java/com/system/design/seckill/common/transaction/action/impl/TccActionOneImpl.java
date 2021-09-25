@@ -3,7 +3,9 @@ package com.system.design.seckill.common.transaction.action.impl;
 import com.system.design.seckill.common.transaction.action.ResultHolder;
 import com.system.design.seckill.common.transaction.action.TccActionOne;
 import io.seata.rm.tcc.api.BusinessActionContext;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TccActionOneImpl implements TccActionOne {
 
     @Override

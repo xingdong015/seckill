@@ -35,6 +35,16 @@
 
     <!--&lt;!&ndash; 第二个TCC 参与者服务发布 &ndash;&gt;-->
     <!--<dubbo:service interface="TccActionTwo" ref="tccActionTwoImpl"/>-->
+    <bean id="tccActionOneImpl" class="com.system.design.seckill.common.transaction.action.impl.TccActionOneImpl"/>
+    <bean id="tccActionTwoImpl" class="com.system.design.seckill.common.transaction.action.impl.TccActionTwoImpl"/>
+    <bean id="tccTransactionService" class="com.system.design.seckill.common.transaction.service.TccTransactionService"/>
+
+    <!-- 第一个TCC 参与者服务发布 -->
+    <dubbo:service interface="com.system.design.seckill.common.transaction.action.TccActionOne" ref="tccActionOneImpl"/>
+
+    <!-- 第二个TCC 参与者服务发布 -->
+    <dubbo:service interface="com.system.design.seckill.common.transaction.action.TccActionTwo" ref="tccActionTwoImpl"/>
+
 
     <!-- 第一个TCC参与者 服务订阅 -->
     <dubbo:reference id="tccActionOne" interface="com.system.design.seckill.common.transaction.action.TccActionOne"

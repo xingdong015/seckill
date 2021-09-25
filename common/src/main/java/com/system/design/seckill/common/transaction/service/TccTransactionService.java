@@ -4,11 +4,13 @@ import com.system.design.seckill.common.transaction.action.TccActionOne;
 import com.system.design.seckill.common.transaction.action.TccActionTwo;
 import io.seata.core.context.RootContext;
 import io.seata.spring.annotation.GlobalTransactional;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class TccTransactionService {
 
     private TccActionOne tccActionOne;

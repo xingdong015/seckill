@@ -1,16 +1,3 @@
-## rocketmq
-rocketmq:
-  name-server:
-  access-channel: LOCAL
-  producer:
-    retry-next-server: true
-    enable-msg-trace: true
-    send-message-timeout: 3000
-    group: seckill-order
-    customized-trace-topic:
-  consumer:
-    group:
-    customized-trace-topic:
 spring:
   application:
     name:springboot-tcc-sample:
