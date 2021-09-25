@@ -11,3 +11,6 @@ rocketmq:
   consumer:
     group:
     customized-trace-topic:
+spring:
+  application:
+    name:springboot-tcc-sample:
