@@ -29,8 +29,8 @@ public class IndexController {
     public String sendMsg() throws UnsupportedEncodingException {
         Message message = new Message("topic_order","hello".getBytes(RemotingHelper.DEFAULT_CHARSET));
         try {
-            defaultMQProducer.send(message);
-        } catch (MQClientException | RemotingException | MQBrokerException |InterruptedException e) {
+            defaultMQProducer.sendOneway(message);
+        } catch (MQClientException | RemotingException |InterruptedException e) {
             e.printStackTrace();
         }
         return "successful";
