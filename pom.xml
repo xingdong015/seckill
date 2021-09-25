@@ -39,7 +39,6 @@
         <commons-pool2.version>2.6.2</commons-pool2.version>
         <swagger-spring-boot-starter.version>1.9.1.RELEASE</swagger-spring-boot-starter.version>
         <commons-collections4.version>4.4</commons-collections4.version>
-        <dubbo.curator.version>5.2.0</dubbo.curator.version>
         <protobuf-java.version>3.11.0</protobuf-java.version>
         <rocketmq-spring-boot-starter.version>2.2.1</rocketmq-spring-boot-starter.version>
         <rocketmq-tools.version>4.8.0</rocketmq-tools.version>
@@ -48,6 +47,11 @@
         <logback-core.version>1.2.3</logback-core.version>
         <logback-classic.version>1.2.3</logback-classic.version>
         <seata.version>1.4.2</seata.version>
+        <dubbo.version>3.0.2.1</dubbo.version>
+        <dubbo.curator.version>3.2.0</dubbo.curator.version>
+        <zoo.version>3.5.6</zoo.version>
+        <curator.version>3.2.0</curator.version>
+        <recipes.version>3.2.0</recipes.version>
     </properties>
     
     <dependencyManagement>
@@ -150,12 +154,6 @@
                 <artifactId>commons-collections4</artifactId>
                 <version>${commons-collections4.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.apache.curator</groupId>
-                <artifactId>curator-framework</artifactId>
-                <version>${dubbo.curator.version}</version>
-            </dependency>
-
             <!-- https://mvnrepository.com/artifact/org.apache.rocketmq/rocketmq-spring-boot-starter -->
             <dependency>
                 <groupId>org.apache.rocketmq</groupId>
@@ -207,6 +205,31 @@
                 <groupId>io.seata</groupId>
                 <artifactId>seata-all</artifactId>
                 <version>${seata.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-spring-boot-starter</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-framework</artifactId>
+                <version>${dubbo.curator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.zookeeper</groupId>
+                <artifactId>zookeeper</artifactId>
+                <version>${zoo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-recipes</artifactId>
+                <version>${recipes.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-x-discovery</artifactId>
+                <version>${curator.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

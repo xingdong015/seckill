@@ -1,6 +1,5 @@
 package com.system.design.seckill.common.transaction;
 
-import org.apache.curator.test.TestingServer;
 import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,7 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class SpringbootTccProviderApplication {
 
-    private static TestingServer server;
 
     /**
      * The entry point of application.
@@ -18,15 +16,8 @@ public class SpringbootTccProviderApplication {
      * @throws Exception the exception
      */
     public static void main(String[] args) throws Exception {
-        //mock zk server
-//        mockZKServer();
         SpringApplication.run(SpringbootTccProviderApplication.class, args);
     }
 
-    private static void mockZKServer() throws Exception {
-        //Mock zk server，作为  配置中心
-        server = new TestingServer(2181, true);
-        server.start();
-    }
 
 }
