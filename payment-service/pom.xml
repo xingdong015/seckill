@@ -33,10 +33,6 @@
 			<artifactId>swagger-spring-boot-starter</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.dubbo</groupId>
-			<artifactId>dubbo</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.system.design.seckill</groupId>
 			<artifactId>common</artifactId>
 		</dependency>
