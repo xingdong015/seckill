@@ -1,19 +1,14 @@
-package com.system.design.seckill.common.transaction.starter;
+package com.system.design.seckill.common.transaction;
 
-import com.system.design.seckill.common.transaction.ApplicationKeeper;
 import com.system.design.seckill.common.transaction.service.TccTransactionService;
 import io.seata.common.util.StringUtils;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.util.Assert;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@SpringBootApplication
-@ImportResource("classpath:spring/*.xml")
 public class SpringbootTccTransactionApplication {
 
     static TccTransactionService tccTransactionService = null;
