@@ -39,7 +39,6 @@
         <commons-pool2.version>2.6.2</commons-pool2.version>
         <swagger-spring-boot-starter.version>1.9.1.RELEASE</swagger-spring-boot-starter.version>
         <commons-collections4.version>4.4</commons-collections4.version>
-        <dubbo.version>3.0.2</dubbo.version>
         <dubbo.curator.version>5.2.0</dubbo.curator.version>
         <protobuf-java.version>3.11.0</protobuf-java.version>
         <rocketmq-spring-boot-starter.version>2.2.1</rocketmq-spring-boot-starter.version>
@@ -153,12 +152,6 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-collections4</artifactId>
                 <version>${commons-collections4.version}</version>
-            </dependency>
-    
-            <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo</artifactId>
-                <version>${dubbo.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.curator</groupId>
