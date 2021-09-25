@@ -6,7 +6,7 @@ dubbo:
     name: dubbo-test
     qos-enable: true
   registry:
-    address: zookeeper://127.0.0.1:2181
+    address: zookeeper://192.168.0.102:2181
   protocol:
     name: dubbo
     port: 21880
