@@ -52,6 +52,7 @@
         <zoo.version>3.7.0</zoo.version>
         <curator.version>5.2.0</curator.version>
         <recipes.version>4.2.0</recipes.version>
+        <mybatis-enhance-actable.version>1.5.0.RELEASE</mybatis-enhance-actable.version>
     </properties>
     
     <dependencyManagement>
@@ -206,11 +207,24 @@
                 <artifactId>seata-all</artifactId>
                 <version>${seata.version}</version>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>org.apache.dubbo</groupId>-->
-<!--                <artifactId>dubbo-spring-boot-starter</artifactId>-->
-<!--                <version>${dubbo.version}</version>-->
-<!--            </dependency>-->
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-spring-boot-starter</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+    
+            <dependency>
+                <groupId>com.gitee.sunchenbin.mybatis.actable</groupId>
+                <artifactId>mybatis-enhance-actable</artifactId>
+                <version>${mybatis-enhance-actable.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>com.baomidou</groupId>
+                        <artifactId>mybatis-plus-annotation</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            
 <!--            <dependency>-->
 <!--                <groupId>org.apache.curator</groupId>-->
 <!--                <artifactId>curator-framework</artifactId>-->
