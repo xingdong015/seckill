@@ -37,11 +37,6 @@
 			<artifactId>common</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 		</dependency>
@@ -50,38 +45,28 @@
 			<artifactId>dubbo-spring-boot-starter</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.gitee.sunchenbin.mybatis.actable</groupId>
-			<artifactId>mybatis-enhance-actable</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>com.baomidou</groupId>
-					<artifactId>mybatis-plus-annotation</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>mybatis-plus-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	
 	<build>
 		<pluginManagement>
 			<plugins>
-				<plugin>
-					<groupId>org.xolstice.maven.plugins</groupId>
-					<artifactId>protobuf-maven-plugin</artifactId>
-					<version>0.6.1</version>
-					<configuration>
-						<protocArtifact>com.google.protobuf:protoc:3.7.1:exe:${os.detected.classifier}</protocArtifact>
-						<pluginId>triple-java</pluginId>
-						<outputDirectory>build/generated/source/proto/main/java</outputDirectory>
-					</configuration>
-					<executions>
-						<execution>
-							<goals>
-								<goal>compile</goal>
-								<goal>test-compile</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
 				<plugin>
 					<artifactId>maven-clean-plugin</artifactId>
 					<version>3.1.0</version>
