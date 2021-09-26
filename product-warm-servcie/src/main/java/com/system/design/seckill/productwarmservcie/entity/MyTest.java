@@ -1,11 +1,19 @@
 package com.system.design.seckill.productwarmservcie.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.apache.ibatis.type.JdbcType;
+import org.springframework.data.annotation.Id;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+import static com.baomidou.mybatisplus.annotation.FieldFill.INSERT;
 
 /**
  * @description:
@@ -14,10 +22,39 @@ import lombok.Data;
  */
 @ApiModel("测试对象")
 @TableName("t_my_test")
-@Data@Builder@AllArgsConstructor
+@Data@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MyTest {
-    @ApiModelProperty(value = "测试姓名",name = "username",example = "jack")
+    @Id
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
+
+    @TableField(value = "my_name", jdbcType = JdbcType.VARCHAR)
     private String myName;
-    @ApiModelProperty(value = "测试年龄",name = "age",example = "18")
-    private Integer myAge;
+
+    @TableField(value = "age", jdbcType = JdbcType.INTEGER)
+    private Integer age;
+
+    //创建时间，只在插入时自动填充
+    @TableField(value = "create_time", fill = FieldFill.INSERT, jdbcType = JdbcType.TIMESTAMP)
+    private Date createTime;
+
+    //更新时间，插入或者更新时自动填充
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE, jdbcType = JdbcType.TIMESTAMP)
+    private Date updateTime;
+
+    /**
+     * 版本号（用于乐观锁， 默认为 1）
+     */
+    @Version
+    @TableField(fill = FieldFill.INSERT)
+    private Integer version;
+
+    /**
+     * 使用 @TableField(exist = false) ，表示该字段在数据库中不存在 ，所以不会插入数据库中
+     * 使用 transient 、 static 修饰属性也不会插入数据库中
+     */
+    @TableField(exist = false)
+    private String phone;
 }
