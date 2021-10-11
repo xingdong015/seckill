@@ -1,0 +1,39 @@
+server:
+  port: 8081
+
+#mysql配置
+spring:
+  # mysql 配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://rgb-fk.com:3306/seckill?useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: blogo
+    type: com.alibaba.druid.pool.DruidDataSource
+
+#dubbo配置
+dubbo:
+  application:
+    id: stock-service-provider
+    name: stock-service-provider
+  scan:
+    base-packages: com.system.design.seckill.service
+  config-center:
+    timeout: 20000
+  registry:
+    id: stock-service-provider-zk
+    address: rgb-fk.com:2181,rgb-fk.com:2182,rgb-fk.com:2183
+    protocol: zookeeper
+    timeout: 10000
+  protocol:
+    name: dubbo
+    port: 20880
+
+
+#mybatis-plus配置
+mybatis-plus:
+  mapper-locations: classpath*:com/gitee/sunchenbin/mybatis/actable/mapping/*/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
