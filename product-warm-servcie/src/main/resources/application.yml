@@ -1,5 +1,5 @@
 server:
-  port: 8082
+  port: 8084
 
 spring:
   # mysql 配置
@@ -47,3 +47,7 @@ swagger:
   exclude-path: /error/**
   version: ${project.version}
 
+#控制台打印sql
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
