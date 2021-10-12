@@ -16,8 +16,6 @@ dubbo:
   application:
     id: stock-service-provider
     name: stock-service-provider
-  scan:
-    base-packages: com.system.design.seckill.service
   config-center:
     timeout: 20000
   registry:
