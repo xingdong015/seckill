@@ -36,6 +36,7 @@ public class OrderBuzService {
     /**
      * 此处是从消息队列获取的秒杀成功消息记录
      *
+     * 此处应该在同一个分布式事务中
      * @param killId
      * @param userId
      */

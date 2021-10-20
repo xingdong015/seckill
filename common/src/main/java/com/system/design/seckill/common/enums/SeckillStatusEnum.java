@@ -1,4 +1,4 @@
-package com.system.design.seckill.enums;
+package com.system.design.seckill.common.enums;
 
 public enum SeckillStatusEnum {
 
