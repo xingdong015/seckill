@@ -101,11 +101,12 @@ public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> 
      */
     @Override
     public SeckillResultStatus executeKill(long killId, long userId, String md5) {
+        //url重写、防止url破解
         if (md5 == null || !md5.equals(getMD5(killId, userId))) {
             return SeckillResultStatus.buildIllegalExecute(killId);
         }
+        //重复秒杀、一个用户只允许秒杀一次
         if (redisTemplate.opsForSet().isMember(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userId)) {
-            //重复秒杀、一个用户只允许秒杀一次
             return SeckillResultStatus.buildRepeatKillExecute(killId);
         }
         DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>();
