@@ -1,7 +1,7 @@
-package com.system.design.seckill.service.mq;
+package com.system.design.seckill.mq;
 
 import com.system.design.seckill.config.mq.AbstractRocketConsumer;
-import com.system.design.seckill.utils.KillEventTopiEnum;
+import com.system.design.seckill.common.utils.KillEventTopiEnum;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.springframework.stereotype.Component;

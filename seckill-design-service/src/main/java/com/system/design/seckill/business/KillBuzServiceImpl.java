@@ -1,15 +1,13 @@
-package com.system.design.seckill.service;
+package com.system.design.seckill.business;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Lists;
 import com.system.design.seckill.bean.Exposer;
 import com.system.design.seckill.bean.RocketMqMessageBean;
 import com.system.design.seckill.bean.SeckillResultStatus;
-import com.system.design.seckill.entity.Seckill;
-import com.system.design.seckill.mapper.SeckillInfoMapper;
-import com.system.design.seckill.utils.CacheKey;
-import com.system.design.seckill.utils.JsonUtils;
-import com.system.design.seckill.utils.KillEventTopiEnum;
+import com.system.design.seckill.business.api.KillBuzService;
+import com.system.design.seckill.common.utils.CacheKey;
+import com.system.design.seckill.common.utils.JsonUtils;
+import com.system.design.seckill.common.utils.KillEventTopiEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.common.message.Message;
@@ -17,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.stereotype.Service;
@@ -37,7 +34,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class KillBuzServiceImpl extends ServiceImpl<SeckillInfoMapper, Seckill> implements KillBuzService {
+public class KillBuzServiceImpl implements KillBuzService {
     @Autowired
     private RedisTemplate redisTemplate;
 

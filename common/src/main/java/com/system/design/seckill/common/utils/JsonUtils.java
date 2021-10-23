@@ -1,4 +1,4 @@
-package com.system.design.seckill.utils;
+package com.system.design.seckill.common.utils;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
