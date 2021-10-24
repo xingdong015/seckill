@@ -5,6 +5,6 @@ import com.system.design.seckill.entity.Order;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MyBaseMapper extends ServiceImpl<OrderMapper, Order> implements OrderService {
+public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements OrderService {
 
 }
