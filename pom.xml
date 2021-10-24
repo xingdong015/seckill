@@ -17,11 +17,6 @@
     <modules>
         <module>seckill-design-service</module>
         <module>seckill-design-web</module>
-        <module>seckill-service</module>
-        <module>order-service</module>
-        <module>payment-service</module>
-        <module>stock-service</module>
-        <module>product-service</module>
         <module>product-warm-servcie</module>
         <module>common</module>
     </modules>
@@ -213,11 +208,11 @@
                 <artifactId>seata-all</artifactId>
                 <version>${seata.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo-spring-boot-starter</artifactId>
-                <version>${dubbo.version}</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.apache.dubbo</groupId>-->
+<!--                <artifactId>dubbo-spring-boot-starter</artifactId>-->
+<!--                <version>${dubbo.version}</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>org.apache.curator</groupId>
                 <artifactId>curator-framework</artifactId>
@@ -266,6 +261,16 @@
                         <groupId>org.apache.zookeeper</groupId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.gitee.sunchenbin.mybatis.actable</groupId>
+                <artifactId>mybatis-enhance-actable</artifactId>
+                <version>${mybatis-enhance-actable.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>1.2.76</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

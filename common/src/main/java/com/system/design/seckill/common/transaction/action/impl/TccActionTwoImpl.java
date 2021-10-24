@@ -1,16 +1,14 @@
 package com.system.design.seckill.common.transaction.action.impl;
 
 import com.system.design.seckill.common.transaction.action.ResultHolder;
-import com.system.design.seckill.common.transaction.action.TccActionOne;
 import com.system.design.seckill.common.transaction.action.TccActionTwo;
 import io.seata.rm.tcc.api.BusinessActionContext;
-import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-@DubboService(interfaceClass = TccActionTwo.class)
+//@DubboService(interfaceClass = TccActionTwo.class)
 public class TccActionTwoImpl implements TccActionTwo {
 
     @Override

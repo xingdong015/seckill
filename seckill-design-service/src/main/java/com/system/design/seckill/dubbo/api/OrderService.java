@@ -2,12 +2,14 @@ package com.system.design.seckill.dubbo.api;
 
 import com.system.design.seckill.entity.Order;
 
+import java.util.Optional;
+
 /**
  * @author chengzhengzheng
  * @date 2021/10/23
  */
 public interface OrderService {
-    Long createOrder(long skuId, String userId);
+    Optional<Order> createOrder(long skuId, String userId);
 
     Order getOrderInfo(Long orderId);
 

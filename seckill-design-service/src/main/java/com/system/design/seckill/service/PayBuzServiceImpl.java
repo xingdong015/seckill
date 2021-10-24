@@ -1,9 +1,9 @@
 package com.system.design.seckill.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.system.design.seckill.bean.PayResultStatus;
 import com.system.design.seckill.bean.RocketMqMessageBean;
 import com.system.design.seckill.service.api.PayBuzService;
-import com.system.design.seckill.common.utils.JsonUtils;
 import com.system.design.seckill.common.utils.KillEventTopiEnum;
 import com.system.design.seckill.entity.Order;
 import com.system.design.seckill.dubbo.OrderServiceImpl;
@@ -24,6 +24,7 @@ public class PayBuzServiceImpl implements PayBuzService {
     private OrderServiceImpl  orderServiceImpl;
     @Autowired
     private DefaultMQProducer defaultMQProducer;
+
     @Override
     public PayResultStatus pay(long orderId, long userId) {
         try {
@@ -38,8 +39,10 @@ public class PayBuzServiceImpl implements PayBuzService {
             }
             Message message = new Message();
             message.setTopic(KillEventTopiEnum.PAY_STATUS_CHANGE.getTopic());
-            RocketMqMessageBean bean = new RocketMqMessageBean(JsonUtils.objectToJson(orderId), -1, System.currentTimeMillis());
-            message.setBody(JsonUtils.objectToJson(bean).getBytes(StandardCharsets.UTF_8));
+            JSONObject object = new JSONObject();
+            object.put("orderId", orderId);
+            RocketMqMessageBean bean = new RocketMqMessageBean(object.toJSONString(), -1, System.currentTimeMillis());
+            message.setBody(JSONObject.toJSONString(bean).getBytes(StandardCharsets.UTF_8));
             defaultMQProducer.send(message);
 
             return PayResultStatus.buildPayFail(orderId, userId);
