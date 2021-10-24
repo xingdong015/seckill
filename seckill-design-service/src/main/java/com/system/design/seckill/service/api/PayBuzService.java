@@ -1,4 +1,4 @@
-package com.system.design.seckill.business.api;
+package com.system.design.seckill.service.api;
 
 import com.system.design.seckill.bean.PayResultStatus;
 

@@ -1,4 +1,4 @@
-package com.system.design.seckill.business.api;
+package com.system.design.seckill.service.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.system.design.seckill.bean.Exposer;

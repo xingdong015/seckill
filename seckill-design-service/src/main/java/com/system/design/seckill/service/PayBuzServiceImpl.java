@@ -1,8 +1,8 @@
-package com.system.design.seckill.business;
+package com.system.design.seckill.service;
 
 import com.system.design.seckill.bean.PayResultStatus;
 import com.system.design.seckill.bean.RocketMqMessageBean;
-import com.system.design.seckill.business.api.PayBuzService;
+import com.system.design.seckill.service.api.PayBuzService;
 import com.system.design.seckill.common.utils.JsonUtils;
 import com.system.design.seckill.common.utils.KillEventTopiEnum;
 import com.system.design.seckill.entity.Order;

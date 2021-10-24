@@ -1,15 +1,15 @@
-package com.system.design.seckill.business;
+package com.system.design.seckill.service;
 
 import com.google.common.base.Preconditions;
 import com.system.design.seckill.bean.OrderStatusEnum;
 import com.system.design.seckill.bean.RocketMqMessageBean;
-import com.system.design.seckill.business.api.OrderBuzService;
 import com.system.design.seckill.common.utils.JsonUtils;
 import com.system.design.seckill.common.utils.KillEventTopiEnum;
+import com.system.design.seckill.dubbo.api.OrderService;
+import com.system.design.seckill.dubbo.api.StorageService;
 import com.system.design.seckill.entity.Order;
 import com.system.design.seckill.job.ScheduleJob;
-import com.system.design.seckill.dubbo.OrderServiceImpl;
-import com.system.design.seckill.dubbo.SeckillServiceImpl;
+import com.system.design.seckill.service.api.OrderBuzService;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.common.message.Message;
@@ -23,11 +23,11 @@ import java.nio.charset.StandardCharsets;
  */
 public class OrderBuzServiceImpl implements OrderBuzService {
     @Autowired
-    private OrderServiceImpl   orderServiceImpl;
+    private OrderService      orderService;
     @Autowired
-    private SeckillServiceImpl seckillServiceImpl;
+    private StorageService    storageService;
     @Autowired
-    private ScheduleJob        scheduleJob;
+    private ScheduleJob       scheduleJob;
     @Autowired
     private DefaultMQProducer defaultMQProducer;
 
@@ -41,10 +41,10 @@ public class OrderBuzServiceImpl implements OrderBuzService {
     @Override
     public Long doKill(long killId, String userId) {
 
-        int count = seckillServiceImpl.updateStock(killId);
+        int count = storageService.reduceStock(killId);
         Preconditions.checkArgument(count >= 1, "%s|%s|库存不足", killId, userId);
 
-        Long orderId = orderServiceImpl.createOrder(killId, userId);
+        Long orderId = orderService.createOrder(killId, userId);
         Preconditions.checkNotNull(orderId, "%s|%s|订单创建失败", killId, userId);
 
         addPayMonitor(orderId);
@@ -54,7 +54,7 @@ public class OrderBuzServiceImpl implements OrderBuzService {
 
     private void addPayMonitor(Long orderId) {
         scheduleJob.addTask(30, () -> {
-            Order orderInfo = orderServiceImpl.getOrderInfo(orderId);
+            Order orderInfo = orderService.getOrderInfo(orderId);
             if (OrderStatusEnum.INIT.getStatus().equals(orderInfo.getStatus())) {
                 Message message = new Message();
                 message.setTopic(KillEventTopiEnum.PAY_STATUS_CHANGE.getTopic());

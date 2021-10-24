@@ -1,10 +1,10 @@
-package com.system.design.seckill.business;
+package com.system.design.seckill.service;
 
 import com.google.common.collect.Lists;
 import com.system.design.seckill.bean.Exposer;
 import com.system.design.seckill.bean.RocketMqMessageBean;
 import com.system.design.seckill.bean.SeckillResultStatus;
-import com.system.design.seckill.business.api.KillBuzService;
+import com.system.design.seckill.service.api.KillBuzService;
 import com.system.design.seckill.common.utils.CacheKey;
 import com.system.design.seckill.common.utils.JsonUtils;
 import com.system.design.seckill.common.utils.KillEventTopiEnum;
