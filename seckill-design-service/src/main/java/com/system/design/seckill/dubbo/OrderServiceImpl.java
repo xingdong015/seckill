@@ -32,7 +32,6 @@ public class OrderServiceImpl implements OrderService {
     public Optional<Order> createOrder(long skuId, String userId) {
         Order order = new Order();
         order.setSeckillId(skuId);
-        order.setUserId(userId);
         orderMapper.save(order);
         return Optional.of(order);
     }
