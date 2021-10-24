@@ -1,4 +1,4 @@
-package com.system.design.seckill.mapper;
+package com.system.design.seckill.service.api;
 
 
 import com.baomidou.mybatisplus.service.IService;
