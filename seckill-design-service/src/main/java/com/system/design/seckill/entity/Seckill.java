@@ -38,11 +38,11 @@ public class Seckill {
     private Long count;
 
     @TableField(value = "residue", jdbcType = JdbcType.BIGINT)
-    private Integer residue;
+    private Long residue;
 
     //TCC事务锁定的库存
     @TableField(value = "frozen", jdbcType = JdbcType.BIGINT)
-    private Integer frozen;
+    private Long frozen;
 
     @TableField(value = "start_time", fill = INSERT, jdbcType = JdbcType.DATE)
     private Long startTime;
