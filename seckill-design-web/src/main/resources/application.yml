@@ -12,13 +12,14 @@ actable:
     pack: com.system.design.seckill.entity
   database:
     type: mysql
-
+# mybatis-plus 配置
 mybatis-plus:
   global-config:
     db-config:
-      table-underline: false
+      table-underline: true
   configuration:
     map-underscore-to-camel-case: true
+  type-aliases-package: com.system.design.seckill.entity
 
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
 druid:
