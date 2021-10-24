@@ -1,10 +1,12 @@
 package com.system.design.seckill.dubbo;
 
-import com.system.design.seckill.dao.SeckillDao;
+import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.system.design.seckill.dubbo.api.StorageService;
+import com.system.design.seckill.mapper.SeckillMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
 
 /**
  * @author chengzhengzheng
@@ -13,12 +15,13 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 //@DubboService(version = "1.0",interfaceClass = StorageService.class)
-public class StorageServiceImpl implements StorageService {
-    @Autowired
-    private SeckillDao seckillDao;
+public class StorageServiceImpl extends ServiceImpl implements StorageService {
+    @Resource
+    private SeckillMapper seckillMapper;
 
     @Override
-    public Integer reduceStock(Long killId) {
-        return seckillDao.updateStock(killId);
+    public Integer decreaseStorage(Long killId) {
+//        return seckillDao.updateStock(killId);
+        return seckillMapper.decreaseStorage(killId);
     }
 }

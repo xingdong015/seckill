@@ -6,5 +6,5 @@ package com.system.design.seckill.dubbo.api;
  */
 public interface StorageService {
 
-    Integer reduceStock(Long killId);
+    Integer decreaseStorage(Long killId);
 }

@@ -43,7 +43,7 @@ public class OrderBuzServiceImpl implements OrderBuzService {
     @Override
     public Long doKill(long killId, String userId) {
 
-        int count = storageService.reduceStock(killId);
+        int count = storageService.decreaseStorage(killId);
         Preconditions.checkArgument(count >= 1, "%s|%s|库存不足", killId, userId);
 
         Optional<Order> orderOptional = orderService.createOrder(killId, userId);
