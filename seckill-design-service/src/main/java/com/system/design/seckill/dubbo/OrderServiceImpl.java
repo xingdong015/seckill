@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Optional;
 
 /**
@@ -18,8 +19,8 @@ import java.util.Optional;
 //@DubboService(version = "1.0",interfaceClass = OrderService.class)
 public class OrderServiceImpl implements OrderService {
 
-    @Autowired
-    OrderMapper orderDao;
+    @Resource
+    OrderMapper orderMapper;
 
     /**
      * 下单操作
@@ -32,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = new Order();
         order.setSeckillId(skuId);
         order.setUserId(userId);
-        orderDao.save(order);
+        orderMapper.save(order);
         return Optional.of(order);
     }
 
@@ -44,7 +45,7 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public Order getOrderInfo(Long orderId) {
-        return orderDao.findOrder(orderId);
+        return orderMapper.findOrder(orderId);
     }
 
     /**

@@ -1,3 +1,10 @@
+spring:
+  application:
+    name:
+server:
+  port: 8081
+  
+## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
 druid:
   url: jdbc:mysql://rgb-fk.com:3306/seckill?useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone= Asia/Shanghai
   driver-class-name: com.mysql.cj.jdbc.Driver
