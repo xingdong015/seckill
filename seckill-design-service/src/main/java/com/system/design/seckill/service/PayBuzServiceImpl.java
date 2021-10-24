@@ -10,6 +10,7 @@ import com.system.design.seckill.dubbo.OrderServiceImpl;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
@@ -18,6 +19,7 @@ import java.util.Random;
  * @author chengzhengzheng
  * @date 2021/10/23
  */
+@Service
 public class PayBuzServiceImpl implements PayBuzService {
 
     @Autowired
