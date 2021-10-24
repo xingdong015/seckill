@@ -3,7 +3,16 @@ spring:
     name:
 server:
   port: 8081
-  
+
+# mybatis-plus 自动建表
+actable:
+  table:
+    auto: update
+  model:
+    pack: com.system.design.seckill.entity
+  database:
+    type: mysql
+
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
 druid:
   url: jdbc:mysql://rgb-fk.com:3306/seckill?useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone= Asia/Shanghai
