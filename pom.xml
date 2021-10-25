@@ -16,11 +16,9 @@
 
     <modules>
         <module>seckill-design-service</module>
-        <module>seckill-design-web</module>
-        <module>product-warm-servcie</module>
         <module>seckill-dubbo-service</module>
         <module>seckill-dubbo-api</module>
-        <module>common</module>
+        <module>seckill-design-common</module>
     </modules>
 
     <properties>

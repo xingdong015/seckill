@@ -1,20 +1,14 @@
 package com.system.design.seckill.service;
 
-import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Preconditions;
-import com.system.design.seckill.common.utils.KillEventTopiEnum;
 import com.system.design.seckill.common.entity.OrderEntity;
 import com.system.design.seckill.dubbo.OrderServiceConsumer;
 import com.system.design.seckill.dubbo.StorageServiceConsumer;
-import com.system.design.seckill.exception.SeckillException;
-import com.system.design.seckill.job.ScheduleJob;
+import com.system.design.seckill.common.exception.SeckillException;
 import com.system.design.seckill.service.api.OrderBuzService;
 import io.seata.spring.annotation.GlobalTransactional;
-import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 /**
