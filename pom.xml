@@ -16,6 +16,7 @@
 
     <modules>
         <module>seckill-design-service</module>
+        <module>seckill-design-db</module>
         <module>seckill-dubbo-service</module>
         <module>seckill-dubbo-api</module>
         <module>seckill-design-common</module>
@@ -59,6 +60,22 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.system.design.seckill</groupId>
+                <artifactId>seckill-design-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.system.design.seckill</groupId>
+                <artifactId>seckill-design-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.system.design.seckill</groupId>
+                <artifactId>seckill-design-db</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter</artifactId>
@@ -218,6 +235,12 @@
                 <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo-spring-boot-starter</artifactId>
                 <version>${dubbo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo</artifactId>
+                <version>${dubbo.version}</version>
+                <scope>compile</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.curator</groupId>

@@ -29,17 +29,12 @@
         <dependency>
             <groupId>org.apache.dubbo</groupId>
             <artifactId>dubbo</artifactId>
-            <version>3.0.3</version>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>com.system.design.seckill</groupId>
-            <artifactId>common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.system.design.seckill</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>seckill-design-common</artifactId>
         </dependency>
     </dependencies>
 
