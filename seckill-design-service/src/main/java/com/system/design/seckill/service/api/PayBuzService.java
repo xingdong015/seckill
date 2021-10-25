@@ -1,6 +1,6 @@
 package com.system.design.seckill.service.api;
 
-import com.system.design.seckill.bean.PayResultStatus;
+import com.system.design.seckill.common.bean.PayResultStatus;
 
 /**
  * @author chengzhengzheng

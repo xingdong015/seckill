@@ -1,12 +1,12 @@
 package com.system.design.seckill.service;
 
 import com.alibaba.fastjson.JSONObject;
-import com.system.design.seckill.bean.PayResultStatus;
-import com.system.design.seckill.bean.RocketMqMessageBean;
+import com.system.design.seckill.common.bean.PayResultStatus;
+import com.system.design.seckill.common.bean.RocketMqMessageBean;
 import com.system.design.seckill.service.api.PayBuzService;
 import com.system.design.seckill.common.utils.KillEventTopiEnum;
-import com.system.design.seckill.entity.Order;
-import com.system.design.seckill.dubbo.OrderServiceImpl;
+import com.system.design.seckill.common.entity.OrderEntity;
+import com.system.design.seckill.dubbo.OrderServiceConsumer;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,20 +23,20 @@ import java.util.Random;
 public class PayBuzServiceImpl implements PayBuzService {
 
     @Autowired
-    private OrderServiceImpl  orderServiceImpl;
+    private OrderServiceConsumer orderServiceConsumer;
     @Autowired
-    private DefaultMQProducer defaultMQProducer;
+    private DefaultMQProducer    defaultMQProducer;
 
     @Override
     public PayResultStatus pay(long orderId, long userId) {
         try {
-            Order orderInfo = orderServiceImpl.getOrderInfo(orderId);
-            if (orderInfo == null) {
+            OrderEntity orderEntityInfo = orderServiceConsumer.getOrderInfo(orderId);
+            if (orderEntityInfo == null) {
                 return PayResultStatus.buildOrderExistedException(orderId, userId);
             }
-            boolean success = doPay(orderInfo, userId);
+            boolean success = doPay(orderEntityInfo, userId);
             if (success) {
-                orderServiceImpl.updateOrderStatus(orderId, "1");
+                orderServiceConsumer.updateOrderStatus(orderId, "1");
                 return PayResultStatus.buildSuccessPay(orderId, userId);
             }
             Message message = new Message();
@@ -53,12 +53,12 @@ public class PayBuzServiceImpl implements PayBuzService {
         }
     }
 
-    private boolean doPay(Order orderInfo, long userId) {
+    private boolean doPay(OrderEntity orderEntityInfo, long userId) {
         if (new Random().nextInt(100) < 50) {
-            System.out.println(userId + " 支付成功,订单id " + orderInfo.getOrderId());
+            System.out.println(userId + " 支付成功,订单id " + orderEntityInfo.getOrderId());
             return true;
         }
-        System.out.println(userId + " 支付失败,订单id " + orderInfo.getOrderId());
+        System.out.println(userId + " 支付失败,订单id " + orderEntityInfo.getOrderId());
         return false;
     }
 }

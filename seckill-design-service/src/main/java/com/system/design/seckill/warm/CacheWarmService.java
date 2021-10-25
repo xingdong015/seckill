@@ -1,7 +1,7 @@
 //package com.system.design.seckill.service;
 //
-//import com.system.design.seckill.entity.Product;
-//import com.system.design.seckill.entity.Seckill;
+//import com.system.design.seckill.common.entity.Product;
+//import com.system.design.seckill.common.entity.Seckill;
 //import com.system.design.seckill.mapper.ProductInfoMapper;
 //import com.system.design.seckill.mapper.SeckillInfoMapper;
 //import com.system.design.seckill.common.utils.CacheKey;

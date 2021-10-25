@@ -1,0 +1,18 @@
+dubbo:
+  cloud:
+    subscribed-services: ${spring.application.name}
+  scan:
+    base-packages: com.system.design.seckill.dubbo
+  protocol:
+    name: dubbo
+    port: -1
+
+spring:
+  application:
+    name: seckill-app-server
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848

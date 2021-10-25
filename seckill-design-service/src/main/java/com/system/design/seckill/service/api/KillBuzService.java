@@ -1,8 +1,8 @@
 package com.system.design.seckill.service.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.system.design.seckill.bean.Exposer;
-import com.system.design.seckill.bean.SeckillResultStatus;
+import com.system.design.seckill.common.bean.Exposer;
+import com.system.design.seckill.common.bean.SeckillResultStatus;
 
 import java.util.List;
 import java.util.Map;

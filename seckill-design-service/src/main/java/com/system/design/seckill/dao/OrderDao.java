@@ -1,7 +1,7 @@
 //package com.system.design.seckill.dao;
 //
-//import com.system.design.seckill.bean.OrderStatusEnum;
-//import com.system.design.seckill.entity.Order;
+//import com.system.design.seckill.common.bean.OrderStatusEnum;
+//import com.system.design.seckill.common.entity.Order;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.jdbc.core.JdbcTemplate;
 //import org.springframework.jdbc.core.PreparedStatementCreator;

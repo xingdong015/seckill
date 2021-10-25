@@ -2,9 +2,9 @@ package com.system.design.seckill.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
-import com.system.design.seckill.bean.Exposer;
-import com.system.design.seckill.bean.RocketMqMessageBean;
-import com.system.design.seckill.bean.SeckillResultStatus;
+import com.system.design.seckill.common.bean.Exposer;
+import com.system.design.seckill.common.bean.RocketMqMessageBean;
+import com.system.design.seckill.common.bean.SeckillResultStatus;
 import com.system.design.seckill.service.api.KillBuzService;
 import com.system.design.seckill.common.utils.CacheKey;
 import com.system.design.seckill.common.utils.KillEventTopiEnum;

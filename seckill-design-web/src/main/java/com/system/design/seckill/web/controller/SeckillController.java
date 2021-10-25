@@ -1,9 +1,9 @@
 package com.system.design.seckill.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.system.design.seckill.bean.Exposer;
-import com.system.design.seckill.bean.PayResultStatus;
-import com.system.design.seckill.bean.SeckillResultStatus;
+import com.system.design.seckill.common.bean.Exposer;
+import com.system.design.seckill.common.bean.PayResultStatus;
+import com.system.design.seckill.common.bean.SeckillResultStatus;
 import com.system.design.seckill.service.api.KillBuzService;
 import com.system.design.seckill.service.api.PayBuzService;
 import org.springframework.beans.factory.annotation.Autowired;

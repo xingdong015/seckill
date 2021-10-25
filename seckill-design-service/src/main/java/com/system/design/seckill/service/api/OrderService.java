@@ -2,9 +2,9 @@ package com.system.design.seckill.service.api;
 
 
 import com.baomidou.mybatisplus.service.IService;
-import com.system.design.seckill.entity.Order;
+import com.system.design.seckill.common.entity.OrderEntity;
 
 
-public interface OrderService extends IService<Order> {
+public interface OrderService extends IService<OrderEntity> {
 
 }

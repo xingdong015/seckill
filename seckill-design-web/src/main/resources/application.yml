@@ -9,7 +9,7 @@ actable:
   table:
     auto: update
   model:
-    pack: com.system.design.seckill.entity
+    pack: com.system.design.seckill.common.entity
   database:
     type: mysql
 # mybatis-plus 配置
@@ -19,7 +19,7 @@ mybatis-plus:
       table-underline: true
   configuration:
     map-underscore-to-camel-case: true
-  type-aliases-package: com.system.design.seckill.entity
+  type-aliases-package: com.system.design.seckill.common.entity
 
 ## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
 druid:

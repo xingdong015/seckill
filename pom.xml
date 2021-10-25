@@ -17,12 +17,9 @@
     <modules>
         <module>seckill-design-service</module>
         <module>seckill-design-web</module>
-        <!--<module>seckill-service</module>
-        <module>order-service</module>
-        <module>payment-service</module>
-        <module>stock-service</module>
-        <module>product-service</module>-->
         <module>product-warm-servcie</module>
+        <module>seckill-dubbo-service</module>
+        <module>seckill-dubbo-api</module>
         <module>common</module>
     </modules>
 
@@ -61,7 +58,7 @@
         <sentinel-core.version>1.8.2</sentinel-core.version>
         <cat-client.version>3.0.0</cat-client.version>
     </properties>
-    
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -153,7 +150,7 @@
                 <artifactId>seckill-design-service</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
             </dependency>
-    
+
             <dependency>
                 <groupId>com.system.design.seckill</groupId>
                 <artifactId>common</artifactId>
@@ -184,7 +181,7 @@
                 <artifactId>dozer</artifactId>
                 <version>${dozer.version}</version>
             </dependency>
-    
+
             <!--logback -->
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -213,7 +210,7 @@
                 <artifactId>sentinel-core</artifactId>
                 <version>${sentinel-core.version}</version>
             </dependency>
-<!--            分布式事务 seata-->
+            <!--            分布式事务 seata-->
             <dependency>
                 <groupId>io.seata</groupId>
                 <artifactId>seata-all</artifactId>
@@ -283,13 +280,15 @@
                 <artifactId>fastjson</artifactId>
                 <version>1.2.76</version>
             </dependency>
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>2.2.6.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
+
     </dependencyManagement>
-
-
-    <build>
-        <plugins>
-        </plugins>
-    </build>
 
 </project>

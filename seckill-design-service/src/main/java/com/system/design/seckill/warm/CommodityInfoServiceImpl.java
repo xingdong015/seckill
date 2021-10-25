@@ -1,7 +1,7 @@
 //package com.system.design.seckill.service;
 //
 //import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-//import com.system.design.seckill.entity.Product;
+//import com.system.design.seckill.common.entity.Product;
 //import com.system.design.seckill.mapper.ProductInfoMapper;
 //import org.apache.tomcat.jni.Status;
 //import org.springframework.stereotype.Service;

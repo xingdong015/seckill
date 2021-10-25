@@ -1,8 +1,7 @@
 package com.system.design.seckill.web;
 
-import com.system.design.seckill.entity.Seckill;
+import com.system.design.seckill.common.entity.Seckill;
 import com.system.design.seckill.service.KillBuzServiceImpl;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
