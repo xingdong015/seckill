@@ -1,3 +1,27 @@
+spring:
+  application:
+    name:
+server:
+  port: 8081
+
+# mybatis-plus 自动建表
+actable:
+  table:
+    auto: update
+  model:
+    pack: com.system.design.seckill.entity
+  database:
+    type: mysql
+# mybatis-plus 配置
+mybatis-plus:
+  global-config:
+    db-config:
+      table-underline: true
+  configuration:
+    map-underscore-to-camel-case: true
+  type-aliases-package: com.system.design.seckill.entity
+
+## ## ## ## ## ## ## ## ## ## ## ## ## ## ## ##
 druid:
   url: jdbc:mysql://rgb-fk.com:3306/seckill?useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&serverTimezone= Asia/Shanghai
   driver-class-name: com.mysql.cj.jdbc.Driver
@@ -71,7 +95,7 @@ swagger:
 ## rocketmq
 rocketmq:
   isEnable: true
-  name-server: 192.168.0.100:9876
+  name-server: 192.168.0.107:9876
   access-channel: LOCAL
   producer:
     retry-next-server: true
@@ -79,3 +103,18 @@ rocketmq:
     send-message-timeout: 3000
     group: SECKILL_ORDER
     customized-trace-topic: topic_order
+
+##dubbo配置
+dubbo:
+  application:
+    name: seckill-system
+  protocol:
+    port:
+  registry:
+    id: seckill
+    address: rgb-fk.com:2181;rgb-fk.com:2182:rgb-fk.com:2183
+    protocol: zookeeper
+
+
+
+

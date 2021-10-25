@@ -25,12 +25,6 @@ public class Seckill {
     @TableId(value = "seckill_id", type = IdType.AUTO)
     private Long seckillId;
 
-    @TableField(value = "start_time", fill = INSERT, jdbcType = JdbcType.DATE)
-    private Long startTime;
-
-    @TableField(value = "end_time", fill = INSERT_UPDATE, jdbcType = JdbcType.DATE)
-    private Long endTime;
-
     @TableField(value = "seckill_name", jdbcType = JdbcType.VARCHAR)
     private String seckillName;
 
@@ -43,10 +37,24 @@ public class Seckill {
     @TableField(value = "count", jdbcType = JdbcType.BIGINT)
     private Long count;
 
+    @TableField(value = "residue", jdbcType = JdbcType.BIGINT)
+    private Long residue;
+
+    //TCC事务锁定的库存
+    @TableField(value = "frozen", jdbcType = JdbcType.BIGINT)
+    private Long frozen;
+
+    @TableField(value = "start_time", fill = INSERT, jdbcType = JdbcType.DATE)
+    private Long startTime;
+
+    @TableField(value = "end_time", fill = INSERT_UPDATE, jdbcType = JdbcType.DATE)
+    private Long endTime;
+
     @TableField(value = "create_time", fill = INSERT, jdbcType = JdbcType.DATE)
     private Long createTime;
 
     @TableField(value = "update_time", fill = INSERT, jdbcType = JdbcType.DATE)
     private Long updateTime;
+
 
 }

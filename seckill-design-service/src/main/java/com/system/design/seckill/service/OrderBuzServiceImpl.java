@@ -1,13 +1,14 @@
 package com.system.design.seckill.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Preconditions;
 import com.system.design.seckill.bean.OrderStatusEnum;
 import com.system.design.seckill.bean.RocketMqMessageBean;
-import com.system.design.seckill.common.utils.JsonUtils;
 import com.system.design.seckill.common.utils.KillEventTopiEnum;
 import com.system.design.seckill.dubbo.api.OrderService;
 import com.system.design.seckill.dubbo.api.StorageService;
 import com.system.design.seckill.entity.Order;
+import com.system.design.seckill.exception.SeckillException;
 import com.system.design.seckill.job.ScheduleJob;
 import com.system.design.seckill.service.api.OrderBuzService;
 import io.seata.spring.annotation.GlobalTransactional;
@@ -16,6 +17,7 @@ import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 /**
  * @author chengzhengzheng
@@ -41,15 +43,19 @@ public class OrderBuzServiceImpl implements OrderBuzService {
     @Override
     public Long doKill(long killId, String userId) {
 
-        int count = storageService.reduceStock(killId);
+        int count = storageService.decreaseStorage(killId);
         Preconditions.checkArgument(count >= 1, "%s|%s|库存不足", killId, userId);
 
-        Long orderId = orderService.createOrder(killId, userId);
-        Preconditions.checkNotNull(orderId, "%s|%s|订单创建失败", killId, userId);
+        Optional<Order> orderOptional = orderService.createOrder(killId, userId);
+        if (!orderOptional.isPresent()) {
+            throw new SeckillException(String.format("order error => killId:%s userId:%s", killId, userId));
+        }
+        Order order = orderOptional.get();
+        Preconditions.checkNotNull(order.getOrderId(), "%s|%s|订单创建失败", killId, userId);
 
-        addPayMonitor(orderId);
+        addPayMonitor(order.getOrderId());
 
-        return orderId;
+        return order.getOrderId();
     }
 
     private void addPayMonitor(Long orderId) {
@@ -58,11 +64,14 @@ public class OrderBuzServiceImpl implements OrderBuzService {
             if (OrderStatusEnum.INIT.getStatus().equals(orderInfo.getStatus())) {
                 Message message = new Message();
                 message.setTopic(KillEventTopiEnum.PAY_STATUS_CHANGE.getTopic());
-                RocketMqMessageBean bean = new RocketMqMessageBean(JsonUtils.objectToJson(orderId), -1, System.currentTimeMillis());
-                message.setBody(JsonUtils.objectToJson(bean).getBytes(StandardCharsets.UTF_8));
+                JSONObject object = new JSONObject();
+                object.put("orderId",orderId);
+                RocketMqMessageBean bean = new RocketMqMessageBean(object.toJSONString(), -1,
+                        System.currentTimeMillis());
+                message.setBody(JSONObject.toJSONString(bean).getBytes(StandardCharsets.UTF_8));
                 try {
                     defaultMQProducer.sendOneway(message);
-                }  catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

@@ -1,12 +1,12 @@
 package com.system.design.seckill.service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import com.system.design.seckill.bean.Exposer;
 import com.system.design.seckill.bean.RocketMqMessageBean;
 import com.system.design.seckill.bean.SeckillResultStatus;
 import com.system.design.seckill.service.api.KillBuzService;
 import com.system.design.seckill.common.utils.CacheKey;
-import com.system.design.seckill.common.utils.JsonUtils;
 import com.system.design.seckill.common.utils.KillEventTopiEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
@@ -118,7 +118,7 @@ public class KillBuzServiceImpl implements KillBuzService {
             Message message = new Message();
             message.setTopic(KillEventTopiEnum.KILL_SUCCESS.getTopic());
             RocketMqMessageBean bean = new RocketMqMessageBean((userId + "-" + killId), null, System.currentTimeMillis());
-            message.setBody(JsonUtils.objectToJson(bean).getBytes(StandardCharsets.UTF_8));
+            message.setBody(JSONObject.toJSONString(bean).getBytes(StandardCharsets.UTF_8));
             //这里有可能会投递失败、导致下单失败、所以实际情况下、redis的库存比数据库的库存多、
             //MySQL在真正扣减库存的时候需要通过乐观锁防止超卖
             defaultMQProducer.sendOneway(message);

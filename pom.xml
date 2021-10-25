@@ -32,6 +32,7 @@
         <mysql-connector-java.version>8.0.26</mysql-connector-java.version>
         <druid.version>1.2.6</druid.version>
         <mybatis-plus-boot-starter.version>3.4.3.4</mybatis-plus-boot-starter.version>
+        <mybatis-supprt.version>2.3</mybatis-supprt.version>
         <lombok.version>1.18.20</lombok.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <guava.version>30.1.1-jre</guava.version>
@@ -47,7 +48,7 @@
         <logback-core.version>1.2.3</logback-core.version>
         <logback-classic.version>1.2.3</logback-classic.version>
         <seata.version>1.4.2</seata.version>
-        <dubbo.version>3.0.2.1</dubbo.version>
+        <dubbo.version>3.0.3</dubbo.version>
         <dubbo.curator.version>5.2.0</dubbo.curator.version>
         <zoo.version>3.7.0</zoo.version>
         <curator.version>5.2.0</curator.version>
@@ -87,6 +88,11 @@
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatis-plus-boot-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-support</artifactId>
+                <version>${mybatis-supprt.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -266,6 +272,16 @@
                         <groupId>org.apache.zookeeper</groupId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.gitee.sunchenbin.mybatis.actable</groupId>
+                <artifactId>mybatis-enhance-actable</artifactId>
+                <version>${mybatis-enhance-actable.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>1.2.76</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

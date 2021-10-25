@@ -1,23 +1,24 @@
 package com.system.design.seckill.dubbo;
 
-import com.system.design.seckill.dao.OrderDao;
 import com.system.design.seckill.entity.Order;
 import com.system.design.seckill.dubbo.api.OrderService;
+import com.system.design.seckill.mapper.OrderMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * @author chengzhengzheng
  * @date 2021/9/21
  */
-@Service
 @Slf4j
-@DubboService(version = "1.0",interfaceClass = OrderService.class)
+@DubboService(version = "1.0", registry = {"seckill"})
 public class OrderServiceImpl implements OrderService {
-    @Autowired
-    private OrderDao orderDao;
+
+    @Resource
+    OrderMapper orderMapper;
 
     /**
      * 下单操作
@@ -26,8 +27,11 @@ public class OrderServiceImpl implements OrderService {
      * @param userId 用户id
      */
     @Override
-    public Long createOrder(long skuId, String userId) {
-        return orderDao.createOrder(skuId, userId);
+    public Optional<Order> createOrder(long skuId, String userId) {
+        Order order = new Order();
+        order.setSeckillId(skuId);
+        //orderMapper.save(order);
+        return Optional.of(order);
     }
 
     /**
@@ -38,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public Order getOrderInfo(Long orderId) {
-        return orderDao.getOrderInfo(orderId);
+        return orderMapper.findOrder(orderId);
     }
 
     /**

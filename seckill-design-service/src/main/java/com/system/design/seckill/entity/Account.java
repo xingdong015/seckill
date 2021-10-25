@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
 import org.apache.ibatis.type.JdbcType;
 import org.springframework.data.annotation.Id;
 
@@ -15,6 +16,7 @@ import static com.baomidou.mybatisplus.annotation.FieldFill.UPDATE;
  * @date 2021/9/19
  */
 @SuppressWarnings("all")
+@Data
 @TableName("t_account")
 public class Account {
     @Id
