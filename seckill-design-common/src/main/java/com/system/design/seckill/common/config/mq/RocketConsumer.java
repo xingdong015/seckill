@@ -1,4 +1,4 @@
-package com.system.design.seckill.config.mq;
+package com.system.design.seckill.common.config.mq;
 
 import org.apache.rocketmq.client.consumer.listener.MessageListener;
 

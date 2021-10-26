@@ -20,6 +20,7 @@
         <module>seckill-dubbo-service</module>
         <module>seckill-dubbo-api</module>
         <module>seckill-design-common</module>
+        <module>seckill-design-web</module>
     </modules>
 
     <properties>

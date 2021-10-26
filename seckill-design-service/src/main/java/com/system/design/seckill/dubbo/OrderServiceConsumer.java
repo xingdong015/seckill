@@ -2,7 +2,7 @@ package com.system.design.seckill.dubbo;
 
 import com.system.design.seckill.dubbo.service.IOrderService;
 import com.system.design.seckill.common.entity.OrderEntity;
-import com.system.design.seckill.mapper.OrderMapper;
+import com.system.design.seckill.db.mapper.OrderMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;

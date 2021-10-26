@@ -1,6 +1,6 @@
-package com.system.design.seckill.mq;
+package com.system.design.seckill.common.mq;
 
-import com.system.design.seckill.config.mq.AbstractRocketConsumer;
+import com.system.design.seckill.common.config.mq.AbstractRocketConsumer;
 import com.system.design.seckill.common.utils.KillEventTopiEnum;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;

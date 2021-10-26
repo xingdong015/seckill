@@ -1,4 +1,4 @@
-package com.system.design.seckill.config;
+package com.system.design.seckill.common.config;
 
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;

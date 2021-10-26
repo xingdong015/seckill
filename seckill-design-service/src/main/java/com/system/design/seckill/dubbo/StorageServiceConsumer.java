@@ -1,7 +1,7 @@
 package com.system.design.seckill.dubbo;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
-import com.system.design.seckill.mapper.SeckillMapper;
+import com.system.design.seckill.db.mapper.SeckillMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;

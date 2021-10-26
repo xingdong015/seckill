@@ -1,4 +1,5 @@
-package com.system.design.seckill.mapper;
+package com.system.design.seckill.db.mapper;
+
 
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.system.design.seckill.common.entity.OrderEntity;

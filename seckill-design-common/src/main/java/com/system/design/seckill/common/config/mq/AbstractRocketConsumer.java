@@ -1,8 +1,7 @@
-package com.system.design.seckill.config.mq;
+package com.system.design.seckill.common.config.mq;
 
 import org.apache.rocketmq.client.consumer.MQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.MessageListener;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 消费者基本信息

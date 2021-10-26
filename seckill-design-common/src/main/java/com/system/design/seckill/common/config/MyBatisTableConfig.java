@@ -1,10 +1,9 @@
-package com.system.design.seckill.config;
+package com.system.design.seckill.common.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import org.mybatis.spring.SqlSessionFactoryBean;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -13,18 +12,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.stereotype.Component;
-
-import javax.sql.DataSource;
 
 /**
  * @author chengzhengzheng
  * @date 2021/9/19
  */
 @Configuration
-@ComponentScan(basePackages = {"com.gitee.sunchenbin.mybatis.actable.manager.*"})
+@ComponentScan
 public class MyBatisTableConfig {
 
     @Bean

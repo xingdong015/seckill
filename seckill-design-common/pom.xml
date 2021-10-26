@@ -103,6 +103,15 @@
 			<groupId>com.baomidou</groupId>
 			<artifactId>mybatis-plus-support</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.rocketmq</groupId>
+			<artifactId>rocketmq-spring-boot-starter</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.rocketmq</groupId>
+			<artifactId>rocketmq-tools</artifactId>
+		</dependency>
     </dependencies>
 
 	<build>

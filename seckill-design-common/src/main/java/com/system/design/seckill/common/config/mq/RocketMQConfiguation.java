@@ -1,4 +1,4 @@
-package com.system.design.seckill.config.mq;
+package com.system.design.seckill.common.config.mq;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
