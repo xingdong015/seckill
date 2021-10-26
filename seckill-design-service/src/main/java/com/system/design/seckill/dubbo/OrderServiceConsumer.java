@@ -6,6 +6,7 @@ import com.system.design.seckill.db.mapper.OrderMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
@@ -15,6 +16,7 @@ import javax.annotation.Resource;
  */
 @Slf4j
 @EnableDiscoveryClient
+@Service
 public class OrderServiceConsumer {
 
     @Resource

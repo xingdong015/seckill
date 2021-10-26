@@ -6,6 +6,8 @@ import com.system.design.seckill.dubbo.service.IStockService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
@@ -14,8 +16,9 @@ import javax.annotation.Resource;
  * @date 2021/10/23
  */
 @Slf4j
-@DubboService(version = "1.0", registry = {"seckill"})
-public class StorageServiceConsumer extends ServiceImpl {
+@EnableDiscoveryClient
+@Service
+public class StockServiceConsumer {
 
     @DubboReference
     private IStockService stockService;

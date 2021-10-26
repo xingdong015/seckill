@@ -1,9 +1,7 @@
 package com.system.design.seckill.dubbo.service;
 
-import com.system.design.seckill.db.mapper.SeckillMapper;
 import org.apache.dubbo.config.annotation.DubboService;
 
-import javax.annotation.Resource;
 
 /**
  * @author chengzhengzheng
@@ -11,9 +9,6 @@ import javax.annotation.Resource;
  */
 @DubboService(protocol = "dubbo")
 public class StockService implements IStockService {
-
-    @Resource
-    private SeckillMapper seckillMapper;
 
     @Override
     public Integer decreaseStorage(Long killId) {
