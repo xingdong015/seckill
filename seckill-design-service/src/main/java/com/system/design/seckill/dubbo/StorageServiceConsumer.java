@@ -2,6 +2,7 @@ package com.system.design.seckill.dubbo;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.system.design.seckill.db.mapper.SeckillMapper;
+import com.system.design.seckill.dubbo.service.IStockService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -15,13 +16,11 @@ import javax.annotation.Resource;
 @Slf4j
 @DubboService(version = "1.0", registry = {"seckill"})
 public class StorageServiceConsumer extends ServiceImpl {
-    @Resource
-    private SeckillMapper seckillMapper;
 
     @DubboReference
-    private StorageServiceConsumer storageServiceConsumer;
+    private IStockService stockService;
 
     public Integer decreaseStorage(Long killId) {
-        return storageServiceConsumer.decreaseStorage(killId);
+        return stockService.decreaseStorage(killId);
     }
 }

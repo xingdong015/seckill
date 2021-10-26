@@ -2,7 +2,6 @@ package com.system.design.seckill.dubbo.service;
 
 import com.system.design.seckill.common.entity.OrderEntity;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.springframework.core.annotation.Order;
 
 /**
  * @author chengzhengzheng
@@ -12,6 +11,7 @@ import org.springframework.core.annotation.Order;
 public class OrderService implements IOrderService {
     @Override
     public OrderEntity createOrder(long skuId, String userId) {
-        return null;
+        System.out.println("创建订单成功");
+        return new OrderEntity();
     }
 }

@@ -41,6 +41,10 @@
             <artifactId>seckill-dubbo-api</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.system.design.seckill</groupId>
+            <artifactId>seckill-design-db</artifactId>
+        </dependency>
     </dependencies>
 
 

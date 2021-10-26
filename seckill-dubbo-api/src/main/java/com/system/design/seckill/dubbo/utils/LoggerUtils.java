@@ -1,8 +1,8 @@
 package com.system.design.seckill.dubbo.utils;
 
+import org.apache.dubbo.rpc.RpcContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.dubbo.rpc.RpcContext;
 
 public abstract class LoggerUtils {
 
@@ -11,9 +11,9 @@ public abstract class LoggerUtils {
 	public static void log(String url, Object result) {
 		String message = String
 				.format("The client[%s] uses '%s' protocol to call %s : %s",
-						RpcContext.getContext().getRemoteHostName(),
-						RpcContext.getContext().getUrl() == null ? "N/A"
-								: RpcContext.getContext().getUrl().getProtocol(),
+						RpcContext.getServerContext().getRemoteHost(),
+						RpcContext.getServerContext().getUrl() == null ? "N/A"
+								: RpcContext.getServerContext().getUrl().getProtocol(),
 						url, result);
 		if (logger.isInfoEnabled()) {
 			logger.info(message);
