@@ -2,6 +2,7 @@ package com.system.design.seckill.dubbo.service;
 
 import com.system.design.seckill.common.entity.OrderEntity;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.stereotype.Service;
 
 /**
  * @author chengzhengzheng

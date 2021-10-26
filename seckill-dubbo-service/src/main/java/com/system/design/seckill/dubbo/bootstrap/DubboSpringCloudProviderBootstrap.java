@@ -1,4 +1,4 @@
-package com.system.design.seckill;
+package com.system.design.seckill.dubbo.bootstrap;
 
 
 import org.springframework.boot.WebApplicationType;
