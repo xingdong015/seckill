@@ -2,6 +2,7 @@ package com.system.design.seckill.dubbo.service;
 
 import org.apache.dubbo.config.annotation.DubboService;
 
+import javax.annotation.Resource;
 
 /**
  * @author chengzhengzheng

@@ -11,7 +11,6 @@ import org.springframework.data.annotation.Id;
 import java.io.Serializable;
 
 import static com.baomidou.mybatisplus.annotation.FieldFill.INSERT;
-import static com.baomidou.mybatisplus.annotation.FieldFill.UPDATE;
 
 /**
  * @author chengzhengzheng

@@ -7,7 +7,6 @@ import com.system.design.seckill.dubbo.StockServiceConsumer;
 import com.system.design.seckill.common.exception.SeckillException;
 import com.system.design.seckill.service.api.OrderBuzService;
 import io.seata.spring.annotation.GlobalTransactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

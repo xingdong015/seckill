@@ -9,7 +9,6 @@ import org.apache.ibatis.type.JdbcType;
 import org.springframework.data.annotation.Id;
 
 import static com.baomidou.mybatisplus.annotation.FieldFill.INSERT;
-import static com.baomidou.mybatisplus.annotation.FieldFill.UPDATE;
 
 /**
  * @author chengzhengzheng
