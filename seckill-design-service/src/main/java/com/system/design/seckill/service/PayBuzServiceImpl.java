@@ -3,11 +3,10 @@ package com.system.design.seckill.service;
 import com.alibaba.fastjson.JSONObject;
 import com.system.design.seckill.common.bean.PayResultStatus;
 import com.system.design.seckill.common.bean.RocketMqMessageBean;
-import com.system.design.seckill.service.api.PayBuzService;
-import com.system.design.seckill.common.utils.KillEventTopiEnum;
 import com.system.design.seckill.common.entity.OrderEntity;
+import com.system.design.seckill.common.utils.KillEventTopiEnum;
 import com.system.design.seckill.dubbo.OrderServiceConsumer;
-import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import com.system.design.seckill.service.api.PayBuzService;
 import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,8 +23,8 @@ public class PayBuzServiceImpl implements PayBuzService {
 
     @Autowired
     private OrderServiceConsumer orderServiceConsumer;
-    @Autowired
-    private DefaultMQProducer    defaultMQProducer;
+//    @Autowired
+//    private DefaultMQProducer    defaultMQProducer;
 
     @Override
     public PayResultStatus pay(long orderId, long userId) {
@@ -45,7 +44,7 @@ public class PayBuzServiceImpl implements PayBuzService {
             object.put("orderId", orderId);
             RocketMqMessageBean bean = new RocketMqMessageBean(object.toJSONString(), -1, System.currentTimeMillis());
             message.setBody(JSONObject.toJSONString(bean).getBytes(StandardCharsets.UTF_8));
-            defaultMQProducer.send(message);
+//            defaultMQProducer.send(message);
 
             return PayResultStatus.buildPayFail(orderId, userId);
         } catch (Throwable e) {

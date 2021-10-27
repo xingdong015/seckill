@@ -38,8 +38,8 @@ public class KillBuzServiceImpl implements KillBuzService {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @Autowired
-    private DefaultMQProducer defaultMQProducer;
+//    @Autowired
+//    private DefaultMQProducer defaultMQProducer;
 
     //加入一个混淆字符串(秒杀接口)的salt，为了我避免用户猜出我们的md5值，值任意给，越复杂越好
     private final String salt = "cjy20200922czz0708";
@@ -121,7 +121,7 @@ public class KillBuzServiceImpl implements KillBuzService {
             message.setBody(JSONObject.toJSONString(bean).getBytes(StandardCharsets.UTF_8));
             //这里有可能会投递失败、导致下单失败、所以实际情况下、redis的库存比数据库的库存多、
             //MySQL在真正扣减库存的时候需要通过乐观锁防止超卖
-            defaultMQProducer.sendOneway(message);
+//            defaultMQProducer.sendOneway(message);
             return SeckillResultStatus.buildSuccessExecute(killId, result);
         } catch (Throwable e) {
             log.error("KillBuzServiceImpl#executeKill error:{} {}", killId, userId, e);
