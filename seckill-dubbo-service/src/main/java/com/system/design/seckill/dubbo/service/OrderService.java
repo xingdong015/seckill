@@ -15,4 +15,7 @@ public class OrderService implements IOrderService {
         System.out.println("创建订单成功");
         return new OrderEntity();
     }
+    public OrderService(){
+        System.out.println("创建OrderService。。。。。");
+    }
 }

@@ -8,6 +8,8 @@ import lombok.Data;
 import org.apache.ibatis.type.JdbcType;
 import org.springframework.data.annotation.Id;
 
+import java.io.Serializable;
+
 import static com.baomidou.mybatisplus.annotation.FieldFill.INSERT;
 import static com.baomidou.mybatisplus.annotation.FieldFill.UPDATE;
 
@@ -18,7 +20,7 @@ import static com.baomidou.mybatisplus.annotation.FieldFill.UPDATE;
 @TableName("t_order")
 @SuppressWarnings("all")
 @Data
-public class OrderEntity {
+public class OrderEntity implements Serializable {
     @Id
     @TableId(value = "order_id", type = IdType.AUTO)
     private Long    orderId;
