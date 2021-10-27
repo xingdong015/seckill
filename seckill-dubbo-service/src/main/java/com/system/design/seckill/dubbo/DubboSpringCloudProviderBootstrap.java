@@ -2,12 +2,12 @@ package com.system.design.seckill.dubbo;
 
 
 import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 @EnableDiscoveryClient
-@EnableAutoConfiguration
+@SpringBootApplication
 public class DubboSpringCloudProviderBootstrap {
     /**
      * 在引导 DubboSpringCloudServerBootstrap 之前，

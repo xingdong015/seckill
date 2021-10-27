@@ -8,7 +8,7 @@ import javax.annotation.Resource;
  * @author chengzhengzheng
  * @date 2021/10/26
  */
-@DubboService(protocol = "dubbo")
+@DubboService
 public class StockService implements IStockService {
 
     @Override

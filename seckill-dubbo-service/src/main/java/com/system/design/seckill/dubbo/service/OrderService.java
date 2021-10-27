@@ -7,7 +7,7 @@ import org.apache.dubbo.config.annotation.DubboService;
  * @author chengzhengzheng
  * @date 2021/10/25
  */
-@DubboService(protocol = "dubbo",interfaceName = "orderService")
+@DubboService
 public class OrderService implements IOrderService {
     @Override
     public OrderEntity createOrder(long skuId, String userId) {
