@@ -2,8 +2,8 @@ package com.system.design.seckill.service;
 
 import com.google.common.base.Preconditions;
 import com.system.design.seckill.common.entity.OrderEntity;
-import com.system.design.seckill.dubbo.OrderServiceConsumer;
-import com.system.design.seckill.dubbo.StockServiceConsumer;
+import com.system.design.seckill.transaction.CreatOrderTccService;
+import com.system.design.seckill.transaction.DecreaseStorageTccService;
 import com.system.design.seckill.common.exception.SeckillException;
 import com.system.design.seckill.service.api.OrderBuzService;
 import io.seata.spring.annotation.GlobalTransactional;
@@ -19,9 +19,9 @@ import java.util.Objects;
 @Service
 public class OrderBuzServiceImpl implements OrderBuzService {
     @Resource
-    private OrderServiceConsumer orderService;
+    private CreatOrderTccService      creatOrderTccService;
     @Resource
-    private StockServiceConsumer storageService;
+    private DecreaseStorageTccService decreaseStorageTccService;
 
     /**
      * 扣减库存、下单
@@ -33,10 +33,10 @@ public class OrderBuzServiceImpl implements OrderBuzService {
     @Override
     public Long doKill(long killId, String userId) {
 
-        int count = storageService.decreaseStorage(killId);
+        int count = decreaseStorageTccService.decreaseStorage(killId);
         Preconditions.checkArgument(count >= 1, "%s|%s|库存不足", killId, userId);
 
-        OrderEntity order = orderService.createOrder(killId, userId);
+        OrderEntity order = creatOrderTccService.createOrder(killId, userId);
         if (Objects.isNull(order)) {
             throw new SeckillException(String.format("order error => killId:%s userId:%s", killId, userId));
         }

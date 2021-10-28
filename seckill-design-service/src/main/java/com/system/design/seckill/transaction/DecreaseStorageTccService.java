@@ -1,4 +1,4 @@
-package com.system.design.seckill.dubbo;
+package com.system.design.seckill.transaction;
 
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.system.design.seckill.db.mapper.SeckillMapper;
@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 @Slf4j
 @EnableDiscoveryClient
 @Service
-public class StockServiceConsumer {
+public class DecreaseStorageTccService {
 
     @DubboReference
     private IStockService stockService;

@@ -5,7 +5,7 @@ import com.system.design.seckill.common.bean.PayResultStatus;
 import com.system.design.seckill.common.bean.RocketMqMessageBean;
 import com.system.design.seckill.common.entity.OrderEntity;
 import com.system.design.seckill.common.utils.KillEventTopiEnum;
-import com.system.design.seckill.dubbo.OrderServiceConsumer;
+import com.system.design.seckill.transaction.CreatOrderTccService;
 import com.system.design.seckill.service.api.PayBuzService;
 import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,20 +22,20 @@ import java.util.Random;
 public class PayBuzServiceImpl implements PayBuzService {
 
     @Autowired
-    private OrderServiceConsumer orderServiceConsumer;
+    private CreatOrderTccService creatOrderTccService;
 //    @Autowired
 //    private DefaultMQProducer    defaultMQProducer;
 
     @Override
     public PayResultStatus pay(long orderId, long userId) {
         try {
-            OrderEntity orderEntityInfo = orderServiceConsumer.getOrderInfo(orderId);
+            OrderEntity orderEntityInfo = creatOrderTccService.getOrderInfo(orderId);
             if (orderEntityInfo == null) {
                 return PayResultStatus.buildOrderExistedException(orderId, userId);
             }
             boolean success = doPay(orderEntityInfo, userId);
             if (success) {
-                orderServiceConsumer.updateOrderStatus(orderId, "1");
+                creatOrderTccService.updateOrderStatus(orderId, "1");
                 return PayResultStatus.buildSuccessPay(orderId, userId);
             }
             Message message = new Message();

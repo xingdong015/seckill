@@ -1,4 +1,4 @@
-package com.system.design.seckill.dubbo;
+package com.system.design.seckill.transaction;
 
 import com.system.design.seckill.dubbo.service.IOrderService;
 import com.system.design.seckill.common.entity.OrderEntity;
@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 @Slf4j
 @EnableDiscoveryClient
 @Service
-public class OrderServiceConsumer {
+public class CreatOrderTccService {
 
     @Resource
     OrderMapper orderMapper;
@@ -34,25 +34,5 @@ public class OrderServiceConsumer {
      */
     public OrderEntity createOrder(long skuId, String userId) {
         return orderService.createOrder(skuId, userId);
-    }
-
-    /**
-     * 获取订单详情数据
-     *
-     * @param orderId
-     * @return
-     */
-    public OrderEntity getOrderInfo(Long orderId) {
-        return orderMapper.findOrder(orderId);
-    }
-
-    /**
-     * 更新订单状态
-     *
-     * @param orderId
-     * @param status
-     */
-    public void updateOrderStatus(long orderId, String status) {
-
     }
 }
