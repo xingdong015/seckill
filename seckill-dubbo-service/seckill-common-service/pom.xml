@@ -4,10 +4,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.system.design.seckill</groupId>
-        <artifactId>seckill-system-design</artifactId>
+        <artifactId>seckill-dubbo-service</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-
     <groupId>com.system.design.seckil</groupId>
     <artifactId>seckill-common-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
