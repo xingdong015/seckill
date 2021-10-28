@@ -18,6 +18,7 @@
         <module>seckill-order-service</module>
         <module>seckill-common-service</module>
         <module>seckill-stock-service</module>
+        <module>seckill-pay-service</module>
     </modules>
 
     <properties>
@@ -25,7 +26,7 @@
     </properties>
 
     <dependencies>
-        <!-- spring-cloud-starter-dubbo : Dubbo Spring Cloud Starter artifact，间接引入 dubbo-spring-boot-starter 等 artifact-->
+        <!--        dubbo依赖 -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-dubbo</artifactId>
@@ -36,17 +37,20 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-actuator</artifactId>
         </dependency>
-
         <!-- spring-cloud-starter-alibaba-nacos-discovery : Nacos Spring Cloud 服务注册与发现 artifact -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
-
         <!--  dubbo 服务api接口-->
         <dependency>
             <groupId>com.system.design.seckill</groupId>
             <artifactId>seckill-design-common</artifactId>
+        </dependency>
+        <!--        lombok插件-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
     </dependencies>
 

@@ -60,12 +60,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <!--  模块依赖-->
-            <dependency>
-                <groupId>com.system.design.seckill</groupId>
-                <artifactId>seckill-design-common</artifactId>
-                <version>${project.version}</version>
-            </dependency>
             <dependency>
                 <groupId>com.system.design.seckill</groupId>
                 <artifactId>seckill-design-service</artifactId>

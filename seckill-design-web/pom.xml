@@ -56,10 +56,6 @@
             <groupId>com.system.design.seckill</groupId>
             <artifactId>seckill-design-common</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.system.design.seckill</groupId>
-            <artifactId>seckill-design-common</artifactId>
-        </dependency>
     </dependencies>
 
 </project>
