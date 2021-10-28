@@ -4,21 +4,14 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.system.design.seckill</groupId>
-        <artifactId>seckill-system-design</artifactId>
+        <artifactId>seckill-dubbo-service</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
     <groupId>com.system.design.seckill</groupId>
-    <artifactId>seckill-dubbo-service</artifactId>
-    <version>${parent.version}</version>
-    <packaging>pom</packaging>
-    <description>所有微服务的复工程</description>
-
-    <modules>
-        <module>seckill-order-service</module>
-        <module>seckill-common-service</module>
-        <module>seckill-stock-service</module>
-    </modules>
+    <artifactId>seckill-pay-service</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>seckill-pay-service</name>
 
     <properties>
         <java.version>1.8</java.version>
@@ -36,19 +29,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-actuator</artifactId>
         </dependency>
-
         <!-- spring-cloud-starter-alibaba-nacos-discovery : Nacos Spring Cloud 服务注册与发现 artifact -->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
-
-        <!--  dubbo 服务api接口-->
-        <dependency>
-            <groupId>com.system.design.seckill</groupId>
-            <artifactId>seckill-design-common</artifactId>
-        </dependency>
     </dependencies>
-
 
 </project>
