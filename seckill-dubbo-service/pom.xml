@@ -10,7 +10,7 @@
 
     <groupId>com.system.design.seckill</groupId>
     <artifactId>seckill-dubbo-service</artifactId>
-    <version>${parent.version}</version>
+    <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>所有微服务的复工程</description>
 

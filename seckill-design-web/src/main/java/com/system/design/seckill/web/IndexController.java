@@ -16,7 +16,7 @@ import javax.annotation.Resource;
 @RequestMapping("/v1")
 public class IndexController {
     @Resource
-    private IOrderService killBuzService;
+    private IKillBuzService killBuzService;
 
     @GetMapping(value = "/kill")
     public Long doKill(long killId, String userId) {

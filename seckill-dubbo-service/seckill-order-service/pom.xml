@@ -10,7 +10,7 @@
 
     <groupId>com.example</groupId>
     <artifactId>seckill-order-service</artifactId>
-    <version>${parent.version}</version>
+    <version>0.0.1-SNAPSHOT</version>
     <name>seckill-order-service</name>
 
     <properties>

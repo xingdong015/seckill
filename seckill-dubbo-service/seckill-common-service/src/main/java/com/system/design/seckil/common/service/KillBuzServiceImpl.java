@@ -1,14 +1,21 @@
 package com.system.design.seckil.common.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.system.design.seckill.common.api.IKillBuzService;
+import com.system.design.seckill.common.api.IOrderService;
+import com.system.design.seckill.common.api.IStockService;
 import com.system.design.seckill.common.bean.Exposer;
 import com.system.design.seckill.common.bean.RocketMqMessageBean;
 import com.system.design.seckill.common.bean.SeckillResultStatus;
+import com.system.design.seckill.common.entity.OrderEntity;
+import com.system.design.seckill.common.exception.SeckillException;
 import com.system.design.seckill.common.utils.CacheKey;
 import com.system.design.seckill.common.utils.KillEventTopiEnum;
+import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -36,6 +43,10 @@ import java.util.stream.Collectors;
 public class KillBuzServiceImpl implements IKillBuzService {
     @Autowired
     private RedisTemplate redisTemplate;
+    @DubboReference
+    private IOrderService orderService;
+    @DubboReference
+    private IStockService stockService;
 
 //    @Autowired
 //    private DefaultMQProducer defaultMQProducer;
@@ -126,6 +137,24 @@ public class KillBuzServiceImpl implements IKillBuzService {
             log.error("KillBuzServiceImpl#executeKill error:{} {}", killId, userId, e);
             return SeckillResultStatus.buildErrorExecute(killId);
         }
+    }
+
+    @GlobalTransactional(rollbackFor = Exception.class)
+    @Override
+    public Long doKill(long killId, String userId) {
+
+        int count = stockService.decreaseStorage(killId);
+        Preconditions.checkArgument(count >= 1, "%s|%s|库存不足", killId, userId);
+
+        OrderEntity order = orderService.createOrder(killId, userId);
+        if (Objects.isNull(order)) {
+            throw new SeckillException(String.format("order error => killId:%s userId:%s", killId, userId));
+        }
+        Preconditions.checkNotNull(order.getOrderId(), "%s|%s|订单创建失败", killId, userId);
+
+//        addPayMonitor(order.getOrderId());
+
+        return order.getOrderId();
     }
 
 }

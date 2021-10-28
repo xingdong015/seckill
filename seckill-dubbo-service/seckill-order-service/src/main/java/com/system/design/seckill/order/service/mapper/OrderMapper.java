@@ -1,4 +1,4 @@
-package com.system.design.seckill.order.mapper;
+package com.system.design.seckill.order.service.mapper;
 
 /**
  * @author chengzhengzheng
