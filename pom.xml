@@ -20,6 +20,7 @@
         <module>seckill-design-common</module>
         <module>seckill-design-web</module>
         <module>seckill-gateway-service</module>
+        <module>seckill-design-dependency</module>
     </modules>
 
     <properties>

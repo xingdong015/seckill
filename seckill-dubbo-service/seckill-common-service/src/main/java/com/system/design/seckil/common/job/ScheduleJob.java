@@ -1,5 +1,6 @@
 package com.system.design.seckil.common.job;
 
+
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ScheduledExecutorService;
