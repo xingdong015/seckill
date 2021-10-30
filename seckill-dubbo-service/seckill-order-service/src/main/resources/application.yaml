@@ -58,7 +58,7 @@ spring:
       # 合并多个DruidDataSource的监控数据
       useGlobalDataSourceStat: true
       # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
-#      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
