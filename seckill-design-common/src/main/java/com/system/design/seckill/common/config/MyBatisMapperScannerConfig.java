@@ -1,13 +1,15 @@
-package com.system.design.seckill.order.config;
+package com.system.design.seckill.common.config;
+
 
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * 自动生成表的配置
+ */
 @Configuration
 public class MyBatisMapperScannerConfig {
-
     @Bean
     public MapperScannerConfigurer mapperScannerConfigurer() {
         MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
