@@ -17,7 +17,8 @@ public class OrderService implements IOrderService {
 
     @Override
     public OrderEntity createOrder(long skuId, String userId) {
-        return null;
+        System.out.println("创建订单成功....");
+        return new OrderEntity();
     }
 
     @Override
