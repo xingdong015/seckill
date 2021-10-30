@@ -12,7 +12,7 @@ import javax.annotation.Resource;
  * @date 2021/10/30
  */
 @RestController
-@RequestMapping("/common")
+@RequestMapping("/business")
 public class IndexController {
     @Resource
     private KillBuzService killBuzService;
