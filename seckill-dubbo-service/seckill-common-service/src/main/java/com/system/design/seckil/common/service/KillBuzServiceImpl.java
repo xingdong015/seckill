@@ -13,7 +13,6 @@ import com.system.design.seckill.common.entity.OrderEntity;
 import com.system.design.seckill.common.exception.SeckillException;
 import com.system.design.seckill.common.utils.CacheKey;
 import com.system.design.seckill.common.utils.KillEventTopiEnum;
-import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.rocketmq.common.message.Message;
@@ -139,7 +138,6 @@ public class KillBuzServiceImpl implements IKillBuzService {
         }
     }
 
-    @GlobalTransactional(rollbackFor = Exception.class)
     @Override
     public Long doKill(long killId, String userId) {
 

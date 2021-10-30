@@ -4,7 +4,6 @@ import com.system.design.seckill.common.api.IOrderService;
 import com.system.design.seckill.common.entity.OrderEntity;
 import com.system.design.seckill.order.mapper.OrderMapper;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
