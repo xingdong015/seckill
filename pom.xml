@@ -23,193 +23,20 @@
         <module>seckill-design-dependency</module>
     </modules>
 
-    <properties>
-        <java.version>1.8</java.version>
-        <spring-boot-starter.version>2.5.4</spring-boot-starter.version>
-        <mysql-connector-java.version>8.0.26</mysql-connector-java.version>
-        <druid.version>1.2.6</druid.version>
-        <mybatis-plus-boot-starter.version>3.4.3.4</mybatis-plus-boot-starter.version>
-        <mybatis-supprt.version>2.3</mybatis-supprt.version>
-        <lombok.version>1.18.20</lombok.version>
-        <commons-lang3.version>3.12.0</commons-lang3.version>
-        <guava.version>30.1.1-jre</guava.version>
-        <tomcat-jni.version>8.0.8</tomcat-jni.version>
-        <commons-pool2.version>2.6.2</commons-pool2.version>
-        <swagger-spring-boot-starter.version>1.9.1.RELEASE</swagger-spring-boot-starter.version>
-        <commons-collections4.version>4.4</commons-collections4.version>
-        <protobuf-java.version>3.11.0</protobuf-java.version>
-        <rocketmq-spring-boot-starter.version>2.2.1</rocketmq-spring-boot-starter.version>
-        <rocketmq-tools.version>4.8.0</rocketmq-tools.version>
-        <dozer.version>5.5.1</dozer.version>
-        <slf4j-api.version>1.7.25</slf4j-api.version>
-        <logback-core.version>1.2.3</logback-core.version>
-        <logback-classic.version>1.2.3</logback-classic.version>
-        <seata.version>1.4.2</seata.version>
-        <dubbo.version>3.0.3</dubbo.version>
-        <dubbo.curator.version>5.2.0</dubbo.curator.version>
-        <zoo.version>3.7.0</zoo.version>
-        <curator.version>5.2.0</curator.version>
-        <recipes.version>4.2.0</recipes.version>
-        <mybatis-enhance-actable.version>1.5.0.RELEASE</mybatis-enhance-actable.version>
-        <zookeeper.version>3.4.14</zookeeper.version>
-        <curator-framework.version>2.12.0</curator-framework.version>
-        <curator-recipes.version>2.12.0</curator-recipes.version>
-        <zkclient.version>0.1</zkclient.version>
-        <sentinel-core.version>1.8.2</sentinel-core.version>
-        <cat-client.version>3.0.0</cat-client.version>
-    </properties>
-
     <dependencyManagement>
         <dependencies>
-            <!--   spring cloud alibaba-->
             <dependency>
-                <groupId>com.alibaba.cloud</groupId>
-                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>2.2.6.RELEASE</version>
-                <type>pom</type>
+                <groupId>com.system.design.seckill</groupId>
+                <artifactId>seckill-design-dependency</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
                 <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alibaba.cloud</groupId>
-                <artifactId>spring-cloud-starter-dubbo</artifactId>
-                <version>2.2.6.RELEASE</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-actuator</artifactId>
-                <version>${spring-boot-starter.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alibaba.cloud</groupId>
-                <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-                <version>2.2.6.RELEASE</version>
-            </dependency>
-
-            <!--            数据库-->
-            <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
-                <version>${mysql-connector-java.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>druid</artifactId>
-                <version>${druid.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>${mybatis-plus-boot-starter.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-support</artifactId>
-                <version>${mybatis-supprt.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.gitee.sunchenbin.mybatis.actable</groupId>
-                <artifactId>mybatis-enhance-actable</artifactId>
-                <version>${mybatis-enhance-actable.version}</version>
-            </dependency>
-            <!--            redis-->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-data-redis</artifactId>
-                <version>${spring-boot-starter.version}</version>
-            </dependency>
-            <!--引入thymeleaf依赖-->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-thymeleaf</artifactId>
-                <version>${spring-boot-starter.version}</version>
-            </dependency>
-            <!-- rocketMq -->
-            <dependency>
-                <groupId>org.apache.rocketmq</groupId>
-                <artifactId>rocketmq-spring-boot-starter</artifactId>
-                <version>${rocketmq-spring-boot-starter.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.rocketmq</groupId>
-                <artifactId>rocketmq-tools</artifactId>
-                <version>${rocketmq-tools.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
-                <optional>true</optional>
-            </dependency>
-            <!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 &ndash;&gt;-->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons-lang3.version}</version>
-            </dependency>
-            <!--        &lt;!&ndash; https://mvnrepository.com/artifact/com.google.guava/guava &ndash;&gt;-->
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${guava.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-pool2</artifactId>
-                <version>${commons-pool2.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.spring4all</groupId>
-                <artifactId>swagger-spring-boot-starter</artifactId>
-                <version>${swagger-spring-boot-starter.version}</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-collections4</artifactId>
-                <version>${commons-collections4.version}</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/net.sf.dozer/dozer -->
-            <dependency>
-                <groupId>net.sf.dozer</groupId>
-                <artifactId>dozer</artifactId>
-                <version>${dozer.version}</version>
-            </dependency>
-            <!--logback -->
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j-api.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-core</artifactId>
-                <version>${logback-core.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>${logback-classic.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba.csp</groupId>
-                <artifactId>sentinel-core</artifactId>
-                <version>${sentinel-core.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
-                <version>1.2.76</version>
             </dependency>
 
             <dependency>
                 <groupId>com.system.design.seckill</groupId>
                 <artifactId>seckill-design-common</artifactId>
-                <version>0.0.1-SNAPSHOT</version>
+                <version>${seckill-design-common.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
-
 </project>

@@ -2,18 +2,16 @@ dubbo:
   cloud:
     subscribed-services: ${spring.application.name}
   scan:
-    base-packages: com.system.design.seckill.common.api.service
+    base-packages: com.system.design.seckill.order.service
   protocol:
     name: dubbo
     port: 20882
   registry:
     # 挂载到 Spring Cloud 注册中心
     address: spring-cloud://localhost
-# http://127.0.0.1:8848/nacos/v1/ns/catalog/instances?serviceName=seckill-app-server&clusterName=DEFAULT&pageSize=10&pageNo=1&namespaceId=
-# http://127.0.0.1:8848/nacos/#/configurationManagement?dataId=&group=&appName=&namespace=&pageSize=&pageNo=
 spring:
   application:
-    name: seckill-app-server
+    name: seckill-order-server
   main:
     allow-bean-definition-overriding: true
   cloud:
@@ -22,3 +20,14 @@ spring:
       password: nacos
       discovery:
         server-addr: 127.0.0.1:8848
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://rgb-fk.com:3306/seckill?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: blogo
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization:
+      write-dates-as-timestamps: false
+

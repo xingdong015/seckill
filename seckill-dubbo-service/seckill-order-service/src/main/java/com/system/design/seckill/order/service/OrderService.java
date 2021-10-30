@@ -1,15 +1,11 @@
 package com.system.design.seckill.order.service;
 
-import com.google.common.base.Preconditions;
-import com.system.design.seckill.common.api.IStockService;
-import com.system.design.seckill.common.entity.OrderEntity;
 import com.system.design.seckill.common.api.IOrderService;
-import com.system.design.seckill.common.exception.SeckillException;
-import io.seata.spring.annotation.GlobalTransactional;
-import org.apache.dubbo.config.annotation.DubboReference;
+import com.system.design.seckill.common.entity.OrderEntity;
+import com.system.design.seckill.order.mapper.OrderMapper;
 import org.apache.dubbo.config.annotation.DubboService;
-
-import java.util.Objects;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author chengzhengzheng
@@ -17,6 +13,8 @@ import java.util.Objects;
  */
 @DubboService
 public class OrderService implements IOrderService {
+    @Autowired
+    private OrderMapper orderMapper;
 
     @Override
     public OrderEntity createOrder(long skuId, String userId) {

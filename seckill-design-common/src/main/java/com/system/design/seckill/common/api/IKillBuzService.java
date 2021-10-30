@@ -2,7 +2,6 @@ package com.system.design.seckill.common.api;
 
 import com.system.design.seckill.common.bean.Exposer;
 import com.system.design.seckill.common.bean.SeckillResultStatus;
-import io.seata.spring.annotation.GlobalTransactional;
 
 import java.util.List;
 import java.util.Map;
@@ -21,6 +20,5 @@ public interface IKillBuzService {
 
     SeckillResultStatus executeKill(long killId, long userId, String md5);
 
-    @GlobalTransactional(rollbackFor = Exception.class)
     Long doKill(long killId, String userId);
 }

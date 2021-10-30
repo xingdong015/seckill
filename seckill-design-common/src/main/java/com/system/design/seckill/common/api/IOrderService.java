@@ -2,7 +2,6 @@ package com.system.design.seckill.common.api;
 
 
 import com.system.design.seckill.common.entity.OrderEntity;
-import io.seata.spring.annotation.GlobalTransactional;
 
 /**
  * @author chengzhengzheng
