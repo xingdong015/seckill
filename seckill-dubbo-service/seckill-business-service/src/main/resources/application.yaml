@@ -9,7 +9,7 @@ dubbo:
     address: spring-cloud://localhost
 spring:
   application:
-    name: seckill-common-server
+    name: seckill-business-server
   main:
     allow-bean-definition-overriding: true
   cloud:

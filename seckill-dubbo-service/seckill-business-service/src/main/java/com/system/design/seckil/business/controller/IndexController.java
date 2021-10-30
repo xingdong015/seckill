@@ -1,6 +1,6 @@
-package com.system.design.seckil.common.controller;
+package com.system.design.seckil.business.controller;
 
-import com.system.design.seckil.common.service.KillBuzService;
+import com.system.design.seckil.business.service.KillBuzService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;

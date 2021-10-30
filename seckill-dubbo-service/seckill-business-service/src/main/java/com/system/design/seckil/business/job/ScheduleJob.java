@@ -1,4 +1,4 @@
-package com.system.design.seckil.common.job;
+package com.system.design.seckil.business.job;
 
 
 import org.springframework.stereotype.Service;

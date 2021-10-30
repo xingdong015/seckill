@@ -16,7 +16,7 @@
 
     <modules>
         <module>seckill-order-service</module>
-        <module>seckill-common-service</module>
+        <module>seckill-business-service</module>
         <module>seckill-stock-service</module>
         <module>seckill-pay-service</module>
     </modules>
