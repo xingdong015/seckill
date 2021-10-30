@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author chengzhengzheng
  * @date 2021/10/28
  */
-@DubboService
+@DubboService(version = "1.0.0")
 public class OrderService implements IOrderService {
     @Autowired
     private OrderMapper orderMapper;

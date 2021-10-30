@@ -5,6 +5,7 @@ import com.system.design.seckill.common.api.IOrderService;
 import com.system.design.seckill.common.api.IPayService;
 import com.system.design.seckill.common.bean.PayResultStatus;
 import com.system.design.seckill.common.entity.OrderEntity;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,7 +14,7 @@ import java.util.Random;
 @DubboService
 public class PayBuzServiceImpl implements IPayService {
 
-    @Autowired
+    @DubboReference(version = "1.0.0")
     private IOrderService orderService;
 //    @Autowired
 //    private DefaultMQProducer    defaultMQProducer;

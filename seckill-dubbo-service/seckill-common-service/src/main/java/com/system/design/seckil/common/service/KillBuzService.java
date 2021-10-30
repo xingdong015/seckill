@@ -5,7 +5,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.system.design.seckill.common.api.IKillBuzService;
 import com.system.design.seckill.common.api.IOrderService;
-import com.system.design.seckill.common.api.IStockService;
 import com.system.design.seckill.common.bean.Exposer;
 import com.system.design.seckill.common.bean.RocketMqMessageBean;
 import com.system.design.seckill.common.bean.SeckillResultStatus;
@@ -15,6 +14,7 @@ import com.system.design.seckill.common.utils.CacheKey;
 import com.system.design.seckill.common.utils.KillEventTopiEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -22,6 +22,7 @@ import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.scripting.support.ResourceScriptSource;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -37,18 +38,17 @@ import java.util.stream.Collectors;
  * @author chengzhengzheng
  * @date 2021/9/19
  */
-@Service
+@DubboService
+@Component
 @Slf4j
-public class KillBuzServiceImpl implements IKillBuzService {
+public class KillBuzService implements IKillBuzService {
     @Autowired
     private RedisTemplate redisTemplate;
-    @DubboReference
-    private IOrderService orderService;
-    @DubboReference
-    private IStockService stockService;
 
-//    @Autowired
-//    private DefaultMQProducer defaultMQProducer;
+    @DubboReference(version = "1.0.0")
+    private IOrderService orderService;
+//    @Resource
+//    private IStockService stockService = null;
 
     //加入一个混淆字符串(秒杀接口)的salt，为了我避免用户猜出我们的md5值，值任意给，越复杂越好
     private final String salt = "cjy20200922czz0708";
@@ -141,7 +141,8 @@ public class KillBuzServiceImpl implements IKillBuzService {
     @Override
     public Long doKill(long killId, String userId) {
 
-        int count = stockService.decreaseStorage(killId);
+//        int count = stockService.decreaseStorage(killId);
+        int count = 0;
         Preconditions.checkArgument(count >= 1, "%s|%s|库存不足", killId, userId);
 
         OrderEntity order = orderService.createOrder(killId, userId);
