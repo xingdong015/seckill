@@ -3,13 +3,13 @@ dubbo:
     base-packages: com.system.design.seckill
   protocol:
     name: dubbo
-    port: 20883
+    port: 20885
   registry:
     # 挂载到 Spring Cloud 注册中心
     address: spring-cloud://localhost
 spring:
   application:
-    name: seckill-pay-server
+    name: seckill-stock-server
   main:
     allow-bean-definition-overriding: true
   cloud:
@@ -29,4 +29,5 @@ spring:
     serialization:
       write-dates-as-timestamps: false
 server:
-  port: 8083
+  port: 8085
+
