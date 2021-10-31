@@ -38,20 +38,20 @@ public class OrderService implements IOrderService {
 
 
 //    public Long doKill(long killId, String userId) {
-//
-//        int count = stockService.decreaseStorage(killId);
-//        Preconditions.checkArgument(count >= 1, "%s|%s|库存不足", killId, userId);
-//
-//        OrderEntity order = orderService.createOrder(killId, userId);
-//        if (Objects.isNull(order)) {
-//            throw new SeckillException(String.format("order error => killId:%s userId:%s", killId, userId));
-//        }
-//        Preconditions.checkNotNull(order.getOrderId(), "%s|%s|订单创建失败", killId, userId);
-//
-//        addPayMonitor(order.getOrderId());
-//
-//        return order.getOrderId();
-//    }
+////
+////        int count = stockService.decreaseStorage(killId);
+////        Preconditions.checkArgument(count >= 1, "%s|%s|库存不足", killId, userId);
+////
+////        OrderEntity order = orderService.createOrder(killId, userId);
+////        if (Objects.isNull(order)) {
+////            throw new SeckillException(String.format("order error => killId:%s userId:%s", killId, userId));
+////        }
+////        Preconditions.checkNotNull(order.getOrderId(), "%s|%s|订单创建失败", killId, userId);
+////
+////        addPayMonitor(order.getOrderId());
+////
+////        return order.getOrderId();
+////    }
 
     private void addPayMonitor(Long orderId) {
 
