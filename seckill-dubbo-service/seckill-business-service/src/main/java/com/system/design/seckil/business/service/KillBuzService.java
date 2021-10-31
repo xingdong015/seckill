@@ -1,6 +1,5 @@
 package com.system.design.seckil.business.service;
 
-import com.alibaba.fastjson.JSONObject;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.system.design.seckill.common.api.IKillBuzService;
@@ -8,21 +7,26 @@ import com.system.design.seckill.common.api.IOrderService;
 import com.system.design.seckill.common.api.IStockService;
 import com.system.design.seckill.common.bean.Exposer;
 import com.system.design.seckill.common.bean.RocketMqMessageBean;
-import com.system.design.seckill.common.bean.SeckillResultStatus;
 import com.system.design.seckill.common.entity.OrderEntity;
+import com.system.design.seckill.common.exception.RepeatKillException;
+import com.system.design.seckill.common.exception.SeckillCloseException;
 import com.system.design.seckill.common.exception.SeckillException;
 import com.system.design.seckill.common.utils.CacheKey;
 import com.system.design.seckill.common.utils.KillEventTopiEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.apache.rocketmq.common.message.Message;
+import org.apache.rocketmq.client.producer.SendCallback;
+import org.apache.rocketmq.client.producer.SendResult;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.GenericMessage;
 import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
@@ -47,13 +51,17 @@ public class KillBuzService implements IKillBuzService {
     private RedisTemplate redisTemplate;
 
     @DubboReference(version = "1.0.0")
-    private IOrderService orderService;
+    private IOrderService    orderService;
     @DubboReference
-    private IStockService stockService;
+    private IStockService    stockService;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
-    //加入一个混淆字符串(秒杀接口)的salt，为了我避免用户猜出我们的md5值，值任意给，越复杂越好
-    @Value("${kill.salt}")
+    @Value("${kill.url.salt}")
     private String salt;
+
+    @Value("${kill.rocketmq.topic}")
+    private String topic;
 
     @Override
     public List<Map<String, Object>> getSeckillList() {
@@ -108,57 +116,61 @@ public class KillBuzService implements IKillBuzService {
      * @return
      */
     @Override
-    public SeckillResultStatus executeKill(long killId, long userId, String md5) {
-        //url重写、防止url破解
-        if (md5 == null || !md5.equals(getMD5(killId, userId))) {
-            return SeckillResultStatus.buildIllegalExecute(killId);
-        }
-        //重复秒杀、一个用户只允许秒杀一次
-        if (redisTemplate.opsForSet().isMember(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userId)) {
-            return SeckillResultStatus.buildRepeatKillExecute(killId);
-        }
+    public void executeKill(long killId, long userId, String md5) {
+        //动态化秒杀地址校验
+        urlCheck(killId, userId, md5);
+        //重复秒杀校验、一个用户只允许秒杀一次
+        repeatKillCheck(killId, userId);
+        //redis中扣减库存
+        decreaseCacheStock(killId);
+        //用户已经秒杀过标记
+        redisTemplate.opsForSet().add(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userId);
+        //发送秒杀成功消息，方便后续处理
+        sendKillSuccessMessage(killId, userId);
+    }
+
+    private void sendKillSuccessMessage(long killId, long userId) {
+        RocketMqMessageBean bean    = new RocketMqMessageBean((userId + "-" + killId), null, System.currentTimeMillis());
+        Message             message = new GenericMessage(bean);
+        //这里有可能会投递失败、导致下单失败、所以实际情况下、redis的库存比数据库的库存多、
+        //MySQL在真正扣减库存的时候需要通过乐观锁防止超卖
+        rocketMQTemplate.asyncSend(KillEventTopiEnum.KILL_SUCCESS.getTopic(), message, new SendCallback() {
+            @Override
+            public void onSuccess(SendResult sendResult) {
+                log.info("async success, killId: {},userId:{}", killId, userId);
+            }
+
+            @Override
+            public void onException(Throwable e) {
+                log.error("async onException, killId: {},userId:{}", killId, userId, e);
+                //这里目前的做法就是简单的将redis的库存添加回去
+                redisTemplate.opsForHash().increment(CacheKey.getSeckillHash(String.valueOf(killId)), "count", 1);
+                redisTemplate.opsForSet().remove(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userId);
+            }
+        });
+    }
+
+    private Long decreaseCacheStock(long killId) {
         DefaultRedisScript<Long> redisScript = new DefaultRedisScript<>();
         redisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("stock.lua")));
         redisScript.setResultType(Long.class);
-        try {
-            Long result = (Long) redisTemplate.execute(redisScript, Lists.newArrayList(CacheKey.getSeckillHash(String.valueOf(killId)), "count"));
-            if (result != null && result < 0) {
-                return SeckillResultStatus.buildFailureExecute(killId);
-            }
-            redisTemplate.opsForSet().add(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userId);
-            Message message = new Message();
-            message.setTopic(KillEventTopiEnum.KILL_SUCCESS.getTopic());
-            RocketMqMessageBean bean = new RocketMqMessageBean((userId + "-" + killId), null, System.currentTimeMillis());
-            message.setBody(JSONObject.toJSONString(bean).getBytes(StandardCharsets.UTF_8));
-            //这里有可能会投递失败、导致下单失败、所以实际情况下、redis的库存比数据库的库存多、
-            //MySQL在真正扣减库存的时候需要通过乐观锁防止超卖
-//            defaultMQProducer.sendOneway(message);
-            return SeckillResultStatus.buildSuccessExecute(killId, result);
-        } catch (Throwable e) {
-            log.error("KillBuzServiceImpl#executeKill error:{} {}", killId, userId, e);
-            return SeckillResultStatus.buildErrorExecute(killId);
+        Long result = (Long) redisTemplate.execute(redisScript, Lists.newArrayList(CacheKey.getSeckillHash(String.valueOf(killId)), "count"));
+        if (result != null && result < 0) {
+            throw new SeckillException("秒杀失败");
+        }
+        return result;
+    }
+
+    private void repeatKillCheck(long killId, long userId) {
+        if (redisTemplate.opsForSet().isMember(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userId)) {
+            throw new RepeatKillException("重复提交");
         }
     }
 
-    @Override
-    public Long doKill(long killId, String userId) {
-
-        int count = stockService.decreaseStorage(killId);
-        Preconditions.checkArgument(count >= 1, "%s|%s|库存不足", killId, userId);
-
-        OrderEntity order = orderService.createOrder(killId, userId);
-        if (Objects.isNull(order)) {
-            throw new SeckillException(String.format("order error => killId:%s userId:%s", killId, userId));
+    private void urlCheck(long killId, long userId, String md5) {
+        if (md5 == null || !md5.equals(getMD5(killId, userId))) {
+            throw new SeckillCloseException("非法操作");
         }
-        Preconditions.checkNotNull(order.getOrderId(), "%s|%s|订单创建失败", killId, userId);
-
-        addPayMonitor(order.getOrderId());
-
-        return order.getOrderId();
-    }
-
-    private void addPayMonitor(Long orderId) {
-
     }
 
 }

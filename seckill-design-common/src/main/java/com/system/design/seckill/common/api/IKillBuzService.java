@@ -18,7 +18,7 @@ public interface IKillBuzService {
 
     Exposer exportKillUrl(long killId, long userId);
 
-    SeckillResultStatus executeKill(long killId, long userId, String md5);
+    void executeKill(long killId, long userId, String md5);
 
     Long doKill(long killId, String userId);
 }

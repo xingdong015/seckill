@@ -32,4 +32,10 @@ server:
   port: 8086
 
 kill:
-  salt: cjy20200922czz0708
+  #加入一个混淆字符串(秒杀接口)的salt，为了我避免用户猜出我们的md5值，值任意给，越复杂越好
+  url:
+    salt: cjy20200922czz0708
+rocketmq:
+  name-server: rgb-fk.com:9876
+  producer:
+    group: business-group
