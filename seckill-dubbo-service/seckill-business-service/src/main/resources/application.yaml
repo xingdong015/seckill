@@ -30,3 +30,6 @@ spring:
       write-dates-as-timestamps: false
 server:
   port: 8086
+
+kill:
+  salt: cjy20200922czz0708

@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.system.design.seckill.common.api.IKillBuzService;
 import com.system.design.seckill.common.api.IOrderService;
+import com.system.design.seckill.common.api.IStockService;
 import com.system.design.seckill.common.bean.Exposer;
 import com.system.design.seckill.common.bean.RocketMqMessageBean;
 import com.system.design.seckill.common.bean.SeckillResultStatus;
@@ -17,6 +18,7 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -46,11 +48,12 @@ public class KillBuzService implements IKillBuzService {
 
     @DubboReference(version = "1.0.0")
     private IOrderService orderService;
-//    @Resource
-//    private IStockService stockService = null;
+    @DubboReference
+    private IStockService stockService;
 
     //加入一个混淆字符串(秒杀接口)的salt，为了我避免用户猜出我们的md5值，值任意给，越复杂越好
-    private final String salt = "cjy20200922czz0708";
+    @Value("${kill.salt}")
+    private String salt;
 
     @Override
     public List<Map<String, Object>> getSeckillList() {
@@ -140,8 +143,7 @@ public class KillBuzService implements IKillBuzService {
     @Override
     public Long doKill(long killId, String userId) {
 
-//        int count = stockService.decreaseStorage(killId);
-        int count = 0;
+        int count = stockService.decreaseStorage(killId);
         Preconditions.checkArgument(count >= 1, "%s|%s|库存不足", killId, userId);
 
         OrderEntity order = orderService.createOrder(killId, userId);
@@ -150,9 +152,13 @@ public class KillBuzService implements IKillBuzService {
         }
         Preconditions.checkNotNull(order.getOrderId(), "%s|%s|订单创建失败", killId, userId);
 
-//        addPayMonitor(order.getOrderId());
+        addPayMonitor(order.getOrderId());
 
         return order.getOrderId();
+    }
+
+    private void addPayMonitor(Long orderId) {
+
     }
 
 }
