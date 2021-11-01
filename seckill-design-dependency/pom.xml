@@ -46,6 +46,12 @@
                 <artifactId>spring-cloud-alibaba-sentinel</artifactId>
                 <version>2.2.0.RELEASE</version>
             </dependency>
+            <!--            seata 分布式是无-->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-seata</artifactId>
+                <version>2.2.6.RELEASE</version>
+            </dependency>
             <dependency>
                 <groupId>com.spring4all</groupId>
                 <artifactId>swagger-spring-boot-starter</artifactId>

@@ -50,10 +50,6 @@ public class KillBuzService implements IKillBuzService {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @DubboReference(version = "1.0.0")
-    private IOrderService    orderService;
-    @DubboReference
-    private IStockService    stockService;
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
 
@@ -129,11 +125,6 @@ public class KillBuzService implements IKillBuzService {
         sendKillSuccessMessage(killId, userId);
     }
 
-    @Override
-    public Long doKill(long killId, String userId) {
-        return null;
-    }
-
     private void sendKillSuccessMessage(long killId, long userId) {
         RocketMqMessageBean bean    = new RocketMqMessageBean((userId + "-" + killId), null, System.currentTimeMillis());
         Message             message = new GenericMessage(bean);
@@ -142,12 +133,12 @@ public class KillBuzService implements IKillBuzService {
         rocketMQTemplate.asyncSend(KillEventTopiEnum.KILL_SUCCESS.getTopic(), message, new SendCallback() {
             @Override
             public void onSuccess(SendResult sendResult) {
-                log.info("async success, killId: {},userId:{}", killId, userId);
+                log.info("async sendKillSuccessMessage success, killId: {},userId:{}", killId, userId);
             }
 
             @Override
             public void onException(Throwable e) {
-                log.error("async onException, killId: {},userId:{}", killId, userId, e);
+                log.error("async sendKillSuccessMessage onException, killId: {},userId:{}", killId, userId, e);
                 //这里目前的做法就是简单的将redis的库存添加回去
                 redisTemplate.opsForHash().increment(CacheKey.getSeckillHash(String.valueOf(killId)), "count", 1);
                 redisTemplate.opsForSet().remove(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userId);

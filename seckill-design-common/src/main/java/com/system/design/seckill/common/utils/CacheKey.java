@@ -37,6 +37,11 @@ public interface CacheKey {
         return String.format("seck:%s:info", id);
     }
 
+    /**
+     * 用户已经抢购过的商品
+     * @param id
+     * @return
+     */
     static String getSeckillBuyPhones(String id) {
         return String.format("seck:%s:buy:ids", id);
     }

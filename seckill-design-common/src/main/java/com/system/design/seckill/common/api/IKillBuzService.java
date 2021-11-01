@@ -20,5 +20,4 @@ public interface IKillBuzService {
 
     void executeKill(long killId, long userId, String md5);
 
-    Long doKill(long killId, String userId);
 }
