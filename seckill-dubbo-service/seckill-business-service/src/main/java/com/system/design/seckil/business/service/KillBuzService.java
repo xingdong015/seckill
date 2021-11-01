@@ -129,6 +129,11 @@ public class KillBuzService implements IKillBuzService {
         sendKillSuccessMessage(killId, userId);
     }
 
+    @Override
+    public Long doKill(long killId, String userId) {
+        return null;
+    }
+
     private void sendKillSuccessMessage(long killId, long userId) {
         RocketMqMessageBean bean    = new RocketMqMessageBean((userId + "-" + killId), null, System.currentTimeMillis());
         Message             message = new GenericMessage(bean);
