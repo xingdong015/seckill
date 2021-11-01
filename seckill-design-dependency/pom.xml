@@ -50,6 +50,12 @@
                 <groupId>com.spring4all</groupId>
                 <artifactId>swagger-spring-boot-starter</artifactId>
                 <version>${swagger-spring-boot-starter.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>swagger-annotations</artifactId>
+                        <groupId>io.swagger</groupId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <!-- 数据库 -->
             <dependency>
@@ -82,11 +88,31 @@
                 <groupId>org.apache.rocketmq</groupId>
                 <artifactId>rocketmq-spring-boot-starter</artifactId>
                 <version>${rocketmq-spring-boot-starter.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>rocketmq-acl</artifactId>
+                        <groupId>org.apache.rocketmq</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>rocketmq-client</artifactId>
+                        <groupId>org.apache.rocketmq</groupId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.rocketmq</groupId>
                 <artifactId>rocketmq-tools</artifactId>
                 <version>${rocketmq-tools.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>commons-collections</artifactId>
+                        <groupId>commons-collections</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>commons-validator</artifactId>
+                        <groupId>commons-validator</groupId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <!-- lombok插件-->
             <dependency>
