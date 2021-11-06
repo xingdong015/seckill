@@ -2,24 +2,22 @@ package com.system.design.seckil.business.service;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.system.design.seckill.common.api.IAccountService;
 import com.system.design.seckill.common.api.IKillBuzService;
-import com.system.design.seckill.common.api.IOrderService;
-import com.system.design.seckill.common.api.IStockService;
 import com.system.design.seckill.common.bean.Exposer;
 import com.system.design.seckill.common.bean.RocketMqMessageBean;
-import com.system.design.seckill.common.entity.OrderEntity;
+import com.system.design.seckill.common.entity.Account;
+import com.system.design.seckill.common.exception.NoStockException;
 import com.system.design.seckill.common.exception.RepeatKillException;
 import com.system.design.seckill.common.exception.SeckillCloseException;
-import com.system.design.seckill.common.exception.SeckillException;
 import com.system.design.seckill.common.utils.CacheKey;
 import com.system.design.seckill.common.utils.KillEventTopiEnum;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.dubbo.config.annotation.DubboReference;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.RedisCallback;
@@ -31,6 +29,7 @@ import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
 
+import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
@@ -47,11 +46,14 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 public class KillBuzService implements IKillBuzService {
-    @Autowired
+    @Resource
     private RedisTemplate redisTemplate;
 
-    @Autowired
+    @Resource
     private RocketMQTemplate rocketMQTemplate;
+
+    @Resource
+    private IAccountService accountService;
 
     @Value("${kill.url.salt}")
     private String salt;
@@ -107,12 +109,20 @@ public class KillBuzService implements IKillBuzService {
     /**
      * 开始秒杀活动
      *
-     * @param killId
-     * @param userId
+     * @param killIdStr
+     * @param userIdStr
      * @return
      */
     @Override
-    public void executeKill(long killId, long userId, String md5) {
+    public void executeKill(String killIdStr, String userIdStr, String md5) {
+        Preconditions.checkArgument(NumberUtils.isDigits(killIdStr), "商品id");
+        Preconditions.checkArgument(NumberUtils.isDigits(userIdStr), "用户id非法");
+        long    killId  = Long.parseLong(killIdStr);
+        long    userId  = Long.parseLong(userIdStr);
+        Account account = accountService.findById(userId);
+        if (account == null) {
+            throw new RuntimeException("用户不存在!");
+        }
         //动态化秒杀地址校验
         urlCheck(killId, userId, md5);
         //重复秒杀校验、一个用户只允许秒杀一次
@@ -135,7 +145,6 @@ public class KillBuzService implements IKillBuzService {
             public void onSuccess(SendResult sendResult) {
                 log.info("async sendKillSuccessMessage success, killId: {},userId:{}", killId, userId);
             }
-
             @Override
             public void onException(Throwable e) {
                 log.error("async sendKillSuccessMessage onException, killId: {},userId:{}", killId, userId, e);
@@ -152,20 +161,20 @@ public class KillBuzService implements IKillBuzService {
         redisScript.setResultType(Long.class);
         Long result = (Long) redisTemplate.execute(redisScript, Lists.newArrayList(CacheKey.getSeckillHash(String.valueOf(killId)), "count"));
         if (result != null && result < 0) {
-            throw new SeckillException("秒杀失败");
+            throw new NoStockException(String.valueOf(killId));
         }
         return result;
     }
 
     private void repeatKillCheck(long killId, long userId) {
         if (redisTemplate.opsForSet().isMember(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userId)) {
-            throw new RepeatKillException("重复提交");
+            throw new RepeatKillException(String.join("|",String.valueOf(killId),String.valueOf(userId)));
         }
     }
 
     private void urlCheck(long killId, long userId, String md5) {
         if (md5 == null || !md5.equals(getMD5(killId, userId))) {
-            throw new SeckillCloseException("非法操作");
+            throw new SeckillCloseException(String.join("|",String.valueOf(killId),String.valueOf(userId)));
         }
     }
 

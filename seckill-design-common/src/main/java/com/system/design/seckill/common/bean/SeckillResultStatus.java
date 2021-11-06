@@ -14,7 +14,7 @@ public class SeckillResultStatus implements Serializable {
     public SeckillResultStatus(long seckillId, Long result, SeckillStatusEnum success) {
         this.seckillId = seckillId;
         this.statEnum  = success;
-        this.stock = result;
+        this.stock     = result;
     }
 
 

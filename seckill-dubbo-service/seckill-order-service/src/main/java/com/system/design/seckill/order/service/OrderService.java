@@ -3,6 +3,7 @@ package com.system.design.seckill.order.service;
 import com.google.common.base.Preconditions;
 import com.system.design.seckill.common.api.IOrderService;
 import com.system.design.seckill.common.entity.OrderEntity;
+import com.system.design.seckill.common.enums.SeckillStatusEnum;
 import com.system.design.seckill.common.exception.SeckillException;
 import com.system.design.seckill.order.mapper.KillMapper;
 import com.system.design.seckill.order.mapper.OrderMapper;
@@ -58,7 +59,7 @@ public class OrderService implements IOrderService {
         Preconditions.checkArgument(count >= 1, "%s|%s|库存不足", killId, userId);
         OrderEntity order = createOrder(killId, userId);
         if (Objects.isNull(order)) {
-            throw new SeckillException(String.format("order error => killId:%s userId:%s", killId, userId));
+            throw new SeckillException(String.format("order error => killId:%s userId:%s", killId, userId), SeckillStatusEnum.REPEAT_KILL);
         }
         Preconditions.checkNotNull(order.getOrderId(), "%s|%s|订单创建失败", killId, userId);
         //添加到RocketMq的延迟消息当中去，监控订单的支付状态

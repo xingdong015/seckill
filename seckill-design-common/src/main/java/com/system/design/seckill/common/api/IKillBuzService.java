@@ -18,6 +18,6 @@ public interface IKillBuzService {
 
     Exposer exportKillUrl(long killId, long userId);
 
-    void executeKill(long killId, long userId, String md5);
+    void executeKill(String killId, String userId, String md5);
 
 }
