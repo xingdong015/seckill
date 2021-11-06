@@ -62,7 +62,7 @@ public class OrderService implements IOrderService {
             throw new SeckillException(String.format("order error => killId:%s userId:%s", killId, userId), SeckillStatusEnum.REPEAT_KILL);
         }
         Preconditions.checkNotNull(order.getOrderId(), "%s|%s|订单创建失败", killId, userId);
-        //添加到RocketMq的延迟消息当中去，监控订单的支付状态
+        //添加到RocketMq的延迟消息当中去，监控订单的支付状态 事务消息
         return order.getOrderId();
     }
 

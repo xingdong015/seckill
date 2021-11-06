@@ -11,7 +11,6 @@ import com.system.design.seckill.common.exception.NoStockException;
 import com.system.design.seckill.common.exception.RepeatKillException;
 import com.system.design.seckill.common.exception.SeckillCloseException;
 import com.system.design.seckill.common.utils.CacheKey;
-import com.system.design.seckill.common.utils.KillEventTopiEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -43,7 +42,6 @@ import java.util.stream.Collectors;
  * @date 2021/9/19
  */
 @DubboService
-@Component
 @Slf4j
 public class KillBuzService implements IKillBuzService {
     @Resource
@@ -58,7 +56,7 @@ public class KillBuzService implements IKillBuzService {
     @Value("${kill.url.salt}")
     private String salt;
 
-    @Value("${kill.rocketmq.topic}")
+    @Value("${kill.rocketmq.producer.topic}")
     private String topic;
 
     @Override
@@ -136,15 +134,16 @@ public class KillBuzService implements IKillBuzService {
     }
 
     private void sendKillSuccessMessage(long killId, long userId) {
-        RocketMqMessageBean bean    = new RocketMqMessageBean((userId + "-" + killId), null, System.currentTimeMillis());
+        RocketMqMessageBean bean    = new RocketMqMessageBean(String.join("|", String.valueOf(killId), String.valueOf(userId)), null, System.currentTimeMillis());
         Message             message = new GenericMessage(bean);
         //这里有可能会投递失败、导致下单失败、所以实际情况下、redis的库存比数据库的库存多、
         //MySQL在真正扣减库存的时候需要通过乐观锁防止超卖
-        rocketMQTemplate.asyncSend(KillEventTopiEnum.KILL_SUCCESS.getTopic(), message, new SendCallback() {
+        rocketMQTemplate.asyncSend(topic, message, new SendCallback() {
             @Override
             public void onSuccess(SendResult sendResult) {
                 log.info("async sendKillSuccessMessage success, killId: {},userId:{}", killId, userId);
             }
+
             @Override
             public void onException(Throwable e) {
                 log.error("async sendKillSuccessMessage onException, killId: {},userId:{}", killId, userId, e);
