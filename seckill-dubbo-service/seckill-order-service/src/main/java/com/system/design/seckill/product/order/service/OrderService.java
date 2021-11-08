@@ -55,8 +55,11 @@ public class OrderService implements IOrderService {
      */
     @GlobalTransactional
     public Long doKill(long killId, String userId) {
+        //1. 扣减库存
         int count = killMapper.decreaseStorage(killId);
         Preconditions.checkArgument(count >= 1, "%s|%s|库存不足", killId, userId);
+
+        //2. 创建订单
         OrderEntity order = createOrder(killId, userId);
         if (Objects.isNull(order)) {
             throw new SeckillException(String.format("order error => killId:%s userId:%s", killId, userId), SeckillStatusEnum.REPEAT_KILL);
