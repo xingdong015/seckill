@@ -17,8 +17,4 @@ public class IndexController {
     @Resource
     private IKillBuzService killBuzService;
 
-    @GetMapping(value = "/kill")
-    public Long doKill(long killId, String userId) {
-        return killBuzService.doKill(killId, userId);
-    }
 }
