@@ -1,10 +1,10 @@
 package com.system.design.seckil.business.controller;
 
 import com.system.design.seckil.business.service.KillBuzService;
-import com.system.design.seckill.common.bean.ApiErrorCodeEnum;
-import com.system.design.seckill.common.bean.Resp;
-import com.system.design.seckill.common.enums.SeckillStatusEnum;
-import com.system.design.seckill.common.exception.SeckillException;
+import com.system.design.seckill.product.common.bean.ApiErrorCodeEnum;
+import com.system.design.seckill.product.common.bean.Resp;
+import com.system.design.seckill.product.common.enums.SeckillStatusEnum;
+import com.system.design.seckill.product.common.exception.SeckillException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
