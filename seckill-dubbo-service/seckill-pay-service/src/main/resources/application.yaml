@@ -6,7 +6,7 @@ dubbo:
     port: 20883
   registry:
     # 挂载到 Spring Cloud 注册中心
-    address: spring-cloud://localhost
+    address: spring-cloud://rgb-fk.com:8848
 spring:
   application:
     name: seckill-pay-server

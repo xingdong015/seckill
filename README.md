@@ -6,3 +6,4 @@
     1. https://www.silince.cn/2021/05/15/MySQL%E4%B8%8EES%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98/
 6. dubbo 文档
     1. https://github.com/alibaba/dubbo-spring-boot-starter/blob/master/README_zh.md
+    2. spring-cloud-alibaba-dubbo 配置  https://www.iocoder.cn/Spring-Cloud-Alibaba/Dubbo/
