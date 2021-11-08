@@ -1,7 +1,7 @@
 package com.system.design.seckill.product.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.system.design.seckill.product.common.entity.Product;
+import com.system.design.seckill.common.entity.Product;
 
 /**
  * @description:

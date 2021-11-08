@@ -1,6 +1,6 @@
 package com.system.design.seckill.product.order.service;
 
-import com.system.design.seckill.product.common.bean.RocketMqMessageBean;
+import com.system.design.seckill.common.bean.RocketMqMessageBean;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;

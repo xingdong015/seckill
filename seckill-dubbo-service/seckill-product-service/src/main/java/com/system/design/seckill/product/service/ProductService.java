@@ -4,16 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.system.design.seckill.product.common.api.IProductService;
-import com.system.design.seckill.product.common.entity.Product;
-import com.system.design.seckill.product.common.entity.vo.ProductVo;
+import com.system.design.seckill.common.api.IProductService;
+import com.system.design.seckill.common.entity.Product;
+import com.system.design.seckill.common.entity.vo.ProductVo;
 import com.system.design.seckill.product.mapper.ProductMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.io.Serializable;
-import java.util.List;
 
 /**
  * @description:

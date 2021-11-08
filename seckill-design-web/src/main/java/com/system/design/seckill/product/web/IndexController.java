@@ -1,7 +1,6 @@
 package com.system.design.seckill.product.web;
 
-import com.system.design.seckill.product.common.api.IKillBuzService;
-import org.springframework.web.bind.annotation.GetMapping;
+import com.system.design.seckill.common.api.IKillBuzService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

@@ -1,10 +1,10 @@
 package com.system.design.seckill.product.pay.service;
 
 
-import com.system.design.seckill.product.common.api.IOrderService;
-import com.system.design.seckill.product.common.api.IPayService;
-import com.system.design.seckill.product.common.bean.PayResultStatus;
-import com.system.design.seckill.product.common.entity.OrderEntity;
+import com.system.design.seckill.common.api.IOrderService;
+import com.system.design.seckill.common.api.IPayService;
+import com.system.design.seckill.common.bean.PayResultStatus;
+import com.system.design.seckill.common.entity.OrderEntity;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 

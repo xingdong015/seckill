@@ -1,10 +1,10 @@
 package com.system.design.seckill.product.order.service;
 
 import com.google.common.base.Preconditions;
-import com.system.design.seckill.product.common.api.IOrderService;
-import com.system.design.seckill.product.common.entity.OrderEntity;
-import com.system.design.seckill.product.common.enums.SeckillStatusEnum;
-import com.system.design.seckill.product.common.exception.SeckillException;
+import com.system.design.seckill.common.api.IOrderService;
+import com.system.design.seckill.common.entity.OrderEntity;
+import com.system.design.seckill.common.enums.SeckillStatusEnum;
+import com.system.design.seckill.common.exception.SeckillException;
 import com.system.design.seckill.product.order.mapper.KillMapper;
 import com.system.design.seckill.product.order.mapper.OrderMapper;
 import io.seata.spring.annotation.GlobalTransactional;

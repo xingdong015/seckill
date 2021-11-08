@@ -2,18 +2,15 @@ package com.system.design.seckill.product.api;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.system.design.seckill.product.SeckillProductServiceApplication;
 import com.system.design.seckill.product.SeckillProductServiceApplicationTests;
-import com.system.design.seckill.product.common.entity.Product;
-import com.system.design.seckill.product.common.entity.vo.ProductVo;
+import com.system.design.seckill.common.entity.Product;
+import com.system.design.seckill.common.entity.vo.ProductVo;
 import com.system.design.seckill.product.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.List;
 
 /**
  * @description:
