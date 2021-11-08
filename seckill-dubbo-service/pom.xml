@@ -20,6 +20,7 @@
         <module>seckill-stock-service</module>
         <module>seckill-pay-service</module>
         <module>seckill-product-service</module>
+        <module>seckill-account-service</module>
     </modules>
 
     <dependencies>
