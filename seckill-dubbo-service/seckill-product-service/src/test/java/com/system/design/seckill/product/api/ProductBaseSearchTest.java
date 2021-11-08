@@ -44,9 +44,9 @@ public class ProductBaseSearchTest extends SeckillProductServiceApplicationTests
     void test_update(){
         Product build = Product.builder()
                 .id(3L)
-                .price(new BigDecimal(10000))
-                .productName("huawei-pro")
-                .productDesc("small computer")
+                .price(new BigDecimal(6000))
+                .productName("v2-huawei-pro")
+                .productDesc("v2-small computer")
                 .build();
         int insert = productService.updateProduct(build);
         System.out.println("update: " + insert);

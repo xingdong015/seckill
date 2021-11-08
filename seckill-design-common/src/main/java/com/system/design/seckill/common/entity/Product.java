@@ -35,9 +35,9 @@ public class Product {
     @TableField(value = "price", jdbcType = JdbcType.DECIMAL)
     private BigDecimal price;
 
-    @TableField(value = "create_time", fill = INSERT, jdbcType = JdbcType.DATE)
+    @TableField(value = "create_time", fill = INSERT, jdbcType = JdbcType.BIGINT)
     private Long createTime;
 
-    @TableField(value = "update_time", fill = INSERT_UPDATE, jdbcType = JdbcType.DATE)
+    @TableField(value = "update_time", fill = INSERT_UPDATE, jdbcType = JdbcType.BIGINT)
     private Long updateTime;
 }
