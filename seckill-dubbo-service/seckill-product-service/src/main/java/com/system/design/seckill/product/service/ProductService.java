@@ -6,10 +6,13 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.system.design.seckill.product.common.api.IProductService;
 import com.system.design.seckill.product.common.entity.Product;
+import com.system.design.seckill.product.common.entity.vo.ProductVo;
 import com.system.design.seckill.product.mapper.ProductMapper;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -25,8 +28,19 @@ public class ProductService implements IProductService {
 
     @Override
     public int createProduct(Product product) {
-        System.out.println("创建产品信息成功...");
-        return productMapper.insert(product);
+        int insert = productMapper.insert(product);
+        System.out.println("创建产品信息成功: " + insert);
+        return insert;
+    }
+
+    @Override
+    public int deleteProduct(long productId) {
+        return productMapper.deleteById(productId);
+    }
+
+    @Override
+    public int updateProduct(Product product) {
+        return productMapper.updateById(product);
     }
 
     @Override
@@ -35,15 +49,24 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> getAllByLimit(Product product) {
-        LambdaQueryWrapper<Product> userLambdaQueryWrapper = Wrappers.lambdaQuery();
-        userLambdaQueryWrapper.like(Product::getProductName , "jack");
+    public IPage selectByPage(ProductVo productVo) {
+        Page<Product> productPage = new Page<>();
+        LambdaQueryWrapper<Product> productLambdaQueryWrapper = Wrappers.lambdaQuery();
+        if (productVo != null){
+            if (productVo.getCurrentPage() != null){productPage.setCurrent(productVo.getCurrentPage());}
+            if (productVo.getPageSize() != null){productPage.setSize(productVo.getPageSize());}
+            if (StringUtils.isNotEmpty(productVo.getProductName())){productLambdaQueryWrapper.like(Product::getProductName, productVo.getProductName());}
+            if (StringUtils.isNotEmpty(productVo.getProductDesc())){productLambdaQueryWrapper.like(Product::getProductDesc, productVo.getProductDesc());}
+            if (productVo.getId() != null){productLambdaQueryWrapper.eq(Product::getId, productVo.getId());}
+            if (productVo.getCreateTimeStart() != null){productLambdaQueryWrapper.ge(Product::getCreateTime,productVo.getCreateTimeStart());}
+            if (productVo.getCreateTimeEnd() != null){productLambdaQueryWrapper.le(Product::getCreateTime,productVo.getCreateTimeEnd());}
+            if (productVo.getUpdateTimeStart() != null){productLambdaQueryWrapper.ge(Product::getUpdateTime,productVo.getUpdateTimeStart());}
+            if (productVo.getUpdateTimeEnd() != null){productLambdaQueryWrapper.le(Product::getUpdateTime,productVo.getUpdateTimeEnd());}
+            if (productVo.getPrice() != null){productLambdaQueryWrapper.eq(Product::getPrice,productVo.getPrice());}
+            if (productVo.getMinPrice() != null){productLambdaQueryWrapper.ge(Product::getPrice,productVo.getMinPrice());}
+            if (productVo.getMaxPrice() != null){productLambdaQueryWrapper.le(Product::getPrice,productVo.getMaxPrice());}
+        }
 
-        Page<Product> productPage = new Page<>(1 , 2);
-        IPage<Product> productIPage = productMapper.selectPage(productPage , userLambdaQueryWrapper);
-        System.out.println("总页数： "+productIPage.getPages());
-        System.out.println("总记录数： "+productIPage.getTotal());
-        productIPage.getRecords().forEach(System.out::println);
-        return productIPage.getRecords();
+        return productMapper.selectPage(productPage , productLambdaQueryWrapper);
     }
 }

@@ -1,6 +1,8 @@
 package com.system.design.seckill.product.common.api;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.system.design.seckill.product.common.entity.Product;
+import com.system.design.seckill.product.common.entity.vo.ProductVo;
 
 import java.util.List;
 
@@ -10,11 +12,25 @@ import java.util.List;
  */
 public interface IProductService {
     /**
-     * 创建订单
+     * 创建产品
      * @param product
      * @return
      */
     int createProduct(Product product);
+
+    /**
+     * 删除产品
+     * @param productId
+     * @return
+     */
+    int deleteProduct(long productId);
+
+    /**
+     * 更新产品
+     * @param product
+     * @return
+     */
+    int updateProduct(Product product);
 
     /**
      * 获取产品详情
@@ -25,8 +41,8 @@ public interface IProductService {
 
     /**
      * 分页检索产品
-     * @param product
+     * @param productVo
      * @return
      */
-    List<Product> getAllByLimit(Product product);
+    IPage selectByPage(ProductVo productVo);
 }

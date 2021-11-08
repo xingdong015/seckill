@@ -12,15 +12,11 @@ import java.util.List;
 
 @SpringBootTest
 @Slf4j
-class SeckillProductServiceApplicationTests {
-
-    @Autowired
-    private ProductService productService;
+public class SeckillProductServiceApplicationTests {
 
     @Test
     void contextLoads() {
-        List<Product> allByLimit = productService.getAllByLimit(null);
-        System.out.println(JSON.toJSONString(allByLimit));
+
     }
 
 }
