@@ -30,3 +30,7 @@ spring:
       write-dates-as-timestamps: false
 server:
   port: 8084
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志
