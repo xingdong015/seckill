@@ -17,10 +17,10 @@ public class OrderController {
     @Resource
     private OrderService orderService;
 
-    @RequestMapping("/create")
+    @RequestMapping("/kill")
     @ResponseBody
     public Object createOrder(long skuId,String userId) {
-        return orderService.createOrder(skuId,userId);
+        return orderService.doKill(skuId,userId);
     }
 
 }

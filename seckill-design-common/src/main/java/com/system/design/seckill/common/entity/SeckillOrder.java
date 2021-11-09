@@ -19,16 +19,13 @@ import static com.baomidou.mybatisplus.annotation.FieldFill.INSERT;
 @TableName("t_order")
 @SuppressWarnings("all")
 @Data
-public class OrderEntity implements Serializable {
+public class SeckillOrder implements Serializable {
     @Id
     @TableId(value = "order_id", type = IdType.AUTO)
     private Long    orderId;
 
     @TableField(value = "create_time", fill = INSERT, jdbcType = JdbcType.DATE)
     private Long createTime;
-
-    @TableField(value = "product_id", jdbcType = JdbcType.BIGINT)
-    private Long  productId;
 
     @TableField(value = "seckill_id", jdbcType = JdbcType.BIGINT)
     private Long    seckillId;

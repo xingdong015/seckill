@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import org.apache.ibatis.type.JdbcType;
+import org.checkerframework.framework.qual.AnnotatedFor;
 import org.springframework.data.annotation.Id;
 
 import java.math.BigDecimal;
@@ -37,10 +38,15 @@ public class Seckill {
     @TableField(value = "count", jdbcType = JdbcType.BIGINT)
     private Long count;
 
+    /**
+     * tcc事务中使用到的字段、如果是非tcc事务、则不使用
+     */
     @TableField(value = "residue", jdbcType = JdbcType.BIGINT)
     private Long residue;
 
-    //TCC事务锁定的库存
+    /**
+     * tcc事务中使用到的字段、如果是非tcc事务、则不使用、锁定的库存
+     */
     @TableField(value = "frozen", jdbcType = JdbcType.BIGINT)
     private Long frozen;
 

@@ -1,7 +1,7 @@
 package com.system.design.seckill.common.api;
 
 
-import com.system.design.seckill.common.entity.OrderEntity;
+import com.system.design.seckill.common.entity.SeckillOrder;
 
 /**
  * @author chengzhengzheng
@@ -14,14 +14,14 @@ public interface IOrderService {
      * @param userId
      * @return
      */
-    OrderEntity createOrder(long skuId, String userId);
+    SeckillOrder createOrder(long skuId, String userId);
 
     /**
      * 获取订单详情
      * @param orderId
      * @return
      */
-    OrderEntity getOrderInfo(long orderId);
+    SeckillOrder getOrderInfo(long orderId);
 
     /**
      * 更新订单状态

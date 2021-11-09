@@ -24,7 +24,7 @@
         <mybatis-plus-boot-starter.version>3.4.3.4</mybatis-plus-boot-starter.version>
         <mybatis-supprt.version>2.3</mybatis-supprt.version>
         <mybatis-enhance-actable.version>1.5.0.RELEASE</mybatis-enhance-actable.version>
-        <rocketmq-spring-boot-starter.version>2.2.1</rocketmq-spring-boot-starter.version>
+        <rocketmq-spring-boot-starter.version>2.2.0</rocketmq-spring-boot-starter.version>
         <rocketmq-tools.version>4.8.0</rocketmq-tools.version>
         <lombok.version>1.18.20</lombok.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>

@@ -2,7 +2,7 @@ package com.system.design.seckill.order.service;
 
 import com.google.common.base.Preconditions;
 import com.system.design.seckill.common.api.IOrderService;
-import com.system.design.seckill.common.entity.OrderEntity;
+import com.system.design.seckill.common.entity.SeckillOrder;
 import com.system.design.seckill.common.enums.SeckillStatusEnum;
 import com.system.design.seckill.common.exception.SeckillException;
 import com.system.design.seckill.order.mapper.KillMapper;
@@ -26,13 +26,20 @@ public class OrderService implements IOrderService {
     private KillMapper killMapper;
 
     @Override
-    public OrderEntity createOrder(long skuId, String userId) {
-        System.out.println("创建订单成功....");
-        return new OrderEntity();
+    public SeckillOrder createOrder(long skuId, String userId) {
+        SeckillOrder seckillOrder = new SeckillOrder();
+        seckillOrder.setSeckillId(skuId);
+        seckillOrder.setUserId(userId);
+        seckillOrder.setCreateTime(System.currentTimeMillis());
+        seckillOrder.setUpdateTime(System.currentTimeMillis());
+        seckillOrder.setStatus(0);
+        int insert = orderMapper.insert(seckillOrder);
+        System.out.println("创建订单成功: " + insert);
+        return seckillOrder;
     }
 
     @Override
-    public OrderEntity getOrderInfo(long orderId) {
+    public SeckillOrder getOrderInfo(long orderId) {
 
         return null;
     }
@@ -52,6 +59,8 @@ public class OrderService implements IOrderService {
      * @param killId
      * @param userId
      * @return
+     *
+     * 事务发起方、TM
      */
     @GlobalTransactional
     public Long doKill(long killId, String userId) {
@@ -60,7 +69,7 @@ public class OrderService implements IOrderService {
         Preconditions.checkArgument(count >= 1, "%s|%s|库存不足", killId, userId);
 
         //2. 创建订单
-        OrderEntity order = createOrder(killId, userId);
+        SeckillOrder order = createOrder(killId, userId);
         if (Objects.isNull(order)) {
             throw new SeckillException(String.format("order error => killId:%s userId:%s", killId, userId), SeckillStatusEnum.REPEAT_KILL);
         }
