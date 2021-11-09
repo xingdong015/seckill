@@ -25,11 +25,12 @@ public class ProductBaseSearchTest extends SeckillProductServiceApplicationTests
     @Test
     void test_insert(){
         Product build = Product.builder()
-                .id(3L)
+                .id(1L)
                 .price(new BigDecimal(8550))
                 .productName("xiaomi-pro")
                 .productDesc("big computer")
                 .build();
+
         int insert = productService.createProduct(build);
         System.out.println("insert: " + insert);
     }
@@ -43,10 +44,10 @@ public class ProductBaseSearchTest extends SeckillProductServiceApplicationTests
     @Test
     void test_update(){
         Product build = Product.builder()
-                .id(3L)
-                .price(new BigDecimal(6000))
-                .productName("v2-huawei-pro")
-                .productDesc("v2-small computer")
+                .id(1L)
+                .price(new BigDecimal(9000))
+                .productName("v3-huawei-pro")
+                .productDesc("v3-small computer")
                 .build();
         int insert = productService.updateProduct(build);
         System.out.println("update: " + insert);

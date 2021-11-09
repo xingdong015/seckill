@@ -8,10 +8,13 @@ import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerIntercept
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * 自动生成表的配置
  */
+@EnableTransactionManagement
 @Configuration
 public class MyBatisMapperScannerConfig {
     @Bean

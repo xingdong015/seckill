@@ -1,9 +1,6 @@
 package com.system.design.seckill.common.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +9,9 @@ import org.apache.ibatis.type.JdbcType;
 import org.springframework.data.annotation.Id;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 import static com.baomidou.mybatisplus.annotation.FieldFill.INSERT;
 import static com.baomidou.mybatisplus.annotation.FieldFill.INSERT_UPDATE;
@@ -35,9 +35,16 @@ public class Product {
     @TableField(value = "price", jdbcType = JdbcType.DECIMAL)
     private BigDecimal price;
 
-    @TableField(value = "create_time", fill = INSERT, jdbcType = JdbcType.BIGINT)
-    private Long createTime;
+    @TableField(value = "create_time", fill = INSERT, jdbcType = JdbcType.TIMESTAMP)
+    private Date createTime;
 
-    @TableField(value = "update_time", fill = INSERT_UPDATE, jdbcType = JdbcType.BIGINT)
-    private Long updateTime;
+    @TableField(value = "update_time", fill = INSERT_UPDATE, jdbcType = JdbcType.TIMESTAMP)
+    private Date updateTime;
+
+    /**
+     * 版本号（用于乐观锁， 默认为 1）
+     */
+    @Version
+    @TableField(fill = FieldFill.INSERT)
+    private Integer version;
 }
