@@ -1,4 +1,4 @@
-package com.system.design.seckill.api;
+package com.system.design.seckill.product;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.metadata.IPage;

@@ -10,7 +10,7 @@ public class SeckillProductServiceApplicationTests {
 
     @Test
     void contextLoads() {
-
+        log.info("exd...");
     }
 
 }
