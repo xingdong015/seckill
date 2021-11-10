@@ -19,6 +19,6 @@ public class CanalTest extends SeckillProductServiceApplicationTests {
 
     @Test
     void test(){
-        canalClient.run();
+//        canalClient.run();
     }
 }
