@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 /**
  * 自动生成表的配置
  */
-@EnableTransactionManagement
 @Configuration
 public class MyBatisMapperScannerConfig {
     @Bean
