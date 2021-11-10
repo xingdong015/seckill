@@ -1,4 +1,4 @@
-package com.system.design.seckill.common.entity.vo;
+package com.system.design.seckill.common.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ProductVo {
+public class ProductDto {
     private Long currentPage;
     private Long pageSize;
     private Long id;

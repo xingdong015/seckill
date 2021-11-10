@@ -4,7 +4,7 @@ package com.system.design.seckill.pay.service;
 import com.system.design.seckill.common.api.IOrderService;
 import com.system.design.seckill.common.api.IPayService;
 import com.system.design.seckill.common.bean.PayResultStatus;
-import com.system.design.seckill.common.entity.SeckillOrder;
+import com.system.design.seckill.common.po.SeckillOrder;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 

@@ -5,8 +5,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.system.design.seckill.common.api.IProductService;
-import com.system.design.seckill.common.entity.Product;
-import com.system.design.seckill.common.entity.vo.ProductVo;
+import com.system.design.seckill.common.po.Product;
+import com.system.design.seckill.common.dto.ProductDto;
 import com.system.design.seckill.product.mapper.ProductMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -46,7 +46,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public IPage selectByPage(ProductVo productVo) {
+    public IPage selectByPage(ProductDto productVo) {
         Page<Product> productPage = new Page<>();
         LambdaQueryWrapper<Product> productLambdaQueryWrapper = Wrappers.lambdaQuery();
         if (productVo != null){

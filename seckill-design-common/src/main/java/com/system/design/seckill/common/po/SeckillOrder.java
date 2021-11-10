@@ -1,4 +1,4 @@
-package com.system.design.seckill.common.entity;
+package com.system.design.seckill.common.po;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -8,34 +8,35 @@ import lombok.Data;
 import org.apache.ibatis.type.JdbcType;
 import org.springframework.data.annotation.Id;
 
+import java.io.Serializable;
+
 import static com.baomidou.mybatisplus.annotation.FieldFill.INSERT;
 
 /**
  * @author chengzhengzheng
  * @date 2021/9/19
  */
+@TableName("t_order")
 @SuppressWarnings("all")
 @Data
-@TableName("t_account")
-public class Account {
+public class SeckillOrder implements Serializable {
     @Id
-    @TableId(value = "account_id", type = IdType.AUTO)
-    private Long accountId;
-
-    @TableField(value = "phone", jdbcType = JdbcType.VARCHAR)
-    private String phone;
-
-    @TableField(value = "address", jdbcType = JdbcType.VARCHAR)
-    private String address;
-
-    @TableField(value = "email", jdbcType = JdbcType.VARCHAR)
-    private String email;
-
-    @TableField(value = "ip_address", jdbcType = JdbcType.VARCHAR)
-    private String ipAddress;
+    @TableId(value = "order_id", type = IdType.AUTO)
+    private Long    orderId;
 
     @TableField(value = "create_time", fill = INSERT, jdbcType = JdbcType.DATE)
     private Long createTime;
+
+    @TableField(value = "seckill_id", jdbcType = JdbcType.BIGINT)
+    private Long    seckillId;
+
+    @TableField(value = "user_id",  jdbcType = JdbcType.BIGINT)
+    private String  userId;
+    /**
+     * '状态标识:-1:无效 0:成功 1:已付款 2:已发货',
+     */
+    @TableField(value = "status", jdbcType = JdbcType.TINYINT)
+    private Integer status;
 
     @TableField(value = "update_time", fill = INSERT, jdbcType = JdbcType.DATE)
     private Long updateTime;

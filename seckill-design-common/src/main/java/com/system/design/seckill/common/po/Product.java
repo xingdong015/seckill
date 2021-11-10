@@ -1,4 +1,4 @@
-package com.system.design.seckill.common.entity;
+package com.system.design.seckill.common.po;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.AllArgsConstructor;
@@ -9,8 +9,6 @@ import org.apache.ibatis.type.JdbcType;
 import org.springframework.data.annotation.Id;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 import static com.baomidou.mybatisplus.annotation.FieldFill.INSERT;

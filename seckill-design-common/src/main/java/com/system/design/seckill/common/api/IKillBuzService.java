@@ -1,6 +1,7 @@
 package com.system.design.seckill.common.api;
 
 import com.system.design.seckill.common.bean.Exposer;
+import com.system.design.seckill.common.dto.SeckillDto;
 
 import java.util.List;
 import java.util.Map;
@@ -19,4 +20,5 @@ public interface IKillBuzService {
 
     void executeKill(String killId, String userId, String md5);
 
+    void addKill(SeckillDto seckillDto);
 }

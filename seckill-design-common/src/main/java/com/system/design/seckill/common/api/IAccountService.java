@@ -1,6 +1,6 @@
 package com.system.design.seckill.common.api;
 
-import com.system.design.seckill.common.entity.Account;
+import com.system.design.seckill.common.po.Account;
 
 /**
  * @author chengzhengzheng

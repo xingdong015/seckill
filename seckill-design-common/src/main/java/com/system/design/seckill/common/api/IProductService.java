@@ -1,8 +1,8 @@
 package com.system.design.seckill.common.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.system.design.seckill.common.entity.Product;
-import com.system.design.seckill.common.entity.vo.ProductVo;
+import com.system.design.seckill.common.dto.ProductDto;
+import com.system.design.seckill.common.po.Product;
 
 /**
  * @author jack
@@ -42,5 +42,5 @@ public interface IProductService {
      * @param productVo
      * @return
      */
-    IPage selectByPage(ProductVo productVo);
+    IPage selectByPage(ProductDto productVo);
 }

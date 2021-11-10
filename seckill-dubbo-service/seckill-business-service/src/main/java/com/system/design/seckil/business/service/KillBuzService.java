@@ -6,7 +6,8 @@ import com.system.design.seckill.common.api.IAccountService;
 import com.system.design.seckill.common.api.IKillBuzService;
 import com.system.design.seckill.common.bean.Exposer;
 import com.system.design.seckill.common.bean.RocketMqMessageBean;
-import com.system.design.seckill.common.entity.Account;
+import com.system.design.seckill.common.dto.SeckillDto;
+import com.system.design.seckill.common.po.Account;
 import com.system.design.seckill.common.exception.NoStockException;
 import com.system.design.seckill.common.exception.RepeatKillException;
 import com.system.design.seckill.common.exception.SeckillCloseException;
@@ -176,4 +177,8 @@ public class KillBuzService implements IKillBuzService {
         }
     }
 
+    @Override
+    public void addKill(SeckillDto seckillDto) {
+        //TODO
+    }
 }

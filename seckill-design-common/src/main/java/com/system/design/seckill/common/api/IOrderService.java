@@ -1,7 +1,7 @@
 package com.system.design.seckill.common.api;
 
 
-import com.system.design.seckill.common.entity.SeckillOrder;
+import com.system.design.seckill.common.po.SeckillOrder;
 
 /**
  * @author chengzhengzheng

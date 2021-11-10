@@ -3,8 +3,8 @@ package com.system.design.seckill.product;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.system.design.seckill.SeckillProductServiceApplicationTests;
-import com.system.design.seckill.common.entity.Product;
-import com.system.design.seckill.common.entity.vo.ProductVo;
+import com.system.design.seckill.common.po.Product;
+import com.system.design.seckill.common.dto.ProductDto;
 import com.system.design.seckill.product.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -55,7 +55,7 @@ public class ProductBaseSearchTest extends SeckillProductServiceApplicationTests
 
     @Test
     void test_query(){
-        ProductVo build = ProductVo.builder()
+        ProductDto build = ProductDto.builder()
                 .minPrice(new BigDecimal(1000))
                 .maxPrice(new BigDecimal(15000))
                 .build();

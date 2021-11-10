@@ -1,7 +1,7 @@
 package com.system.design.seckill.order.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.system.design.seckill.common.entity.Seckill;
+import com.system.design.seckill.common.po.Seckill;
 import org.apache.ibatis.annotations.Update;
 
 /**
