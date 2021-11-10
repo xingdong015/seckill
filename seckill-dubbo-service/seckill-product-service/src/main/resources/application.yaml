@@ -34,3 +34,10 @@ server:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志
+
+canal:
+  host: 8.141.57.79
+  port: 11111
+  destination: example
+  username:
+  password:
