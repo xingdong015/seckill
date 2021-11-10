@@ -20,8 +20,7 @@ public class MyBatisMapperScannerConfig {
     @Bean
     public MapperScannerConfigurer mapperScannerConfigurer() {
         MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
-        mapperScannerConfigurer.setBasePackage("com.system.design.seckill.order.mapper.*;com.gitee.sunchenbin.mybatis" +
-                ".actable.dao.*");
+        mapperScannerConfigurer.setBasePackage("com.gitee.sunchenbin.mybatis.actable.dao.*");
         mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactory");
         return mapperScannerConfigurer;
     }

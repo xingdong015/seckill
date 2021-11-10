@@ -54,7 +54,7 @@ seata:
   application-id: ${spring.application.name}
   tx-service-group: ${spring.application.name}-tx-group
   registry:
-    type: nocos
+    type: Nacos
     nacos:
       application: seata-server
       server-addr: rgb-fk.com:8848
