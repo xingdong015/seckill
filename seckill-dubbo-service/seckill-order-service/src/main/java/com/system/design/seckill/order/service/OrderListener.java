@@ -15,8 +15,8 @@ import javax.annotation.Resource;
  * spring boot starter rocketmq 接受消息 具体可以参考
  * https://github.com/apache/rocketmq-spring/wiki/%E6%8E%A5%E6%94%B6%E6%B6%88%E6%81%AF
  */
-@RocketMQMessageListener(topic = "redis_kill_success", consumerGroup = "business-group")
-@Component
+//@RocketMQMessageListener(topic = "redis_kill_success", consumerGroup = "business-group")
+//@Component
 public class OrderListener implements RocketMQListener<RocketMqMessageBean> {
     @Resource
     private OrderService orderService;

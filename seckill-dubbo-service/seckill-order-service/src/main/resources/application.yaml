@@ -31,7 +31,7 @@ spring:
       #如果允许时报错  java.lang.ClassNotFoundException: org.apache.log4j.Priority
       #则导入 log4j 依赖即可，Maven 地址：https://mvnrepository.com/artifact/log4j/log4j
       # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，比如不配置stat,我们在Druid的监控页面中就拿不到想要的信息。
-#      filters: stat,wall,log4j
+      #      filters: stat,wall,log4j
       # 合并多个DruidDataSource的监控数据
       useGlobalDataSourceStat: true
       # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
@@ -68,3 +68,15 @@ seata:
       group: SEATA_GROUP
       username: nacos
       password: nacos
+#      此配置可以参考  SysMysqlCreateTableManagerImpl 这个源码类来了解配置
+mybatis:
+  table:
+    auto: create
+  model:
+    pack: com.system.design.seckill.common.po
+  database:
+    type: mysql
+mybatis-plus:
+  #1.如果是mybatis 直接在mybatis下增加该配置。
+  #2.如果使用properties配置方式,要写成mapperLocations
+  mapper-locations: classpath*:com/gitee/sunchenbin/mybatis/actable/mapping/*/*.xml
