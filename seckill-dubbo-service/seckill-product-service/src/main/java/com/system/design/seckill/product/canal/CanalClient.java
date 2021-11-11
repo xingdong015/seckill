@@ -46,14 +46,14 @@ public class CanalClient implements ApplicationRunner {
     private static final int sleepValue = 2000;
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         CanalConnector connector = CanalConnectors.newSingleConnector(
                 new InetSocketAddress(host,port), destination, username, password);
         try {
             //打开连接
             connector.connect();
-            //订阅数据库表,全部表
-            connector.subscribe(".*..*");
+            //订阅数据库表,全部表 connector.subscribe(".*..*");
+            connector.subscribe("seckill.t_product");
             //回滚到未进行ack的地方，下次fetch的时候，可以从最后一个没有ack的地方开始拿
             connector.rollback();
             try {
@@ -66,15 +66,13 @@ public class CanalClient implements ApplicationRunner {
                         Thread.sleep(sleepValue);
                     } else {
                         //异步调用处理,拼接sql
-                        sqlHandle.dataHandle(message.getEntries());
+//                        sqlHandle.dataHandle(message.getEntries());
                         //异步调用处理,组装成操作标识和es操作对象，调用es接口
                         esHandle.dataHandle(message.getEntries());
                     }
                     connector.ack(batchId);
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (InvalidProtocolBufferException e) {
+            } catch (InterruptedException | InvalidProtocolBufferException e) {
                 e.printStackTrace();
             }
         } finally {

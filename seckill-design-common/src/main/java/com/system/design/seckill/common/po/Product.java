@@ -33,16 +33,10 @@ public class Product {
     @TableField(value = "price", jdbcType = JdbcType.DECIMAL)
     private BigDecimal price;
 
-    @TableField(value = "create_time", fill = INSERT, jdbcType = JdbcType.TIMESTAMP)
-    private Date createTime;
+    @TableField(value = "create_time", fill = INSERT, jdbcType = JdbcType.BIGINT)
+    private Long createTime;
 
-    @TableField(value = "update_time", fill = INSERT_UPDATE, jdbcType = JdbcType.TIMESTAMP)
-    private Date updateTime;
+    @TableField(value = "update_time", fill = INSERT_UPDATE, jdbcType = JdbcType.BIGINT)
+    private Long updateTime;
 
-    /**
-     * 版本号（用于乐观锁， 默认为 1）
-     */
-    @Version
-    @TableField(fill = FieldFill.INSERT)
-    private Integer version;
 }
