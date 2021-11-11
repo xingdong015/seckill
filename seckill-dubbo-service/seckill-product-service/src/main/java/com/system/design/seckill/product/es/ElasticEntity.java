@@ -6,6 +6,7 @@ package com.system.design.seckill.product.es;
  * @create: 2021-03-17 14:23
  */
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.util.Map;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ElasticEntity<T> {
 
     /**

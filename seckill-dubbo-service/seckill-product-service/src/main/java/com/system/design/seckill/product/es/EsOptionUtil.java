@@ -1,6 +1,5 @@
 package com.system.design.seckill.product.es;
 
-import cn.cnic.es.entity.ElasticEntity;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
@@ -36,7 +35,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Component
-public class EsSearchUtil {
+public class EsOptionUtil {
 
     @Autowired
     RestHighLevelClient restHighLevelClient;
@@ -106,6 +105,7 @@ public class EsSearchUtil {
             throw new RuntimeException(e);
         }
     }
+
 
     /** 批量删除
      */
