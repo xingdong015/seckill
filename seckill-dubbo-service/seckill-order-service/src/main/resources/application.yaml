@@ -71,7 +71,7 @@ seata:
 #      此配置可以参考  SysMysqlCreateTableManagerImpl 这个源码类来了解配置
 mybatis:
   table:
-    auto: create
+    auto: update
   model:
     pack: com.system.design.seckill.common.po
   database:
