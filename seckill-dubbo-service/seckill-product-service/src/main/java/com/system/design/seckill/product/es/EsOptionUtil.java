@@ -24,6 +24,7 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -51,7 +52,9 @@ public class EsOptionUtil {
             CreateIndexRequest request = new CreateIndexRequest(idxName);
             buildSetting(request);
             //2.// 创建映射
-            request.mapping(idxSQL, XContentType.JSON);
+            if(!StringUtils.isEmpty(idxSQL)) {
+                request.mapping(idxSQL, XContentType.JSON);
+            }
             //request.settings() 手工指定Setting
             //3.执行创建操作并得到响应
             CreateIndexResponse res = restHighLevelClient.indices().create(request, RequestOptions.DEFAULT);
