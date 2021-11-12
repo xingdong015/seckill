@@ -1,0 +1,7 @@
+type Query {
+    product: [Product]
+}
+
+type Product {
+    query: String
+}

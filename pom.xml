@@ -22,6 +22,7 @@
         <module>seckill-design-web</module>
         <module>seckill-gateway-service</module>
         <module>seckill-design-dependency</module>
+        <module>seckill-canal-graphql</module>
     </modules>
 
     <dependencyManagement>
