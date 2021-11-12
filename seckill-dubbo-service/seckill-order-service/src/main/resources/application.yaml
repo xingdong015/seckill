@@ -43,11 +43,11 @@ spring:
       write-dates-as-timestamps: false
 server:
   port: 8082
-rocketmq:
-  name-server: rgb-fk.com:9876
-  consumer:
-    group: business-group
-    topic: redis_kill_success
+#rocketmq:
+#  name-server: rgb-fk.com:9876
+#  consumer:
+#    group: business-group
+#    topic: redis_kill_success
 seata:
   ## 是否开启seata，默认true
   enabled: true
