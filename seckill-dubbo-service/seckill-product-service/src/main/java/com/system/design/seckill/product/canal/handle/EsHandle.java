@@ -1,11 +1,8 @@
 package com.system.design.seckill.product.canal.handle;
 
-import cn.hutool.db.sql.SqlBuilder;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.otter.canal.protocol.CanalEntry;
 import com.google.protobuf.InvalidProtocolBufferException;
-import com.system.design.seckill.common.po.Product;
 import com.system.design.seckill.product.es.ElasticEntity;
 import com.system.design.seckill.product.es.EsOptionUtil;
 import com.system.design.seckill.product.es.IndexNameConstant;
@@ -14,7 +11,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -63,13 +59,13 @@ public class EsHandle {
             if(eventType == CanalEntry.EventType.DELETE) {
                 List<ElasticEntity> elasticEntities = createColumnsObj(rowDatasList, "Before");
                 //调用es接口进行删除
-                esOptionUtil.deleteBatch(IndexNameConstant.getIndexName(tableName), elasticEntities);
+                esOptionUtil.deleteBatch(IndexNameConstant.getIndexName(tableName), elasticEntities.stream().map(ElasticEntity::getId).collect(Collectors.toList()));
                 log.info("### DELETE elasticEntities:{} ###", JSON.toJSONString(elasticEntities));
             } else if(eventType == CanalEntry.EventType.UPDATE) {
                 List<ElasticEntity> elasticEntitiesBefore = createColumnsObj(rowDatasList, "Before");
                 List<ElasticEntity> elasticEntitiesAfter = createColumnsObj(rowDatasList, "After");
                 //调用es接口进行更新:先删除后添加
-                esOptionUtil.deleteBatch(IndexNameConstant.getIndexName(tableName), elasticEntitiesBefore);
+                esOptionUtil.deleteBatch(IndexNameConstant.getIndexName(tableName), elasticEntitiesBefore.stream().map(ElasticEntity::getId).collect(Collectors.toList()));
                 esOptionUtil.insertBatch(IndexNameConstant.getIndexName(tableName), elasticEntitiesAfter);
                 log.info("### UPDATE before:{} --- after:{} ###", JSON.toJSONString(elasticEntitiesBefore), JSON.toJSONString(elasticEntitiesAfter));
             } else if(eventType == CanalEntry.EventType.INSERT) {
@@ -114,31 +110,31 @@ public class EsHandle {
     }
 
 
-    private static void createProduct(Product product, List<CanalEntry.Column> columnList) {
-        columnList.stream().forEach(column -> {
-            switch(column.getName()) {
-                case "id":
-                    product.setId(Long.valueOf(column.getValue()));
-                    break;
-                case "product_name":
-                    product.setProductName(column.getValue());
-                    break;
-                case "product_desc":
-                    product.setProductDesc(column.getValue());
-                    break;
-                case "price":
-                    product.setPrice(new BigDecimal(column.getValue()));
-                    break;
-                case "create_time":
-                    product.setCreateTime(Long.valueOf(column.getValue()));
-                    break;
-                case "update_time":
-                    product.setUpdateTime(Long.valueOf(column.getValue()));
-                    break;
-                default:
-                    log.error("### 未匹配到字段name:{}, value:{} ###", column.getName(), column.getValue());
-                    break;
-            }
-        });
-    }
+//    private static void createProduct(Product product, List<CanalEntry.Column> columnList) {
+//        columnList.stream().forEach(column -> {
+//            switch(column.getName()) {
+//                case "id":
+//                    product.setId(Long.valueOf(column.getValue()));
+//                    break;
+//                case "product_name":
+//                    product.setProductName(column.getValue());
+//                    break;
+//                case "product_desc":
+//                    product.setProductDesc(column.getValue());
+//                    break;
+//                case "price":
+//                    product.setPrice(new BigDecimal(column.getValue()));
+//                    break;
+//                case "create_time":
+//                    product.setCreateTime(Long.valueOf(column.getValue()));
+//                    break;
+//                case "update_time":
+//                    product.setUpdateTime(Long.valueOf(column.getValue()));
+//                    break;
+//                default:
+//                    log.error("### 未匹配到字段name:{}, value:{} ###", column.getName(), column.getValue());
+//                    break;
+//            }
+//        });
+//    }
 }
