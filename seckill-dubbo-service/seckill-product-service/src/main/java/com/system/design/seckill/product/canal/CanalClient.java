@@ -1,6 +1,5 @@
 package com.system.design.seckill.product.canal;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.otter.canal.client.CanalConnector;
 import com.alibaba.otter.canal.client.CanalConnectors;
 import com.alibaba.otter.canal.protocol.Message;
@@ -16,10 +15,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.net.InetSocketAddress;
-import java.util.List;
-import java.util.Queue;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * @description:
@@ -67,7 +63,7 @@ public class CanalClient implements ApplicationRunner {
                     boolean tryGetDistributedLock = RedisUtils.tryGetDistributedLock(jedis,key, randomString, 3000);
                     if (tryGetDistributedLock){
                         //尝试从master那边拉去数据batchSize条记录，有多少取多少
-                        Message message = connector.getWithoutAck(batchSize);
+                        Message message = connector.getWithoutAck(BATCH_SIZE);
                         long batchId = message.getId();
                         int size = message.getEntries().size();
                         if (batchId == -1 || size == 0) {
