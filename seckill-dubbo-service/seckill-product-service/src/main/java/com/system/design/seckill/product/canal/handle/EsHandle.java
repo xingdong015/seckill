@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @description:
@@ -37,7 +38,7 @@ public class EsHandle {
     @Async
     public void dataHandle(List<CanalEntry.Entry> entrys) throws InvalidProtocolBufferException {
         for (CanalEntry.Entry entry : entrys) {
-            if (CanalEntry.EntryType.ROWDATA == entry.getEntryType()) {
+            if (CanalEntry.EntryType.ROWDATA == entry.getEntryType() && entry.getHeader().getTableName().startsWith("t_")) {
                 CanalEntry.RowChange rowChange = CanalEntry.RowChange.parseFrom(entry.getStoreValue());
                 esApiHandle(rowChange.getEventType(), entry.getHeader().getTableName(), rowChange.getRowDatasList());
             }
@@ -45,22 +46,25 @@ public class EsHandle {
     }
 
     private void esApiHandle(CanalEntry.EventType eventType, String tableName, List<CanalEntry.RowData> rowDatasList) {
-        if (eventType == CanalEntry.EventType.DELETE) {
+        if (eventType == CanalEntry.EventType.CREATE) {
+            //自动创建mapping todo
+
+        } else if (eventType == CanalEntry.EventType.DELETE) {
             List<ElasticEntity> elasticEntities = createColumnsObj(tableName, rowDatasList, "Before");
             //调用es接口进行删除
-            esOptionUtil.deleteBatch(IndexNameConstant.T_PRODUCT, elasticEntities);
+            esOptionUtil.deleteBatch(IndexNameConstant.getIndexName(tableName), elasticEntities);
             log.info("### DELETE elasticEntities:{} ###", JSON.toJSONString(elasticEntities));
         } else if (eventType == CanalEntry.EventType.UPDATE) {
             List<ElasticEntity> elasticEntitiesBefore = createColumnsObj(tableName, rowDatasList, "Before");
             List<ElasticEntity> elasticEntitiesAfter = createColumnsObj(tableName, rowDatasList, "After");
             //调用es接口进行更新:先删除后添加
-            esOptionUtil.deleteBatch(IndexNameConstant.T_PRODUCT, elasticEntitiesBefore);
-            esOptionUtil.insertBatch(IndexNameConstant.T_PRODUCT, elasticEntitiesAfter);
+            esOptionUtil.deleteBatch(IndexNameConstant.getIndexName(tableName), elasticEntitiesBefore);
+            esOptionUtil.insertBatch(IndexNameConstant.getIndexName(tableName), elasticEntitiesAfter);
             log.info("### UPDATE before:{} --- after:{} ###", JSON.toJSONString(elasticEntitiesBefore), JSON.toJSONString(elasticEntitiesAfter));
         } else if (eventType == CanalEntry.EventType.INSERT) {
             List<ElasticEntity> elasticEntities = createColumnsObj(tableName, rowDatasList, "After");
             //调用es接口进行保存
-            esOptionUtil.insertBatch(IndexNameConstant.T_PRODUCT, elasticEntities);
+            esOptionUtil.insertBatch(IndexNameConstant.getIndexName(tableName), elasticEntities);
             log.info("### INSERT elasticEntities:{} ###", JSON.toJSONString(elasticEntities));
         }
     }
@@ -69,17 +73,20 @@ public class EsHandle {
         List<ElasticEntity> elasticEntityList = new ArrayList<>();
         try {
             for (CanalEntry.RowData rowData : rowDatasList) {
-                ElasticEntity<Object> elasticEntity = null;
+                ElasticEntity elasticEntity ;
                 List<CanalEntry.Column> columnList = rowData.getAfterColumnsList();
                 if ("Before".equals(flag)) {
                     columnList = rowData.getBeforeColumnsList();
                 }
-                if ("t_product".equals(tableName)) {
-                    Product product = Product.builder().build();
-                    createProduct(product, columnList);
-                    Map map = JSONObject.parseObject(JSONObject.toJSONString(product), Map.class);
-                    elasticEntity = ElasticEntity.builder().id(product.getId().toString()).data(map).build();
-                }
+//                if ("t_product".equals(tableName)) {
+//                    Product product = Product.builder().build();
+//                    createProduct(product, columnList);
+//                    Map map = JSONObject.parseObject(JSONObject.toJSONString(product), Map.class);
+//                    elasticEntity = ElasticEntity.builder().id(product.getId().toString()).data(map).build();
+//                }
+
+                Map<Object, Object> objMap = columnList.stream().collect(Collectors.toMap(CanalEntry.Column::getName, CanalEntry.Column::getValue));
+                elasticEntity = ElasticEntity.builder().id(objMap.get("id").toString()).data(objMap).build();
                 elasticEntityList.add(elasticEntity);
             }
         } catch (Exception e) {

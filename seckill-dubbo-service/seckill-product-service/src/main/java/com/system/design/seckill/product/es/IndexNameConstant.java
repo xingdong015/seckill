@@ -6,5 +6,10 @@ package com.system.design.seckill.product.es;
  * @create: 2021-08-12 17:31
  */
 public class IndexNameConstant {
-    public static final String T_PRODUCT = "t_product";
+    public static final String API_SKILL_DEV_ = "api_skill_dev-%s";
+
+    public static String getIndexName(String tableName) {
+            return String.format(API_SKILL_DEV_ , tableName);
+    }
+
 }

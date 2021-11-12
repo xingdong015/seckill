@@ -16,7 +16,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ElasticEntity<T> {
+public class ElasticEntity {
 
     /**
      * 主键标识，用户ES持久化
@@ -26,6 +26,6 @@ public class ElasticEntity<T> {
     /**
      * JSON对象，实际存储数据
      */
-    private Map data;
+    private Map<Object,Object> data;
 }
 
