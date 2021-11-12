@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
 
 import javax.annotation.Resource;
 import java.net.InetSocketAddress;
@@ -39,8 +40,11 @@ public class CanalClient implements ApplicationRunner {
     private SqlHandle sqlHandle;
     @Resource
     private EsHandle esHandle;
+    @Resource
+    private RedisUtils redisUtils;
     private static final int BATCH_SIZE = 1000;
     private static final int SLEEP_VALUE = 2000;
+    private static final int EXPIRE_TIME = 20000;
 
     @Override
     public void run(ApplicationArguments args) {
@@ -54,13 +58,13 @@ public class CanalClient implements ApplicationRunner {
 //            connector.subscribe("seckill.t_product");
             //回滚到未进行ack的地方，下次fetch的时候，可以从最后一个没有ack的地方开始拿
             connector.rollback();
-            Jedis jedis = RedisUtils.getJedis();
+            Jedis jedis = redisUtils.getJedis();
             String key = "redis:key";
             String randomString = UUID.randomUUID().toString();
             try {
                 while (true) {
                     //获取分布式锁
-                    boolean tryGetDistributedLock = RedisUtils.tryGetDistributedLock(jedis,key, randomString, 3000);
+                    boolean tryGetDistributedLock = redisUtils.tryGetDistributedLock(jedis,key, randomString, EXPIRE_TIME);
                     if (tryGetDistributedLock){
                         //尝试从master那边拉去数据batchSize条记录，有多少取多少
                         Message message = connector.getWithoutAck(BATCH_SIZE);
@@ -76,14 +80,14 @@ public class CanalClient implements ApplicationRunner {
                         }
                         connector.ack(batchId);
                     }else {
-                        Thread.sleep(sleepValue);
+                        Thread.sleep(SLEEP_VALUE);
                     }
                 }
             } catch (InterruptedException | InvalidProtocolBufferException e) {
                 e.printStackTrace();
             }finally {
                 //异常时，释放redis分布式锁
-                RedisUtils.releaseDistributedLock(jedis,key, randomString);
+                redisUtils.releaseDistributedLock(jedis,key, randomString);
             }
         } finally {
             connector.disconnect();
