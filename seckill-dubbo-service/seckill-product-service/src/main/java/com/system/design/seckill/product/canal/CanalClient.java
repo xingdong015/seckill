@@ -7,6 +7,7 @@ import com.alibaba.otter.canal.protocol.Message;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.system.design.seckill.product.canal.handle.EsHandle;
 import com.system.design.seckill.product.canal.handle.SqlHandle;
+import com.system.design.seckill.product.redis.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +19,7 @@ import javax.annotation.Resource;
 import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Queue;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
@@ -56,24 +58,36 @@ public class CanalClient implements ApplicationRunner {
             connector.subscribe("seckill.t_product");
             //回滚到未进行ack的地方，下次fetch的时候，可以从最后一个没有ack的地方开始拿
             connector.rollback();
+            Jedis jedis = RedisUtils.getJedis();
+            String key = "redis:key";
+            String randomString = UUID.randomUUID().toString();
             try {
                 while (true) {
-                    //尝试从master那边拉去数据batchSize条记录，有多少取多少
-                    Message message = connector.getWithoutAck(batchSize);
-                    long batchId = message.getId();
-                    int size = message.getEntries().size();
-                    if (batchId == -1 || size == 0) {
-                        Thread.sleep(sleepValue);
-                    } else {
-                        //异步调用处理,拼接sql
+                    //获取分布式锁
+                    boolean tryGetDistributedLock = RedisUtils.tryGetDistributedLock(jedis,key, randomString, 3000);
+                    if (tryGetDistributedLock){
+                        //尝试从master那边拉去数据batchSize条记录，有多少取多少
+                        Message message = connector.getWithoutAck(batchSize);
+                        long batchId = message.getId();
+                        int size = message.getEntries().size();
+                        if (batchId == -1 || size == 0) {
+                            Thread.sleep(sleepValue);
+                        } else {
+                            //异步调用处理,拼接sql
 //                        sqlHandle.dataHandle(message.getEntries());
-                        //异步调用处理,组装成操作标识和es操作对象，调用es接口
-                        esHandle.dataHandle(message.getEntries());
+                            //异步调用处理,组装成操作标识和es操作对象，调用es接口
+                            esHandle.dataHandle(message.getEntries());
+                        }
+                        connector.ack(batchId);
+                    }else {
+                        Thread.sleep(sleepValue);
                     }
-                    connector.ack(batchId);
                 }
             } catch (InterruptedException | InvalidProtocolBufferException e) {
                 e.printStackTrace();
+            }finally {
+                //异常时，释放redis分布式锁
+                RedisUtils.releaseDistributedLock(jedis,key, randomString);
             }
         } finally {
             connector.disconnect();
