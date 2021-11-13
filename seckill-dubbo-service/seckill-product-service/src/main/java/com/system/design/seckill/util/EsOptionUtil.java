@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -38,13 +39,31 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 public class EsOptionUtil {
-
     @Autowired
     RestHighLevelClient restHighLevelClient;
 
+    //创建索引
+    public CreateIndexResponse createIndex(String indexName) throws IOException {
+        CreateIndexRequest createIndexRequest = new CreateIndexRequest(indexName);
+        return restHighLevelClient.indices().create(createIndexRequest, RequestOptions.DEFAULT);
+    }
+
+    //判断索引是否存在
+    public boolean existIndex(String indexName) throws IOException {
+        GetIndexRequest getIndexRequest = new GetIndexRequest(indexName);
+        return restHighLevelClient.indices().exists(getIndexRequest, RequestOptions.DEFAULT);
+    }
+
+    //删除索引
+    public boolean deleteIndex(String indexName) throws IOException {
+        DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest(indexName);
+        AcknowledgedResponse delete = restHighLevelClient.indices().delete(deleteIndexRequest, RequestOptions.DEFAULT);
+        return delete.isAcknowledged();
+    }
+
     public void createIndex(String idxName,String idxSQL){
         try {
-            if (this.indexExist(idxName)) {
+            if (this.existIndex(idxName)) {
                 log.error(" idxName={} 已经存在,idxSql={}",idxName,idxSQL);
                 return;
             }
@@ -67,14 +86,6 @@ public class EsOptionUtil {
         }
     }
 
-    /** 断某个index是否存在
-     */
-    public boolean indexExist(String idxName) throws Exception {
-        GetIndexRequest request = new GetIndexRequest(idxName);
-        boolean exists = restHighLevelClient.indices().exists(request, RequestOptions.DEFAULT);
-        return exists;
-    }
-
     /** 设置分片
      */
     public void buildSetting(CreateIndexRequest request){
@@ -95,7 +106,6 @@ public class EsOptionUtil {
         }
     }
 
-
     /** 批量插入数据
      */
     public void insertBatch(String idxName, List<ElasticEntity> list) {
@@ -109,7 +119,6 @@ public class EsOptionUtil {
         }
     }
 
-
     /** 批量删除
      */
     public <T> void deleteBatch(String idxName, Collection<T> idList) {
@@ -121,7 +130,6 @@ public class EsOptionUtil {
             throw new RuntimeException(e);
         }
     }
-
 
     public <T> List<T> search(String idxName, SearchSourceBuilder builder, Class<T> c) {
         SearchRequest request = new SearchRequest(idxName);
@@ -156,23 +164,6 @@ public class EsOptionUtil {
             map.put("data",res);
             map.put("count",value);
             return map;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /** 删除index
-     */
-    public void deleteIndex(String idxName) {
-        try {
-            if (!this.indexExist(idxName)) {
-                log.error(" idxName={} 已经存在",idxName);
-                return;
-            }
-            AcknowledgedResponse acknowledgedResponse = restHighLevelClient.indices().delete(new DeleteIndexRequest(idxName), RequestOptions.DEFAULT);
-            // 得到响应
-            boolean acknowledged = acknowledgedResponse.isAcknowledged();
-            System.out.println(acknowledged);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -220,7 +211,6 @@ public class EsOptionUtil {
         sourceBuilder.timeout(new TimeValue(timeout, TimeUnit.SECONDS));
         return sourceBuilder;
     }
-
 
     public static SearchSourceBuilder initSearchSourceBuilder(QueryBuilder queryBuilder){
         return initSearchSourceBuilder(queryBuilder,0,10,60);
