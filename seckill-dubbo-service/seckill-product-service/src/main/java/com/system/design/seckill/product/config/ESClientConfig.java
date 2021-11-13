@@ -3,6 +3,8 @@ package com.system.design.seckill.product.config;
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.indices.CreateIndexRequest;
+import org.elasticsearch.common.settings.Settings;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
  * @create: 2021-08-09 12:13
  */
 @Configuration
-public class ElasticSearchClientConfig {
+public class ESClientConfig {
     @Bean
     public RestHighLevelClient restHighLevelClient() {
 
@@ -22,5 +24,13 @@ public class ElasticSearchClientConfig {
                 )
         );
         return client;
+    }
+
+    /** 设置分片
+     */
+    public static void buildSetting(CreateIndexRequest request){
+
+        request.settings(Settings.builder().put("index.number_of_shards",1)
+                .put("index.number_of_replicas",1));
     }
 }

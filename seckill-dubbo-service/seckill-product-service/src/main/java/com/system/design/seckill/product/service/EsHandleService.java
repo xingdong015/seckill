@@ -1,6 +1,7 @@
-package com.system.design.seckill.util;
+package com.system.design.seckill.product.service;
 
 import com.alibaba.fastjson.JSON;
+import com.system.design.seckill.product.config.ESClientConfig;
 import com.system.design.seckill.product.entity.ElasticEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
@@ -38,7 +39,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Component
-public class EsOptionUtil {
+public class EsHandleService {
     @Autowired
     RestHighLevelClient restHighLevelClient;
 
@@ -69,7 +70,7 @@ public class EsOptionUtil {
             }
             // 1.创建索引的请求
             CreateIndexRequest request = new CreateIndexRequest(idxName);
-            buildSetting(request);
+            ESClientConfig.buildSetting(request);
             //2.// 创建映射
             if(!StringUtils.isEmpty(idxSQL)) {
                 request.mapping(idxSQL, XContentType.JSON);
@@ -84,14 +85,6 @@ public class EsOptionUtil {
             e.printStackTrace();
             System.exit(0);
         }
-    }
-
-    /** 设置分片
-     */
-    public void buildSetting(CreateIndexRequest request){
-
-        request.settings(Settings.builder().put("index.number_of_shards",1)
-                .put("index.number_of_replicas",1));
     }
 
     public void insertOrUpdateOne(String idxName, ElasticEntity entity) {
