@@ -3,7 +3,7 @@ package com.system.design.seckill.product.listener;
 import com.alibaba.otter.canal.client.CanalConnector;
 import com.alibaba.otter.canal.client.CanalConnectors;
 import com.alibaba.otter.canal.protocol.Message;
-import com.system.design.seckill.product.redis.RedisUtils;
+import com.system.design.seckill.util.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;

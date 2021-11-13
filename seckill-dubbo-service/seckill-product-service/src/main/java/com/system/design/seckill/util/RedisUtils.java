@@ -1,5 +1,6 @@
-package com.system.design.seckill.product.redis;
+package com.system.design.seckill.util;
 
+import com.system.design.seckill.product.config.RedisConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;

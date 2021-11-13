@@ -1,4 +1,4 @@
-package com.system.design.seckill.product.redis;
+package com.system.design.seckill.product.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
