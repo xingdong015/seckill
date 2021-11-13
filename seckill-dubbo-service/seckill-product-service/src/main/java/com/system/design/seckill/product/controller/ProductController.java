@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 @RequestMapping("/es/product")
 @CrossOrigin(allowCredentials="true")
 @Slf4j
-public class ProductEsController {
+public class ProductController {
     @Resource
     private EsHandleService esHandleService;
 

@@ -11,6 +11,9 @@ import com.system.design.seckill.product.mapper.ProductMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+
+import javax.annotation.Resource;
 
 /**
  * @description:
@@ -19,10 +22,12 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @DubboService(version = "1.0.0")
 public class ProductService implements IProductService {
-
     @Autowired
     private ProductMapper productMapper;
+    @Resource
+    private RedisTemplate redisTemplate;
 
+    //****暂时curd都加redis
     @Override
     public int createProduct(Product product) {
         int insert = productMapper.insert(product);
@@ -47,6 +52,8 @@ public class ProductService implements IProductService {
 
     @Override
     public IPage selectByPage(ProductDto productVo) {
+        //zset 结构分页检索
+
         Page<Product> productPage = new Page<>();
         LambdaQueryWrapper<Product> productLambdaQueryWrapper = Wrappers.lambdaQuery();
         if (productVo != null){
