@@ -18,6 +18,12 @@
         <common.version>0.0.1-SNAPSHOT</common.version>
     </properties>
     <dependencies>
+
+        <dependency>
+            <groupId>com.system.design.seckill</groupId>
+            <artifactId>seckill-design-common</artifactId>
+            <version>${common.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>

@@ -21,7 +21,7 @@ public class OrderController {
     @RequestMapping("/kill")
     @ResponseBody
     public Object createOrder(@RequestParam("skuId") long skuId,@RequestParam("userId") String userId) {
-        return orderService.doKill(skuId,userId);
+        return orderService.doKill(skuId, userId);
     }
     @RequestMapping("/hello")
     @ResponseBody
