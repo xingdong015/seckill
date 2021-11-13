@@ -1,11 +1,11 @@
-package com.system.design.seckill.product.es;
+package com.system.design.seckill.product.constant;
 
 /**
  * @description: 索引名称常量
  * @author: 贾凯
  * @create: 2021-08-12 17:31
  */
-public class IndexNameConstant {
+public class EsIndexConstant {
     public static final String API_SKILL_DEV_ = "api_skill_dev-%s";
 
     public static String getIndexName(String tableName) {

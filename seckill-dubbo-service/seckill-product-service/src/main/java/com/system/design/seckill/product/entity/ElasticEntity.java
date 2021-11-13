@@ -1,4 +1,4 @@
-package com.system.design.seckill.product.es;
+package com.system.design.seckill.product.entity;
 
 /**
  * @description:
