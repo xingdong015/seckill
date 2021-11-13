@@ -1,10 +1,8 @@
-package com.system.design.seckill.product.canal;
+package com.system.design.seckill.product.listener;
 
 import com.alibaba.otter.canal.client.CanalConnector;
 import com.alibaba.otter.canal.client.CanalConnectors;
 import com.alibaba.otter.canal.protocol.Message;
-import com.system.design.seckill.product.canal.handle.EsHandle;
-import com.system.design.seckill.product.canal.handle.SqlHandle;
 import com.system.design.seckill.product.redis.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,9 +33,9 @@ public class CanalClient implements ApplicationRunner {
     @Value("${canal.password}")
     private String password;
     @Resource
-    private SqlHandle sqlHandle;
+    private SqlHandleListener sqlHandleListener;
     @Resource
-    private EsHandle esHandle;
+    private EsHandleListener esHandleListener;
     @Resource
     private RedisUtils redisUtils;
     private static final int BATCH_SIZE = 1000;
@@ -68,8 +66,8 @@ public class CanalClient implements ApplicationRunner {
                     try {
                         boolean tryGetDistributedLock = redisUtils.tryGetDistributedLock(jedis, key, value, EXPIRE_TIME);
                         if (tryGetDistributedLock) {
-                            //异步调用处理,组装成操作标识和es操作对象，调用es接口;//异步调用处理,拼接sql sqlHandle.dataHandle(message.getEntries());
-                            esHandle.dataHandle(message.getEntries());
+                            //异步调用处理,组装成操作标识和es操作对象，调用es接口;//异步调用处理,拼接sql sqlHandleListener.dataHandle(message.getEntries());
+                            esHandleListener.dataHandle(message.getEntries());
                             connector.ack(batchId);
                         } else {
                             Thread.sleep(SLEEP_VALUE);

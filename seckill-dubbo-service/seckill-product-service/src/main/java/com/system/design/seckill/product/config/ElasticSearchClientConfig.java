@@ -1,4 +1,4 @@
-package com.system.design.seckill.product.es;
+package com.system.design.seckill.product.config;
 
 import org.apache.http.HttpHost;
 import org.elasticsearch.client.RestClient;

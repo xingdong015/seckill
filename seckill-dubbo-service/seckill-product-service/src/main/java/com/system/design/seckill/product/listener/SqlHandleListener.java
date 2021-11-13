@@ -1,4 +1,4 @@
-package com.system.design.seckill.product.canal.handle;
+package com.system.design.seckill.product.listener;
 
 import com.alibaba.otter.canal.protocol.CanalEntry;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Slf4j
 @Component
-public class SqlHandle {
+public class SqlHandleListener {
     /**
      * 数据处理
      *

@@ -1,6 +1,7 @@
-package com.system.design.seckill.product.es;
+package com.system.design.seckill.util;
 
 import com.alibaba.fastjson.JSON;
+import com.system.design.seckill.product.entity.ElasticEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -43,7 +44,6 @@ public class EsOptionUtil {
 
     public void createIndex(String idxName,String idxSQL){
         try {
-
             if (this.indexExist(idxName)) {
                 log.error(" idxName={} 已经存在,idxSql={}",idxName,idxSQL);
                 return;
