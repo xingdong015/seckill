@@ -56,24 +56,23 @@ public class EsHandle {
             }
         } else {
             // dml
+            List<ElasticEntity> elasticEntities = null;
             if(eventType == CanalEntry.EventType.DELETE) {
-                List<ElasticEntity> elasticEntities = createColumnsObj(rowDatasList, "Before");
+                elasticEntities = createColumnsObj(rowDatasList, "Before");
                 //调用es接口进行删除
                 esOptionUtil.deleteBatch(IndexNameConstant.getIndexName(tableName), elasticEntities.stream().map(ElasticEntity::getId).collect(Collectors.toList()));
-                log.info("### DELETE elasticEntities:{} ###", JSON.toJSONString(elasticEntities));
             } else if(eventType == CanalEntry.EventType.UPDATE) {
                 List<ElasticEntity> elasticEntitiesBefore = createColumnsObj(rowDatasList, "Before");
-                List<ElasticEntity> elasticEntitiesAfter = createColumnsObj(rowDatasList, "After");
+                elasticEntities = createColumnsObj(rowDatasList, "After");
                 //调用es接口进行更新:先删除后添加
                 esOptionUtil.deleteBatch(IndexNameConstant.getIndexName(tableName), elasticEntitiesBefore.stream().map(ElasticEntity::getId).collect(Collectors.toList()));
-                esOptionUtil.insertBatch(IndexNameConstant.getIndexName(tableName), elasticEntitiesAfter);
-                log.info("### UPDATE before:{} --- after:{} ###", JSON.toJSONString(elasticEntitiesBefore), JSON.toJSONString(elasticEntitiesAfter));
+                esOptionUtil.insertBatch(IndexNameConstant.getIndexName(tableName), elasticEntities);
             } else if(eventType == CanalEntry.EventType.INSERT) {
-                List<ElasticEntity> elasticEntities = createColumnsObj(rowDatasList, "After");
+                elasticEntities = createColumnsObj(rowDatasList, "After");
                 //调用es接口进行保存
                 esOptionUtil.insertBatch(IndexNameConstant.getIndexName(tableName), elasticEntities);
-                log.info("### INSERT elasticEntities:{} ###", JSON.toJSONString(elasticEntities));
             }
+            log.info("### {}, elasticEntities:{} ###", eventType, JSON.toJSONString(elasticEntities));
         }
     }
 
@@ -92,13 +91,6 @@ public class EsHandle {
                 if("Before".equals(flag)) {
                     columnList = rowData.getBeforeColumnsList();
                 }
-//                if ("t_product".equals(tableName)) {
-//                    Product product = Product.builder().build();
-//                    createProduct(product, columnList);
-//                    Map map = JSONObject.parseObject(JSONObject.toJSONString(product), Map.class);
-//                    elasticEntity = ElasticEntity.builder().id(product.getId().toString()).data(map).build();
-//                }
-
                 Map<Object, Object> objMap = columnList.stream().collect(Collectors.toMap(CanalEntry.Column::getName, CanalEntry.Column::getValue));
                 elasticEntity = ElasticEntity.builder().id(objMap.get("id").toString()).data(objMap).build();
                 elasticEntityList.add(elasticEntity);
@@ -108,33 +100,4 @@ public class EsHandle {
         }
         return elasticEntityList;
     }
-
-
-//    private static void createProduct(Product product, List<CanalEntry.Column> columnList) {
-//        columnList.stream().forEach(column -> {
-//            switch(column.getName()) {
-//                case "id":
-//                    product.setId(Long.valueOf(column.getValue()));
-//                    break;
-//                case "product_name":
-//                    product.setProductName(column.getValue());
-//                    break;
-//                case "product_desc":
-//                    product.setProductDesc(column.getValue());
-//                    break;
-//                case "price":
-//                    product.setPrice(new BigDecimal(column.getValue()));
-//                    break;
-//                case "create_time":
-//                    product.setCreateTime(Long.valueOf(column.getValue()));
-//                    break;
-//                case "update_time":
-//                    product.setUpdateTime(Long.valueOf(column.getValue()));
-//                    break;
-//                default:
-//                    log.error("### 未匹配到字段name:{}, value:{} ###", column.getName(), column.getValue());
-//                    break;
-//            }
-//        });
-//    }
 }
