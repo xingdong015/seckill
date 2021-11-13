@@ -3,11 +3,13 @@ package com.system.design.seckil.graphql.runtimeWiring.response;
 import com.alibaba.fastjson.JSONObject;
 import com.system.design.seckil.graphql.runtimeWiring.config.DataLoadInterface;
 import graphql.schema.DataFetchingEnvironment;
+import org.springframework.stereotype.Component;
 
 /**
  * @author 程征波
  * @date 2021/11/13
  */
+@Component
 public class ProductResponse implements DataLoadInterface {
 
     @Override

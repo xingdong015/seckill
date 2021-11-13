@@ -1,11 +1,11 @@
 package com.system.design.seckil.graphql.runtimeWiring.component;
 
-import com.alibaba.fastjson.JSONObject;
 import com.system.design.seckil.graphql.runtimeWiring.config.DataLoadInterface;
+import com.system.design.seckil.graphql.runtimeWiring.utils.ThreadUtils;
 import graphql.schema.DataFetcher;
 import graphql.schema.idl.RuntimeWiring;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Resource;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
@@ -18,7 +18,7 @@ import java.util.concurrent.CompletionStage;
  */
 public abstract class AbstractRuntimeWiring<T extends DataLoadInterface> implements CustomizerRuntimeWiring {
 
-    @Resource
+    @Autowired
     private T reponse;
 
     public abstract String getFieldName();
@@ -30,9 +30,9 @@ public abstract class AbstractRuntimeWiring<T extends DataLoadInterface> impleme
     }
 
     private DataFetcher<CompletionStage<Object>> loaderFetcher() {
-        return env -> CompletableFuture.supplyAsync(() -> reponse.findOne(env));
+        return env -> CompletableFuture.supplyAsync(() -> reponse.findOne(env), ThreadUtils.getThread(getFieldName()));
     }
     private DataFetcher<CompletionStage<Object>> loaderFetcherList() {
-        return env -> CompletableFuture.supplyAsync(() -> reponse.findList(env));
+        return env -> CompletableFuture.supplyAsync(() -> reponse.findList(env), ThreadUtils.getThread(getFieldName()));
     }
 }
