@@ -1,7 +1,7 @@
-type Query {
-    product: [Product]
+extend type Query {
+    product(query: String!): Product
 }
 
 type Product {
-    query: String
+    id: String
 }

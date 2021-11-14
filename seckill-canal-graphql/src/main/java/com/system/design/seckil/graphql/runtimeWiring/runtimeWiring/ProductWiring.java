@@ -2,6 +2,7 @@ package com.system.design.seckil.graphql.runtimeWiring.runtimeWiring;
 
 import com.system.design.seckil.graphql.runtimeWiring.component.AbstractRuntimeWiring;
 import com.system.design.seckil.graphql.runtimeWiring.response.ProductResponse;
+import graphql.schema.idl.RuntimeWiring;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,8 +15,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductWiring extends AbstractRuntimeWiring<ProductResponse> {
 
-    public  String getFieldName() {
+    public String getFieldName() {
         return "t_product";
     }
 
+    @Override
+    public void loader(RuntimeWiring.Builder builder) {
+        super.loader(builder);
+    }
 }

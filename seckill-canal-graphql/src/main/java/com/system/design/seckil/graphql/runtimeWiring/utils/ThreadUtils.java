@@ -1,6 +1,6 @@
 package com.system.design.seckil.graphql.runtimeWiring.utils;
 
-import org.jetbrains.annotations.NotNull;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
@@ -17,16 +17,14 @@ public class ThreadUtils {
     public static ThreadPoolExecutor getThread(String name) {
         int                      processors = Runtime.getRuntime().availableProcessors();
         RejectedExecutionHandler handler    = new ThreadPoolExecutor.CallerRunsPolicy();
+        ThreadFactory threadFactory = new ThreadFactoryBuilder()
+                .setNameFormat("#####graphql####thread#### =>" + name).setDaemon(true).build();
         return new ThreadPoolExecutor(
                 processors, processors * 2,
                 0, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<>(),
-                (ThreadFactory) r -> {
-                    Thread thread = new Thread();
-                    thread.setName("graphql##thread##" + name);
-                    thread.setDaemon(true);
-                    return thread;
-                }, handler
+                threadFactory,
+                handler
         );
     }
 
