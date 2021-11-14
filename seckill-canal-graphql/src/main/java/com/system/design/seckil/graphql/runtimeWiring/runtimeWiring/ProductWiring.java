@@ -2,7 +2,7 @@ package com.system.design.seckil.graphql.runtimeWiring.runtimeWiring;
 
 import com.system.design.seckil.graphql.runtimeWiring.component.AbstractRuntimeWiring;
 import com.system.design.seckil.graphql.runtimeWiring.response.ProductResponse;
-import graphql.schema.idl.RuntimeWiring;
+import graphql.kickstart.tools.GraphQLQueryResolver;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,14 +13,18 @@ import org.springframework.stereotype.Component;
  * @version: 1.0
  */
 @Component
-public class ProductWiring extends AbstractRuntimeWiring<ProductResponse> {
+public class ProductWiring extends AbstractRuntimeWiring<ProductResponse>  {
 
     public String getFieldName() {
-        return "t_product";
+        return "product";
     }
 
-    @Override
-    public void loader(RuntimeWiring.Builder builder) {
-        super.loader(builder);
+    public Product product(long id) {
+        return new Product();
     }
+
+    public Product productList(long id) {
+        return new Product();
+    }
+
 }

@@ -2,10 +2,13 @@ package com.system.design.seckil.graphql.runtimeWiring.component;
 
 import com.system.design.seckil.graphql.runtimeWiring.response.ServiceInterface;
 import com.system.design.seckil.graphql.runtimeWiring.utils.ThreadUtils;
+import graphql.kickstart.tools.GraphQLQueryResolver;
 import graphql.kickstart.tools.GraphQLResolver;
 import graphql.schema.DataFetcher;
+import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.idl.RuntimeWiring;
-import graphql.schema.idl.SchemaDirectiveWiring;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 
 import javax.annotation.Resource;
 import java.util.concurrent.CompletableFuture;
@@ -18,7 +21,8 @@ import java.util.concurrent.CompletionStage;
  * @modified By：`
  * @version: 1.0
  */
-public abstract class AbstractRuntimeWiring<T extends ServiceInterface> implements CustomizerRuntimeWiring {
+public abstract class AbstractRuntimeWiring<T extends ServiceInterface> implements GraphQLQueryResolver,
+        CustomizerRuntimeWiring {
 
     @Resource
     private T reponse;

@@ -1,0 +1,8 @@
+extend type Query {
+    product(query: Int!): Product
+    productList(query: Int!): Product
+}
+
+type Product {
+    id: Int
+}
