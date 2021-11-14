@@ -2,13 +2,11 @@ package com.system.design.seckil.graphql.runtimeWiring.component;
 
 import com.system.design.seckil.graphql.runtimeWiring.response.ServiceInterface;
 import com.system.design.seckil.graphql.runtimeWiring.utils.ThreadUtils;
+import graphql.kickstart.tools.GraphQLMutationResolver;
 import graphql.kickstart.tools.GraphQLQueryResolver;
-import graphql.kickstart.tools.GraphQLResolver;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.idl.RuntimeWiring;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 
 import javax.annotation.Resource;
 import java.util.concurrent.CompletableFuture;
@@ -35,7 +33,7 @@ public abstract class AbstractRuntimeWiring<T extends ServiceInterface> implemen
                 .type("Query", item -> item.dataFetcher(getFieldName() + "List", loaderFetcherList()));
     }
 
-    private DataFetcher<CompletionStage<Object>> loaderFetcher() {
+    public DataFetcher<CompletionStage<Object>> loaderFetcher() {
         return env -> CompletableFuture.supplyAsync(() -> reponse.findOne(env), ThreadUtils.getThread(getFieldName()));
     }
 

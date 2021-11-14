@@ -1,6 +1,6 @@
 extend type Query {
-    product(query: Int!): Product
-    productList(query: Int!): Product
+    product(id: Int!): Product
+    productList(id: Int!): Product
 }
 
 type Product {

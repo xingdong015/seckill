@@ -2,7 +2,7 @@ package com.system.design.seckil.graphql.runtimeWiring.runtimeWiring;
 
 import com.system.design.seckil.graphql.runtimeWiring.component.AbstractRuntimeWiring;
 import com.system.design.seckil.graphql.runtimeWiring.response.ProductResponse;
-import graphql.kickstart.tools.GraphQLQueryResolver;
+import graphql.schema.DataFetchingEnvironment;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,7 +19,9 @@ public class ProductWiring extends AbstractRuntimeWiring<ProductResponse>  {
         return "product";
     }
 
-    public Product product(long id) {
+    public Product product(long id, DataFetchingEnvironment environment) {
+        Object id1 = environment.getArgument("id");
+        System.out.println(id1);
         return new Product();
     }
 
