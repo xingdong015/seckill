@@ -6,7 +6,6 @@ import graphql.schema.DataFetcher;
 import graphql.schema.idl.RuntimeWiring;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Resource;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
@@ -19,7 +18,7 @@ import java.util.concurrent.CompletionStage;
  */
 public abstract class AbstractRuntimeWiring<T extends ServiceInterface> implements CustomizerRuntimeWiring {
 
-    @Resource
+    @Autowired
     private T reponse;
 
     public abstract String getMethodName();

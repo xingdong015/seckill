@@ -1,0 +1,9 @@
+extend type Query {
+    user(id: Int!): User
+    userList(id: Int!): [User]
+}
+
+type User {
+    id: Int
+    name: String
+}

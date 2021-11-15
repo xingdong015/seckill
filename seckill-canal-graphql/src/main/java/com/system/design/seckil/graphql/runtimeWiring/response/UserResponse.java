@@ -11,15 +11,15 @@ import java.util.List;
  * @date 2021/11/13
  */
 @Repository
-public class ProductResponse implements ServiceInterface {
+public class UserResponse implements ServiceInterface {
 
     @Override
     public Object findOne(DataFetchingEnvironment env) {
         //// TODO: 2021/11/13
         String     query      = env.getArgument("query");
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("id", 123456);
-        return jsonObject;
+        jsonObject.put("query", query);
+        return null;
     }
 
     @Override

@@ -1,7 +1,12 @@
 package com.system.design.seckil.graphql.runtimeWiring.component;
 
+import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Maps;
+import graphql.ExecutionInput;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
+import graphql.kickstart.tools.SchemaParserBuilder;
+import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.SchemaParser;
@@ -20,6 +25,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 全量构建graphql对象
@@ -40,13 +46,18 @@ public class GraphqlBuilderConfig {
     private List<CustomizerRuntimeWiring> customizerRuntimeWiring;
 
     @Bean
-    public GraphQL getGraphql() throws IOException {
+    public GraphQL graphql() throws IOException {
         RuntimeWiring.Builder builder = RuntimeWiring.newRuntimeWiring();
         customizerRuntimeWiring.forEach(v -> v.loader(builder));
         TypeDefinitionRegistry registry = getSchemaResources().stream()
                 .map(this::parseSchemaResource).reduce(TypeDefinitionRegistry::merge)
                 .orElseThrow(() -> new IllegalArgumentException("'schemaResources' should not be empty"));
-        return GraphQL.newGraphQL(new SchemaGenerator().makeExecutableSchema(registry, builder.build())).build();
+        GraphQLSchema schema = new SchemaGenerator().makeExecutableSchema(registry, builder.build());
+        GraphQL build = GraphQL.newGraphQL(schema).build();
+        //test 01
+        ExecutionResult result = build.execute("{product{id}}");
+        System.out.println(result);
+        return build;
     }
 
     private List<org.springframework.core.io.Resource> getSchemaResources() throws IOException {

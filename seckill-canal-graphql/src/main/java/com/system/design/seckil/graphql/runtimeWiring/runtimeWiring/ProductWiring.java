@@ -3,6 +3,8 @@ package com.system.design.seckil.graphql.runtimeWiring.runtimeWiring;
 import com.system.design.seckil.graphql.runtimeWiring.component.AbstractRuntimeWiring;
 import com.system.design.seckil.graphql.runtimeWiring.response.ProductResponse;
 import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.idl.RuntimeWiring;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -18,6 +20,11 @@ public class ProductWiring extends AbstractRuntimeWiring<ProductResponse>  {
     @Override
     public String getMethodName() {
         return "product";
+    }
+
+    @Override
+    public void loader(@Autowired RuntimeWiring.Builder builder) {
+        super.loader(builder);
     }
 
 }
