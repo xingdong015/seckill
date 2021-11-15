@@ -1,5 +1,6 @@
 package com.system.design.seckill.product.service;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -12,8 +13,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @description:
@@ -29,24 +33,35 @@ public class ProductService implements IProductService {
 
     //****暂时curd都加redis
     @Override
+//    @GlobalTransactional
     public int createProduct(Product product) {
         int insert = productMapper.insert(product);
+//        String key = "product:id:" + product.getId();
+//        redisTemplate.opsForZSet().add(key, JSON.toJSON(product), product.getId());
         System.out.println("创建产品信息成功: " + insert);
         return insert;
     }
 
     @Override
     public int deleteProduct(long productId) {
-        return productMapper.deleteById(productId);
+        int delete = productMapper.deleteById(productId);
+//        String key = "product:id:" + productId;
+//        redisTemplate.opsForZSet().removeRange(key, productId, productId);
+        return delete;
     }
 
     @Override
     public int updateProduct(Product product) {
-        return productMapper.updateById(product);
+//        String key = "product:id:" + product.getId();
+//        redisTemplate.opsForZSet().removeRange(key, product.getId(), product.getId());
+//        redisTemplate.opsForZSet().add(key, JSON.toJSON(product), product.getId());
+        int update = productMapper.updateById(product);
+        return update;
     }
 
     @Override
     public Product getProductInfo(long productId) {
+//        redisTemplate.opsForZSet().scan()
         return productMapper.selectById(productId);
     }
 
