@@ -2,11 +2,9 @@ package com.system.design.seckil.graphql.runtimeWiring.component;
 
 import com.system.design.seckil.graphql.runtimeWiring.response.ServiceInterface;
 import com.system.design.seckil.graphql.runtimeWiring.utils.ThreadUtils;
-import graphql.kickstart.tools.GraphQLMutationResolver;
-import graphql.kickstart.tools.GraphQLQueryResolver;
 import graphql.schema.DataFetcher;
-import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.idl.RuntimeWiring;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
 import java.util.concurrent.CompletableFuture;
@@ -19,25 +17,24 @@ import java.util.concurrent.CompletionStage;
  * @modified By：`
  * @version: 1.0
  */
-public abstract class AbstractRuntimeWiring<T extends ServiceInterface> implements GraphQLQueryResolver,
-        CustomizerRuntimeWiring {
+public abstract class AbstractRuntimeWiring<T extends ServiceInterface> implements CustomizerRuntimeWiring {
 
     @Resource
     private T reponse;
 
-    public abstract String getFieldName();
+    public abstract String getMethodName();
 
     @Override
-    public void loader(RuntimeWiring.Builder builder) {
-        builder.type("Query", item -> item.dataFetcher(getFieldName(), loaderFetcher()))
-                .type("Query", item -> item.dataFetcher(getFieldName() + "List", loaderFetcherList()));
+    public void loader(@Autowired RuntimeWiring.Builder builder) {
+        builder.type("Query", item -> item.dataFetcher(getMethodName(), loaderFetcher()))
+                .type("Query", item -> item.dataFetcher(getMethodName() + "List", loaderFetcherList()));
     }
 
     public DataFetcher<CompletionStage<Object>> loaderFetcher() {
-        return env -> CompletableFuture.supplyAsync(() -> reponse.findOne(env), ThreadUtils.getThread(getFieldName()));
+        return env -> CompletableFuture.supplyAsync(() -> reponse.findOne(env), ThreadUtils.getThread(getMethodName()));
     }
 
     private DataFetcher<CompletionStage<Object>> loaderFetcherList() {
-        return env -> CompletableFuture.supplyAsync(() -> reponse.findList(env), ThreadUtils.getThread(getFieldName()));
+        return env -> CompletableFuture.supplyAsync(() -> reponse.findList(env), ThreadUtils.getThread(getMethodName()));
     }
 }

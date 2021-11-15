@@ -15,18 +15,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProductWiring extends AbstractRuntimeWiring<ProductResponse>  {
 
-    public String getFieldName() {
+    @Override
+    public String getMethodName() {
         return "product";
-    }
-
-    public Product product(long id, DataFetchingEnvironment environment) {
-        Object id1 = environment.getArgument("id");
-        System.out.println(id1);
-        return new Product();
-    }
-
-    public Product productList(long id) {
-        return new Product();
     }
 
 }
