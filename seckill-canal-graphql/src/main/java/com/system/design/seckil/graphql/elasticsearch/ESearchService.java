@@ -13,5 +13,5 @@ import java.util.Optional;
  */
 public interface ESearchService {
 
-    Optional<Object> searchSimple(String tableName, QueryBuilder queryBuilder) throws Exception;
+    Optional<Object> searchSimple(String tableName, QueryBuilder queryBuilder, Integer size) throws Exception;
 }

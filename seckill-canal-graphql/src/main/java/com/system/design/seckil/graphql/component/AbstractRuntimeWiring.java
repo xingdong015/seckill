@@ -29,7 +29,8 @@ public abstract class AbstractRuntimeWiring<T extends IService> implements Custo
     @Override
     public void loader(@Autowired RuntimeWiring.Builder builder) {
         builder.type("Query", item -> item.dataFetcher(getMethodName(), loaderFetcher()))
-                .type("Query", item -> item.dataFetcher(getMethodName() + "List", loaderFetcherList()));
+                .type("Query", item -> item.dataFetcher(getMethodName() + "List", loaderFetcherList()))
+                .type("Query", item -> item.dataFetcher(getMethodName() + "Page", loaderFetcherPage()));
     }
 
     public DataFetcher<CompletionStage<Object>> loaderFetcher() {
@@ -37,6 +38,10 @@ public abstract class AbstractRuntimeWiring<T extends IService> implements Custo
     }
 
     private DataFetcher<CompletionStage<Object>> loaderFetcherList() {
+        return env -> CompletableFuture.supplyAsync(() -> seviceImpl.findList(env), executor);
+    }
+
+    private DataFetcher<CompletionStage<Object>> loaderFetcherPage() {
         return env -> CompletableFuture.supplyAsync(() -> seviceImpl.findList(env), executor);
     }
 }

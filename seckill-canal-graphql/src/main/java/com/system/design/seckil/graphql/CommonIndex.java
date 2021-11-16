@@ -13,6 +13,7 @@ public interface CommonIndex {
     /**
      *  商品表索引
      */
-    String PRODUCT_INDEX = DEFAULT_DEV + "t_product";
+//    String PRODUCT_INDEX = DEFAULT_DEV + "t_product";
+    String PRODUCT_INDEX = DEFAULT_DEV + "t_es_test";
 
 }
