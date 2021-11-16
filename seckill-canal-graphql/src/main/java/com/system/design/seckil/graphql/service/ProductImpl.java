@@ -1,34 +1,16 @@
 package com.system.design.seckil.graphql.service;
 
-import com.alibaba.fastjson.JSONObject;
-import graphql.schema.DataFetchingEnvironment;
-import org.springframework.stereotype.Repository;
-
-import java.util.Collections;
-import java.util.List;
+import org.springframework.stereotype.Service;
 
 /**
  * @author 程征波
  * @date 2021/11/13
  */
-@Repository
-public class ProductImpl implements IService {
+@Service
+public class ProductImpl extends IAbstractService {
 
     @Override
-    public Object findOne(DataFetchingEnvironment env) {
-        //// TODO: 2021/11/13
-        String query = env.getArgument("query");
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("id", 123456);
-        return jsonObject;
-    }
-
-    @Override
-    public List findList(DataFetchingEnvironment env) {
-        //// TODO: 2021/11/13
-        String query = env.getArgument("query");
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("query", query);
-        return Collections.singletonList(jsonObject);
+    public String getIndex() {
+        return "api_skill_dev-t_es_test";
     }
 }

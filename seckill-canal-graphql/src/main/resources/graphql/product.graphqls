@@ -1,8 +1,12 @@
 extend type Query {
-    product: Product
-    productList: [Product]
+    product(query: String): Product
+    productList(query: String): [Product]
 }
 
 type Product {
     id: Int
+    ctime: Int
+    name: String
+    price: Float
+    count: Int
 }
