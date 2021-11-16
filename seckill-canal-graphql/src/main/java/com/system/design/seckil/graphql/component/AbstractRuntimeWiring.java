@@ -1,7 +1,6 @@
-package com.system.design.seckil.graphql.runtimeWiring.component;
+package com.system.design.seckil.graphql.component;
 
-import com.system.design.seckil.graphql.runtimeWiring.service.IService;
-import com.system.design.seckil.graphql.runtimeWiring.utils.ThreadUtils;
+import com.system.design.seckil.graphql.utils.ThreadUtils;
 import graphql.schema.DataFetcher;
 import graphql.schema.idl.RuntimeWiring;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ThreadPoolExecutor;
+import com.system.design.seckil.graphql.service.IService;
 
 /**
  * @author ：程征波

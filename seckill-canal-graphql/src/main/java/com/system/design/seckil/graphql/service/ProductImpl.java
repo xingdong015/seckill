@@ -1,4 +1,4 @@
-package com.system.design.seckil.graphql.runtimeWiring.service;
+package com.system.design.seckil.graphql.service;
 
 import com.alibaba.fastjson.JSONObject;
 import graphql.schema.DataFetchingEnvironment;

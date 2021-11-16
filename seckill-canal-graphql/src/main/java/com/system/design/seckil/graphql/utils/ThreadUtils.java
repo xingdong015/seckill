@@ -1,4 +1,4 @@
-package com.system.design.seckil.graphql.runtimeWiring.utils;
+package com.system.design.seckil.graphql.utils;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 

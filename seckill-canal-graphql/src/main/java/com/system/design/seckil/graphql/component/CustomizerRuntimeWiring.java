@@ -1,4 +1,4 @@
-package com.system.design.seckil.graphql.runtimeWiring.component;
+package com.system.design.seckil.graphql.component;
 
 
 import graphql.schema.idl.RuntimeWiring;
