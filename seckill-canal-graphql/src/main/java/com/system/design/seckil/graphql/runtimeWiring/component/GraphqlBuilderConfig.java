@@ -1,18 +1,15 @@
 package com.system.design.seckil.graphql.runtimeWiring.component;
 
-import com.alibaba.fastjson.JSON;
-import com.google.common.collect.Maps;
-import graphql.ExecutionInput;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
-import graphql.kickstart.tools.SchemaParserBuilder;
+import graphql.kickstart.servlet.GraphQLHttpServlet;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.SchemaParser;
 import graphql.schema.idl.TypeDefinitionRegistry;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.io.support.ResourcePatternResolver;
@@ -25,7 +22,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 全量构建graphql对象
@@ -34,9 +30,11 @@ import java.util.Map;
  * @date 2021-11-15 15:31:02
  */
 @Component
+@Slf4j
 public class GraphqlBuilderConfig {
 
     private static final String[] SCHEMA_EXT = new String[]{"*.graphqls", "*.graphql", "*.gql", "*.gqls"};
+    private static GraphQLSchema graphQLSchema = null;
 
     @Resource
     private ResourcePatternResolver resourcePatternResolver;
@@ -47,17 +45,17 @@ public class GraphqlBuilderConfig {
 
     @Bean
     public GraphQL graphql() throws IOException {
-        RuntimeWiring.Builder builder = RuntimeWiring.newRuntimeWiring();
-        customizerRuntimeWiring.forEach(v -> v.loader(builder));
-        TypeDefinitionRegistry registry = getSchemaResources().stream()
-                .map(this::parseSchemaResource).reduce(TypeDefinitionRegistry::merge)
-                .orElseThrow(() -> new IllegalArgumentException("'schemaResources' should not be empty"));
-        GraphQLSchema schema = new SchemaGenerator().makeExecutableSchema(registry, builder.build());
+        GraphQLSchema schema = getGraphqlSchema();
         GraphQL build = GraphQL.newGraphQL(schema).build();
-        //test 01
         ExecutionResult result = build.execute("{product{id}}");
-        System.out.println(result);
+        log.info("graphql query ==>> {}", result);
         return build;
+    }
+
+    @Bean
+    public ServletRegistrationBean<GraphQLHttpServlet> graphqlServletRegistrationBean() throws IOException {
+        GraphQLSchema schema = getGraphqlSchema();
+        return new ServletRegistrationBean<>(GraphQLHttpServlet.with(schema), "/graphql");
     }
 
     private List<org.springframework.core.io.Resource> getSchemaResources() throws IOException {
@@ -78,5 +76,17 @@ public class GraphqlBuilderConfig {
         } catch(IOException ex) {
             throw new IllegalArgumentException("Failed to load schema resource: " + schemaResource.toString());
         }
+    }
+
+    private GraphQLSchema getGraphqlSchema() throws IOException {
+        if(graphQLSchema != null) {
+            return graphQLSchema;
+        }
+        RuntimeWiring.Builder builder = RuntimeWiring.newRuntimeWiring();
+        customizerRuntimeWiring.forEach(v -> v.loader(builder));
+        TypeDefinitionRegistry registry = getSchemaResources().stream()
+                .map(this::parseSchemaResource).reduce(TypeDefinitionRegistry::merge)
+                .orElseThrow(() -> new IllegalArgumentException("'schemaResources' should not be empty"));
+        return graphQLSchema = new SchemaGenerator().makeExecutableSchema(registry, builder.build());
     }
 }

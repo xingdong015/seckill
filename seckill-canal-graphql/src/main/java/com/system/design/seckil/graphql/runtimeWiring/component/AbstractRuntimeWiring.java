@@ -2,6 +2,7 @@ package com.system.design.seckil.graphql.runtimeWiring.component;
 
 import com.system.design.seckil.graphql.runtimeWiring.response.ServiceInterface;
 import com.system.design.seckil.graphql.runtimeWiring.utils.ThreadUtils;
+import graphql.kickstart.tools.GraphQLResolver;
 import graphql.schema.DataFetcher;
 import graphql.schema.idl.RuntimeWiring;
 import org.springframework.beans.factory.annotation.Autowired;
