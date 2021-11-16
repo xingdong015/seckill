@@ -10,6 +10,11 @@ import com.system.design.seckill.order.mapper.KillMapper;
 import com.system.design.seckill.order.mapper.OrderMapper;
 import io.seata.spring.annotation.GlobalTransactional;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.apache.rocketmq.client.exception.MQClientException;
+import org.apache.rocketmq.client.producer.LocalTransactionState;
+import org.apache.rocketmq.client.producer.TransactionListener;
+import org.apache.rocketmq.client.producer.TransactionMQProducer;
+import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
@@ -17,6 +22,11 @@ import org.springframework.messaging.support.GenericMessage;
 
 import javax.annotation.Resource;
 import java.util.Objects;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author chengzhengzheng
@@ -87,7 +97,7 @@ public class OrderService implements IOrderService {
      * @return
      */
     @GlobalTransactional
-    public Long doKill(long killId, String userId) {
+    public Long doKill(long killId, String userId) throws MQClientException {
         //1. 扣减库存
         int count = killMapper.decreaseStorage(killId);
         Preconditions.checkArgument(count >= 1, "%s|%s|库存不足", killId, userId);
@@ -100,6 +110,29 @@ public class OrderService implements IOrderService {
         Preconditions.checkNotNull(order.getOrderId(), "%s|%s|订单创建失败", killId, userId);
         //添加到RocketMq的延迟消息当中去，监控订单的支付状态 事务消息
         Message message = new GenericMessage(JSON.toJSONString(order));
+
+        TransactionListener   transactionListener = new TransactionListener() {
+            @Override
+            public LocalTransactionState executeLocalTransaction(org.apache.rocketmq.common.message.Message msg, Object arg) {
+                return null;
+            }
+
+            @Override
+            public LocalTransactionState checkLocalTransaction(MessageExt msg) {
+                return null;
+            }
+        };
+        TransactionMQProducer producer            = new TransactionMQProducer("please_rename_unique_group_name");
+        ExecutorService executorService = new ThreadPoolExecutor(2, 5, 100, TimeUnit.SECONDS, new ArrayBlockingQueue<>(2000), r -> {
+            Thread thread = new Thread(r);
+            thread.setName("client-transaction-msg-check-thread");
+            return thread;
+        });
+
+        producer.setExecutorService(executorService);
+        producer.setTransactionListener(transactionListener);
+        producer.start();
+
         rocketMQTemplate.sendMessageInTransaction("seckill-order-pay", message, null);
         return order.getOrderId();
     }
