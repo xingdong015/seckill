@@ -1,9 +1,10 @@
-package com.system.design.seckil.graphql.runtimeWiring.response;
+package com.system.design.seckil.graphql.runtimeWiring.service;
 
 import com.alibaba.fastjson.JSONObject;
 import graphql.schema.DataFetchingEnvironment;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -11,12 +12,12 @@ import java.util.List;
  * @date 2021/11/13
  */
 @Repository
-public class ProductResponse implements ServiceInterface {
+public class ProductImpl implements IService {
 
     @Override
     public Object findOne(DataFetchingEnvironment env) {
         //// TODO: 2021/11/13
-        String     query      = env.getArgument("query");
+        String query = env.getArgument("query");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("id", 123456);
         return jsonObject;
@@ -25,9 +26,9 @@ public class ProductResponse implements ServiceInterface {
     @Override
     public List findList(DataFetchingEnvironment env) {
         //// TODO: 2021/11/13
-        String     query      = env.getArgument("query");
+        String query = env.getArgument("query");
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("query", query);
-        return null;
+        return Collections.singletonList(jsonObject);
     }
 }

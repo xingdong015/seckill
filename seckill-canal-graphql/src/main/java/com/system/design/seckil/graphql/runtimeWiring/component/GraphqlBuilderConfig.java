@@ -9,6 +9,7 @@ import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.SchemaParser;
 import graphql.schema.idl.TypeDefinitionRegistry;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
@@ -36,6 +37,9 @@ public class GraphqlBuilderConfig {
     private static final String[] SCHEMA_EXT = new String[]{"*.graphqls", "*.graphql", "*.gql", "*.gqls"};
     private static GraphQLSchema graphQLSchema = null;
 
+    @Value("${graphql.servlet.mapping}")
+    private String mapping;
+
     @Resource
     private ResourcePatternResolver resourcePatternResolver;
 
@@ -55,7 +59,7 @@ public class GraphqlBuilderConfig {
     @Bean
     public ServletRegistrationBean<GraphQLHttpServlet> graphqlServletRegistrationBean() throws IOException {
         GraphQLSchema schema = getGraphqlSchema();
-        return new ServletRegistrationBean<>(GraphQLHttpServlet.with(schema), "/graphql");
+        return new ServletRegistrationBean<>(GraphQLHttpServlet.with(schema), mapping);
     }
 
     private List<org.springframework.core.io.Resource> getSchemaResources() throws IOException {

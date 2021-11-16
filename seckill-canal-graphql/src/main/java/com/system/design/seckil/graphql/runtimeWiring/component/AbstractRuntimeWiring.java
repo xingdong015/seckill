@@ -1,14 +1,14 @@
 package com.system.design.seckil.graphql.runtimeWiring.component;
 
-import com.system.design.seckil.graphql.runtimeWiring.response.ServiceInterface;
+import com.system.design.seckil.graphql.runtimeWiring.service.IService;
 import com.system.design.seckil.graphql.runtimeWiring.utils.ThreadUtils;
-import graphql.kickstart.tools.GraphQLResolver;
 import graphql.schema.DataFetcher;
 import graphql.schema.idl.RuntimeWiring;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @author ：程征波
@@ -17,10 +17,12 @@ import java.util.concurrent.CompletionStage;
  * @modified By：`
  * @version: 1.0
  */
-public abstract class AbstractRuntimeWiring<T extends ServiceInterface> implements CustomizerRuntimeWiring {
+public abstract class AbstractRuntimeWiring<T extends IService> implements CustomizerRuntimeWiring {
+
+    private static final ThreadPoolExecutor executor = ThreadUtils.getThread(" ###AbstractRuntimeWiring### ");
 
     @Autowired
-    private T reponse;
+    private T seviceImpl;
 
     public abstract String getMethodName();
 
@@ -31,10 +33,10 @@ public abstract class AbstractRuntimeWiring<T extends ServiceInterface> implemen
     }
 
     public DataFetcher<CompletionStage<Object>> loaderFetcher() {
-        return env -> CompletableFuture.supplyAsync(() -> reponse.findOne(env), ThreadUtils.getThread(getMethodName()));
+        return env -> CompletableFuture.supplyAsync(() -> seviceImpl.findOne(env), executor);
     }
 
     private DataFetcher<CompletionStage<Object>> loaderFetcherList() {
-        return env -> CompletableFuture.supplyAsync(() -> reponse.findList(env), ThreadUtils.getThread(getMethodName()));
+        return env -> CompletableFuture.supplyAsync(() -> seviceImpl.findList(env), executor);
     }
 }
