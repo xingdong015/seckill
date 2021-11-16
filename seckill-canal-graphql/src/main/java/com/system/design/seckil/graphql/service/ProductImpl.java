@@ -1,5 +1,6 @@
 package com.system.design.seckil.graphql.service;
 
+import com.system.design.seckil.graphql.CommonIndex;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,6 +12,6 @@ public class ProductImpl extends IAbstractService {
 
     @Override
     public String getIndex() {
-        return "api_skill_dev-t_es_test";
+        return CommonIndex.PRODUCT_INDEX;
     }
 }
