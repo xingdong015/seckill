@@ -36,7 +36,7 @@ kill:
   url:
     salt: cjy20200922czz0708
 rocketmq:
-  name-server: rgb-fk.com:9876
+  name-server: 127.0.0.1:9876
   producer:
     group: business-group
     topic: redis_kill_success

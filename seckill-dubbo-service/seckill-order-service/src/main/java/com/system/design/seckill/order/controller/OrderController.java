@@ -23,10 +23,4 @@ public class OrderController {
     public Object createOrder(@RequestParam("skuId") long skuId,@RequestParam("userId") String userId) {
         return orderService.doKill(skuId, userId);
     }
-    @RequestMapping("/hello")
-    @ResponseBody
-    public String hello(){
-        return "hello world!";
-    }
-
 }
