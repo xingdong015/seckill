@@ -8,4 +8,7 @@ spring:
     allow-bean-definition-overriding: true
   cloud:
     nacos:
-      discovery: spring-cloud://rgb-fk.com:8848
+      discovery:
+        serverAddr: spring-cloud://rgb-fk.com:8848
+        username: nacos
+        password: nacos
