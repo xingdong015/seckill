@@ -1,6 +1,7 @@
 package com.system.design.seckill.order.controller;
 
 import com.system.design.seckill.order.service.OrderService;
+import org.apache.rocketmq.client.exception.MQClientException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,13 +21,7 @@ public class OrderController {
 
     @RequestMapping("/kill")
     @ResponseBody
-    public Object createOrder(@RequestParam("skuId") long skuId,@RequestParam("userId") String userId) {
+    public Object createOrder(@RequestParam("skuId") long skuId,@RequestParam("userId") String userId) throws MQClientException {
         return orderService.doKill(skuId, userId);
     }
-    @RequestMapping("/hello")
-    @ResponseBody
-    public String hello(){
-        return "hello world!";
-    }
-
 }

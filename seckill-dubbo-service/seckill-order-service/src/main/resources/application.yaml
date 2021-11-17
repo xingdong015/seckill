@@ -43,11 +43,10 @@ spring:
       write-dates-as-timestamps: false
 server:
   port: 8082
-#rocketmq:
-#  name-server: rgb-fk.com:9876
-#  consumer:
-#    group: business-group
-#    topic: redis_kill_success
+rocketmq:
+  name-server: 127.0.0.1:9876
+  producer:
+    group: business-group
 seata:
   ## 是否开启seata，默认true
   enabled: true
@@ -71,7 +70,7 @@ seata:
 #      此配置可以参考  SysMysqlCreateTableManagerImpl 这个源码类来了解配置
 mybatis:
   table:
-    auto: update
+    auto: none
   model:
     pack: com.system.design.seckill.common.po
   database:
