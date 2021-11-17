@@ -1,6 +1,7 @@
-package com.system.design.seckill.order.service;
+package com.system.design.seckill.order.listener;
 
 import com.system.design.seckill.common.bean.RocketMqMessageBean;
+import com.system.design.seckill.order.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
@@ -23,7 +24,7 @@ import javax.annotation.Resource;
  * 需要在本地启动 rocketmq
  * https://rocketmq.apache.org/docs/filter-by-sql92-example/
  */
-@RocketMQMessageListener(topic = "redis_kill_success", consumerGroup = "business-group")
+@RocketMQMessageListener(topic = "redisKillSuccess", consumerGroup = "business-group")
 @Component
 @Slf4j
 public class OrderListener implements RocketMQListener<RocketMqMessageBean> {

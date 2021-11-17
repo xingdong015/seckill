@@ -11,7 +11,6 @@ import com.system.design.seckill.order.mapper.OrderMapper;
 import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
@@ -87,12 +86,13 @@ public class OrderService implements IOrderService {
      * 从business业务中获取的秒杀数据
      * 执行扣减库存。创建订单等逻辑。提交到rocketMq的延迟队列中去。
      * 分布式事务。事务消息机制
+     *
      * @param killId
      * @param userId
      * @return
      */
     @GlobalTransactional
-    public Long doKill(long killId, String userId) throws MQClientException {
+    public Long doKill(long killId, String userId) {
         //1. 扣减库存
         int count = killMapper.decreaseStorage(killId);
         Preconditions.checkArgument(count >= 1, "%s|%s|库存不足", killId, userId);
@@ -112,7 +112,7 @@ public class OrderService implements IOrderService {
             }
             @Override
             public void onException(Throwable e) {
-                log.error("send delay pay status monitor message to rocketmq success. order-{}", order.getOrderId(), e);
+                log.error("send delay pay status monitor message to rocketmq fail. order-{}", order.getOrderId(), e);
             }
         }, 30, 16);
         return order.getOrderId();
