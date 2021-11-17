@@ -16,6 +16,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,8 +33,8 @@ public class ProductService implements IProductService {
     private RedisTemplate redisTemplate;
 
     //****暂时curd都加redis
-    @Override
 //    @GlobalTransactional
+    @Override
     public int createProduct(Product product) {
         int insert = productMapper.insert(product);
 //        String key = "product:id:" + product.getId();
