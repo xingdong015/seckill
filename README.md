@@ -9,3 +9,6 @@
     2. spring-cloud-alibaba-dubbo 配置  https://www.iocoder.cn/Spring-Cloud-Alibaba/Dubbo/
 7. 在开发阶段由于表结构需要频繁变更、如果有表结构变更需求、引入了 mybatis-enhance-actable 组件、此组件的原理我已经在dubbo-order模块中详细说明、实际就是自动代理了
 一些mybatis的功能而已、我已经在dubbo-order中集成完成、如果需要重新生成表只需要修改 common中的实体类、然后运行dubbo-order模块既可以删除然后重新新建表结构。
+8. 解决jar包冲突的方案：https://blog.csdn.net/w1014074794/article/details/114668927
+   
+   
