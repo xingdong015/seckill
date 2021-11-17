@@ -24,8 +24,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * @author     ：程征波
- * @date       ：Created in 2021/11/16 1:48 下午
+ * @author ：程征波
+ * @date ：Created in 2021/11/16 1:48 下午
  * @description：查询接口
  * @modified By：`
  * @version: 1.0
@@ -37,17 +37,17 @@ public class ESearchServiceImpl implements ESearchService {
     RestHighLevelClient restHighLevelClient;
 
     @Override
-    public Optional<Object> searchSimple(String tableName, QueryBuilder queryBuilder, Integer size) throws Exception {
+    public Optional<Object> searchSimple(String tableName, QueryBuilder queryBuilder, Integer page, Integer size) throws Exception {
         //todo 抽象 包装一个统一的response
         SearchRequest searchRequest = new SearchRequest();
         searchRequest.indices(tableName);
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder().trackTotalHits(true);
         searchSourceBuilder.query(queryBuilder);
-        Scroll scroll = new Scroll(TimeValue.timeValueSeconds(1));
-        searchRequest.scroll(scroll);
         searchSourceBuilder.size(size);
-        searchRequest.source(searchSourceBuilder);
-        SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+        searchSourceBuilder.from(page * size + 1);
+//        Scroll scroll = new Scroll(TimeValue.timeValueSeconds(10));
+        SearchRequest source = searchRequest.source(searchSourceBuilder);
+        SearchResponse response = restHighLevelClient.search(source, RequestOptions.DEFAULT);
         SearchHits hits = response.getHits();
         SearchHit[] resultHits = hits.getHits();
         int len = resultHits.length;

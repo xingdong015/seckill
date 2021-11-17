@@ -29,7 +29,7 @@ public abstract class IAbstractService implements IService {
         try {
             String query = env.getArgument("query");
             QueryBuilder queryBuilder = QueryDataBuilder.builder(query);
-            Optional<Object> objectOptional = eSearchService.searchSimple(getIndex(), queryBuilder, 1);
+            Optional<Object> objectOptional = eSearchService.searchSimple(getIndex(), queryBuilder, 0, 1);
             if(objectOptional.isPresent()) {
                 List list = (List)objectOptional.get();
                 return list.get(0);
@@ -46,7 +46,7 @@ public abstract class IAbstractService implements IService {
         try {
             String query = env.getArgument("query");
             QueryBuilder queryBuilder = QueryDataBuilder.builder(query);
-            Optional<Object> objectOptional = eSearchService.searchSimple(getIndex(), queryBuilder, 1000);
+            Optional<Object> objectOptional = eSearchService.searchSimple(getIndex(), queryBuilder, 0, 10);
             if(objectOptional.isPresent()) {
                 return (List)objectOptional.get();
             }
@@ -61,8 +61,9 @@ public abstract class IAbstractService implements IService {
         try {
             String query = env.getArgument("query");
             Integer size = env.getArgument("size");
+            Integer page = env.getArgument("page");
             QueryBuilder queryBuilder = QueryDataBuilder.builder(query);
-            Optional<Object> objectOptional = eSearchService.searchSimple(getIndex(), queryBuilder, 1000);
+            Optional<Object> objectOptional = eSearchService.searchSimple(getIndex(), queryBuilder, page, size);
             if(objectOptional.isPresent()) {
                 return new PageImpl((List)objectOptional.get());
             }
