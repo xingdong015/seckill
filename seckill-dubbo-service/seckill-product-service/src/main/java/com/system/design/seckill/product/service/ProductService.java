@@ -16,6 +16,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -28,16 +29,10 @@ import java.util.Set;
 public class ProductService implements IProductService {
     @Autowired
     private ProductMapper productMapper;
-    @Resource
-    private RedisTemplate redisTemplate;
 
-    //****暂时curd都加redis
     @Override
-//    @GlobalTransactional
     public int createProduct(Product product) {
         int insert = productMapper.insert(product);
-//        String key = "product:id:" + product.getId();
-//        redisTemplate.opsForZSet().add(key, JSON.toJSON(product), product.getId());
         System.out.println("创建产品信息成功: " + insert);
         return insert;
     }
@@ -45,30 +40,22 @@ public class ProductService implements IProductService {
     @Override
     public int deleteProduct(long productId) {
         int delete = productMapper.deleteById(productId);
-//        String key = "product:id:" + productId;
-//        redisTemplate.opsForZSet().removeRange(key, productId, productId);
         return delete;
     }
 
     @Override
     public int updateProduct(Product product) {
-//        String key = "product:id:" + product.getId();
-//        redisTemplate.opsForZSet().removeRange(key, product.getId(), product.getId());
-//        redisTemplate.opsForZSet().add(key, JSON.toJSON(product), product.getId());
         int update = productMapper.updateById(product);
         return update;
     }
 
     @Override
     public Product getProductInfo(long productId) {
-//        redisTemplate.opsForZSet().scan()
         return productMapper.selectById(productId);
     }
 
     @Override
     public IPage selectByPage(ProductDto productVo) {
-        //zset 结构分页检索
-
         Page<Product> productPage = new Page<>();
         LambdaQueryWrapper<Product> productLambdaQueryWrapper = Wrappers.lambdaQuery();
         if (productVo != null){
@@ -85,7 +72,6 @@ public class ProductService implements IProductService {
             if (productVo.getMinPrice() != null){productLambdaQueryWrapper.ge(Product::getPrice,productVo.getMinPrice());}
             if (productVo.getMaxPrice() != null){productLambdaQueryWrapper.le(Product::getPrice,productVo.getMaxPrice());}
         }
-
         return productMapper.selectPage(productPage , productLambdaQueryWrapper);
     }
 }

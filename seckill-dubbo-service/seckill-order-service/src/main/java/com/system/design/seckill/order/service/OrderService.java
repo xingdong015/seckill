@@ -9,30 +9,24 @@ import com.system.design.seckill.common.po.SeckillOrder;
 import com.system.design.seckill.order.mapper.KillMapper;
 import com.system.design.seckill.order.mapper.OrderMapper;
 import io.seata.spring.annotation.GlobalTransactional;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.apache.rocketmq.client.exception.MQClientException;
-import org.apache.rocketmq.client.producer.LocalTransactionState;
-import org.apache.rocketmq.client.producer.TransactionListener;
-import org.apache.rocketmq.client.producer.TransactionMQProducer;
-import org.apache.rocketmq.common.message.MessageExt;
+import org.apache.rocketmq.client.producer.SendCallback;
+import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
-import org.springframework.messaging.support.GenericMessage;
+import org.springframework.messaging.support.MessageBuilder;
 
 import javax.annotation.Resource;
 import java.util.Objects;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author chengzhengzheng
  * @date 2021/10/28
  */
 @DubboService(version = "1.0.0")
+@Slf4j
 public class OrderService implements IOrderService {
     @Autowired
     private OrderMapper orderMapper;
@@ -92,48 +86,35 @@ public class OrderService implements IOrderService {
      * 从business业务中获取的秒杀数据
      * 执行扣减库存。创建订单等逻辑。提交到rocketMq的延迟队列中去。
      * 分布式事务。事务消息机制
+     *
      * @param killId
      * @param userId
      * @return
      */
     @GlobalTransactional
-    public Long doKill(long killId, String userId) throws MQClientException {
+    public Long doKill(long killId, String userId) {
         //1. 扣减库存
         int count = killMapper.decreaseStorage(killId);
         Preconditions.checkArgument(count >= 1, "%s|%s|库存不足", killId, userId);
-
         //2. 创建订单
         SeckillOrder order = createOrder(killId, userId);
         if (Objects.isNull(order)) {
             throw new SeckillException(String.format("order error => killId:%s userId:%s", killId, userId), SeckillStatusEnum.REPEAT_KILL);
         }
         Preconditions.checkNotNull(order.getOrderId(), "%s|%s|订单创建失败", killId, userId);
-        //添加到RocketMq的延迟消息当中去，监控订单的支付状态 事务消息
-        Message message = new GenericMessage(JSON.toJSONString(order));
-
-        TransactionListener   transactionListener = new TransactionListener() {
+        //3. 添加到RocketMq的延迟消息当中去，监控订单的支付状态 事务消息
+        //1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h 延迟消息一共18级
+        Message message = MessageBuilder.withPayload(JSON.toJSONString(order)).build();
+        rocketMQTemplate.asyncSend("orderPayStatusMonitor", message, new SendCallback() {
             @Override
-            public LocalTransactionState executeLocalTransaction(org.apache.rocketmq.common.message.Message msg, Object arg) {
-                return null;
+            public void onSuccess(SendResult sendResult) {
+                log.info("send delay pay status monitor message to rocketmq success. order-{}",order.getOrderId());
             }
-
             @Override
-            public LocalTransactionState checkLocalTransaction(MessageExt msg) {
-                return null;
+            public void onException(Throwable e) {
+                log.error("send delay pay status monitor message to rocketmq fail. order-{}", order.getOrderId(), e);
             }
-        };
-        TransactionMQProducer producer            = new TransactionMQProducer("please_rename_unique_group_name");
-        ExecutorService executorService = new ThreadPoolExecutor(2, 5, 100, TimeUnit.SECONDS, new ArrayBlockingQueue<>(2000), r -> {
-            Thread thread = new Thread(r);
-            thread.setName("client-transaction-msg-check-thread");
-            return thread;
-        });
-
-        producer.setExecutorService(executorService);
-        producer.setTransactionListener(transactionListener);
-        producer.start();
-
-        rocketMQTemplate.sendMessageInTransaction("seckill-order-pay", message, null);
+        }, 30, 16);
         return order.getOrderId();
     }
 
