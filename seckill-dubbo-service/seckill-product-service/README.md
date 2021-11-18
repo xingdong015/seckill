@@ -9,6 +9,7 @@
 ####1)关于product信息的增删改查，统一同步到redis
 #####1.存储
 ~~~~
+*项目初始化的时候，全量缓存到redis，然后canal监控增量同步数据到redis
 1.prouct的id如何生成？通过redis的string结构自增获取？
 2.zset("product-key","id-value",createtime-score);   
   hash("product-id-key","product-field-hkey","peoduct-fieid-hkey-value")   

@@ -1,7 +1,8 @@
-package com.system.design.seckill.product.listener;
+package com.system.design.seckill.product.service;
 
 import com.alibaba.otter.canal.protocol.CanalEntry;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.system.design.seckill.product.listener.CanalDataHandleStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -15,28 +16,29 @@ import java.util.List;
  */
 @Slf4j
 @Component
-public class SqlHandleListener {
-    /**
-     * 数据处理
-     *
-     * @param entrys
-     */
-    @Async
-    public void dataHandle(List<CanalEntry.Entry> entrys) throws InvalidProtocolBufferException {
+public class SqlHandleService implements CanalDataHandleStrategy {
+    @Override
+    public void CanalDataHandle(List<CanalEntry.Entry> entrys) {
         for (CanalEntry.Entry entry : entrys) {
             if (CanalEntry.EntryType.ROWDATA == entry.getEntryType()) {
-                CanalEntry.RowChange rowChange = CanalEntry.RowChange.parseFrom(entry.getStoreValue());
-                CanalEntry.EventType eventType = rowChange.getEventType();
-                if (eventType == CanalEntry.EventType.DELETE) {
-                    saveDeleteSql(entry);
-                } else if (eventType == CanalEntry.EventType.UPDATE) {
-                    saveUpdateSql(entry);
-                } else if (eventType == CanalEntry.EventType.INSERT) {
-                    saveInsertSql(entry);
+                CanalEntry.RowChange rowChange = null;
+                try {
+                    rowChange = CanalEntry.RowChange.parseFrom(entry.getStoreValue());
+                    CanalEntry.EventType eventType = rowChange.getEventType();
+                    if (eventType == CanalEntry.EventType.DELETE) {
+                        saveDeleteSql(entry);
+                    } else if (eventType == CanalEntry.EventType.UPDATE) {
+                        saveUpdateSql(entry);
+                    } else if (eventType == CanalEntry.EventType.INSERT) {
+                        saveInsertSql(entry);
+                    }
+                } catch (InvalidProtocolBufferException e) {
+                    e.printStackTrace();
                 }
             }
         }
     }
+
 
     /**
      * 保存更新语句
@@ -132,4 +134,5 @@ public class SqlHandleListener {
             e.printStackTrace();
         }
     }
+
 }

@@ -33,9 +33,7 @@ public class CanalClient implements ApplicationRunner {
     @Value("${canal.password}")
     private String password;
     @Resource
-    private SqlHandleListener sqlHandleListener;
-    @Resource
-    private EsHandleListener esHandleListener;
+    private CanalDataHandleFactory canalDataHandleFactory;
     @Resource
     private RedisUtils redisUtils;
     private static final int BATCH_SIZE = 1000;
@@ -66,8 +64,10 @@ public class CanalClient implements ApplicationRunner {
                     try {
                         boolean tryGetDistributedLock = redisUtils.tryGetDistributedLock(jedis, key, value, EXPIRE_TIME);
                         if (tryGetDistributedLock) {
-                            //异步调用处理,组装成操作标识和es操作对象，调用es接口;//异步调用处理,拼接sql sqlHandleListener.dataHandle(message.getEntries());
-                            esHandleListener.dataHandle(message.getEntries());
+                            //工厂加策略模式，调用异步方法处理
+                            canalDataHandleFactory.getCanalDataHandleStrategy("esHandleService").CanalDataHandle(message.getEntries());
+                            canalDataHandleFactory.getCanalDataHandleStrategy("redisHandleService").CanalDataHandle(message.getEntries());
+                            canalDataHandleFactory.getCanalDataHandleStrategy("sqlHandleService").CanalDataHandle(message.getEntries());
                             connector.ack(batchId);
                         } else {
                             Thread.sleep(SLEEP_VALUE);
