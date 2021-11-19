@@ -1,4 +1,4 @@
-package com.system.design.seckill.product.service;
+package com.system.design.seckill.product.listener.service;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.otter.canal.protocol.CanalEntry;
@@ -6,10 +6,8 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.system.design.seckill.product.constant.EsIndexConstant;
 import com.system.design.seckill.product.entity.ElasticEntity;
 import com.system.design.seckill.product.listener.CanalDataHandleStrategy;
-import com.system.design.seckill.util.EsUtils;
+import com.system.design.seckill.product.utils.EsUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

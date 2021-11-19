@@ -1,4 +1,4 @@
-package com.system.design.seckill.util;
+package com.system.design.seckill.product.utils;
 
 import com.system.design.seckill.product.config.RedisConfig;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.system.design.seckill.product.service;
+package com.system.design.seckill.product.listener.service;
 
 import com.alibaba.otter.canal.protocol.CanalEntry;
 import com.google.protobuf.InvalidProtocolBufferException;
