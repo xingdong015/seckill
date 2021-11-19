@@ -1,4 +1,4 @@
-package com.system.design.seckill.product.service;
+package com.system.design.seckill.util;
 
 import com.alibaba.fastjson.JSON;
 import com.system.design.seckill.product.config.ESClientConfig;
@@ -39,7 +39,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Component
-public class EsHandleService {
+public class EsUtils {
     @Autowired
     RestHighLevelClient restHighLevelClient;
 

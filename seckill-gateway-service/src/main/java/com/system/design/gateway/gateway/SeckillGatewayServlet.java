@@ -25,7 +25,7 @@ import java.util.*;
 
 import static com.alibaba.cloud.commons.lang.StringUtils.substringAfter;
 
-@WebServlet(urlPatterns = {"/seckill/*"})
+@WebServlet(urlPatterns = {"/seckill"})
 public class SeckillGatewayServlet extends HttpServletBean {
 
     private final DubboServiceMetadataRepository repository;
