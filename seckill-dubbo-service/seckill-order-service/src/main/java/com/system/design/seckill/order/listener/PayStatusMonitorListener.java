@@ -43,7 +43,7 @@ public class PayStatusMonitorListener implements RocketMQListener<RocketMqMessag
         Long         orderId   = seckillOrder.getOrderId();
         SeckillOrder orderInfo = orderMapper.selectById(orderId);
         if (orderInfo.getStatus() < 1) {
-            //订单还未支付成功
+            //订单还未支付成功  事务消息参考 https://github.com/apache/rocketmq-spring/wiki/%E4%BA%8B%E5%8A%A1%E6%B6%88%E6%81%AF
             TransactionSendResult transactionSendResult = rocketMQTemplate.sendMessageInTransaction("cancelOrder", MessageBuilder.withPayload(orderId).build(), null);
             Preconditions.checkState(transactionSendResult.getSendStatus() == SendStatus.SEND_OK, "发送事务消息失败.");
         } else {
