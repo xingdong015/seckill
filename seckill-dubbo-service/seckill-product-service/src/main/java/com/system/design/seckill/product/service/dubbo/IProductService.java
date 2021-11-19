@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.system.design.seckill.common.dto.ProductDto;
 import com.system.design.seckill.common.po.Product;
 import com.system.design.seckill.product.service.ProductService;
+import com.system.design.seckill.product.utils.CacheKey;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;

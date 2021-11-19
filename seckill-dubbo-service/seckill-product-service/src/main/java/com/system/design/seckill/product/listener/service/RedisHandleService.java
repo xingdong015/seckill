@@ -4,6 +4,7 @@ import com.alibaba.otter.canal.protocol.CanalEntry;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.system.design.seckill.product.entity.ElasticEntity;
 import com.system.design.seckill.product.listener.CanalDataHandleStrategy;
+import com.system.design.seckill.product.utils.CacheKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
