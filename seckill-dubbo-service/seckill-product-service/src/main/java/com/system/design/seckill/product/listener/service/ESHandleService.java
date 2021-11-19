@@ -8,6 +8,7 @@ import com.system.design.seckill.product.entity.ElasticEntity;
 import com.system.design.seckill.product.listener.CanalDataHandleStrategy;
 import com.system.design.seckill.product.utils.EsUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
  * @create: 2021-11-10 14:41
  */
 @Slf4j
-@Service()
+@Component
 public class ESHandleService implements CanalDataHandleStrategy {
 
     @Resource

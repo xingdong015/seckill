@@ -20,7 +20,7 @@ import java.util.Map;
  * @author: 贾凯
  * @create: 2021-11-18 18:26
  */
-@DubboService(version = "1.0.0")
+//@DubboService(version = "1.0.0")
 public class IProductService {
     @Resource
     private ProductService productService;
