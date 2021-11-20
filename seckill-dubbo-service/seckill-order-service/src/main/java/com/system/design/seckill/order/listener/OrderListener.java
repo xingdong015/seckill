@@ -24,7 +24,7 @@ import javax.annotation.Resource;
  * 需要在本地启动 rocketmq
  * https://rocketmq.apache.org/docs/filter-by-sql92-example/
  */
-@RocketMQMessageListener(topic = "redisKillSuccess", consumerGroup = "business-group")
+@RocketMQMessageListener(topic = "redisKillSuccess", consumerGroup = "redisKillSuccessGroup")
 @Component
 @Slf4j
 public class OrderListener implements RocketMQListener<RocketMqMessageBean> {

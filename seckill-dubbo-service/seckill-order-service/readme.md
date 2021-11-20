@@ -4,5 +4,5 @@
 4. 添加订单超时未支付处理机制。
 springboot根目录扫描包路径问题：
 https://blog.csdn.net/wojiushiwo945you/article/details/109302986
-5. rocketmq事务消息原理: https://help.aliyun.com/document_detail/43348.html
+
    

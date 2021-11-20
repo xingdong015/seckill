@@ -114,7 +114,7 @@ public class OrderService implements IOrderService {
             public void onException(Throwable e) {
                 log.error("send delay pay status monitor message to rocketmq fail. order-{}", order.getOrderId(), e);
             }
-        }, 30, 16);
+        }, 30, 1);
         return order.getOrderId();
     }
 

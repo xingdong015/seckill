@@ -41,12 +41,14 @@ spring:
     time-zone: GMT+8
     serialization:
       write-dates-as-timestamps: false
+  profiles:
+    active: dev
 server:
   port: 8082
 rocketmq:
   name-server: 127.0.0.1:9876
   producer:
-    group: business-group
+    group: business-group-producer
 seata:
   ## 是否开启seata，默认true
   enabled: true

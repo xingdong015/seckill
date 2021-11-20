@@ -14,7 +14,7 @@ public class PayExpireTransactionListener implements RocketMQLocalTransactionLis
 
     @Override
     public RocketMQLocalTransactionState executeLocalTransaction(Message msg, Object arg) {
-
+        System.out.println("PayExpireTransactionListener executeLocalTransaction " + msg + "----" + arg);
         return null;
     }
 
