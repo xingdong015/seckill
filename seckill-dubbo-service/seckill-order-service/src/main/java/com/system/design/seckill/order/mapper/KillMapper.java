@@ -11,10 +11,19 @@ import org.apache.ibatis.annotations.Update;
 @SuppressWarnings("all")
 public interface KillMapper extends BaseMapper<Seckill> {
     /**
+     * 库存-1
      *
      * @param killId
      * @return
      */
     @Update("update t_seckill set count = count - 1 where seckill_id = #{killId} and count > 0")
     int decreaseStorage(long killId);
+
+    /**
+     * 库存+1
+     *
+     * @param orderId
+     */
+    @Update("update t_seckill set count = count + 1 where seckill_id = #{killId}")
+    void incStorage(Long orderId);
 }

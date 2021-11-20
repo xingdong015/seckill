@@ -8,3 +8,5 @@
 参考OrderListener.java 和 RocketMQMessageListener的配置
 
 Warning: consumer instances of a consumer group must have exactly the same topic subscription(s).
+
+rocketmq控制台： https://github.com/apache/rocketmq-dashboard
