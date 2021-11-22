@@ -35,7 +35,6 @@ public class QueryDataBuilder {
             }
             if(JSON.isValidObject(query)) {
                 Map<String,Object> jsonMap = (Map<String,Object>)JSONObject.parseObject(query, Map.class);
-                JSONArray jsonArray = new JSONArray();
                 List<JSONObject> jsonObjectList = jsonMap.entrySet().stream().map(entry -> {
                     JSONObject mastQuery = new JSONObject();
                     JSONObject kvQuery = new JSONObject();
