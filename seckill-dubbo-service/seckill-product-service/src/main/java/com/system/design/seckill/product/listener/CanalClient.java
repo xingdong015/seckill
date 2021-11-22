@@ -65,9 +65,9 @@ public class CanalClient implements ApplicationRunner {
                         boolean tryGetDistributedLock = redisUtils.tryGetDistributedLock(jedis, key, value, EXPIRE_TIME);
                         if (tryGetDistributedLock) {
                             //工厂加策略模式，调用异步方法处理
-                            canalDataHandleFactory.getCanalDataHandleStrategy("esHandleService").CanalDataHandle(message.getEntries());
+//                            canalDataHandleFactory.getCanalDataHandleStrategy("esHandleService").CanalDataHandle(message.getEntries());
                             canalDataHandleFactory.getCanalDataHandleStrategy("redisHandleService").CanalDataHandle(message.getEntries());
-                            canalDataHandleFactory.getCanalDataHandleStrategy("sqlHandleService").CanalDataHandle(message.getEntries());
+//                            canalDataHandleFactory.getCanalDataHandleStrategy("sqlHandleService").CanalDataHandle(message.getEntries());
                             connector.ack(batchId);
                         } else {
                             Thread.sleep(SLEEP_VALUE);

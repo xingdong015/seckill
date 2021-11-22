@@ -15,7 +15,7 @@ import java.util.List;
  * @create: 2021-11-10 14:33
  */
 @Slf4j
-@Component
+@Component(value = "sqlHandleService")
 public class SqlHandleService implements CanalDataHandleStrategy {
     @Override
     public void CanalDataHandle(List<CanalEntry.Entry> entrys) {

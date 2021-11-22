@@ -15,9 +15,4 @@ public class RocketMqMessageBean implements Serializable {
     private String  body;
     private Integer type;
     private long    currentTime;
-
-    public RocketMqMessageBean(String body, long currentTime) {
-        this.body = body;
-        this.currentTime = currentTime;
-    }
 }

@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * @create: 2021-11-10 14:41
  */
 @Slf4j
-@Component
+@Component(value = "esHandleService")
 public class ESHandleService implements CanalDataHandleStrategy {
 
     @Resource

@@ -108,13 +108,14 @@ public class OrderService implements IOrderService {
         rocketMQTemplate.asyncSend("orderPayStatusMonitor", message, new SendCallback() {
             @Override
             public void onSuccess(SendResult sendResult) {
-                log.info("send delay pay status monitor message to rocketmq success. order-{}",order.getOrderId());
+                log.info("send delay pay status monitor message to rocketmq success. order-{}", order.getOrderId());
             }
+
             @Override
             public void onException(Throwable e) {
                 log.error("send delay pay status monitor message to rocketmq fail. order-{}", order.getOrderId(), e);
             }
-        }, 30, 1);
+        }, 3000, 1);
         return order.getOrderId();
     }
 
