@@ -17,17 +17,17 @@ public class RedisConfig {
     @Value("${spring.redis.host}")
     private String host;
     @Value("${spring.redis.port}")
-    private int port;
+    private Integer port;
     @Value("${spring.redis.password}")
     private String password;
     @Value("${spring.redis.database}")
-    private int database;
+    private Integer database;
     @Value("${spring.redis.timeout}")
-    private int timeout;
+    private Integer timeout;
     @Value("${spring.redis.jedis.pool.max-idle}")
-    private int maxIdle;
+    private Integer maxIdle;
     @Value("${spring.redis.jedis.pool.max-wait}")
-    private int maxWaitMillis;
+    private Integer maxWaitMillis;
 
     @Bean
     public JedisPool jedisPoolFactory() {
