@@ -28,6 +28,20 @@ spring:
     time-zone: GMT+8
     serialization:
       write-dates-as-timestamps: false
+  redis:
+    database: 1
+    host:
+    port:
+    password:
+    jedis:
+      pool:
+        max-active: 200
+        max-wait: 10
+        max-idle: 10
+        min-idle: 0
+    timeout: 10000
+
+
 server:
   port: 8084
 
@@ -42,25 +56,25 @@ canal:
   username:
   password:
 
-redis:
-  # Redis服务器地址
-  host: 127.0.0.1
-  # Redis服务器连接端口
-  port: 6379
-  # Redis服务器连接密码（默认为空）
-  password: null
-  timeout: 30000
-  # 连接池最大连接数（使用负值表示没有限制）
-  maxTotal: 30
-  # 连接池中的最大空闲连接
-  maxIdle: 10
-  numTestsPerEvictionRun: 1024
-  timeBetweenEvictionRunsMillis: 30000
-  minEvictableIdleTimeMillis: 1800000
-  softMinEvictableIdleTimeMillis: 10000
-  # 连接池最大阻塞等待时间（使用负值表示没有限制）
-  maxWaitMillis: 1500
-  testOnBorrow: true
-  testWhileIdle: true
-  blockWhenExhausted: false
-  JmxEnabled: true
+#redis:
+#  # Redis服务器地址
+#  host: 127.0.0.1
+#  # Redis服务器连接端口
+#  port: 6379
+#  # Redis服务器连接密码（默认为空）
+#  password: null
+#  timeout: 30000
+#  # 连接池最大连接数（使用负值表示没有限制）
+#  maxTotal: 30
+#  # 连接池中的最大空闲连接
+#  maxIdle: 10
+#  numTestsPerEvictionRun: 1024
+#  timeBetweenEvictionRunsMillis: 30000
+#  minEvictableIdleTimeMillis: 1800000
+#  softMinEvictableIdleTimeMillis: 10000
+#  # 连接池最大阻塞等待时间（使用负值表示没有限制）
+#  maxWaitMillis: 1500
+#  testOnBorrow: true
+#  testWhileIdle: true
+#  blockWhenExhausted: false
+#  JmxEnabled: true

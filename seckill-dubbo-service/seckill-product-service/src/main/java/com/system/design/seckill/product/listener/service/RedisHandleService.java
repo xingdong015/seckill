@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * @create: 2021-11-18 18:28
  */
 @Slf4j
-@Component
+@Component(value = "redisHandleService")
 public class RedisHandleService implements CanalDataHandleStrategy {
     @Resource
     private RedisTemplate redisTemplate;
@@ -66,12 +66,20 @@ public class RedisHandleService implements CanalDataHandleStrategy {
         dataList.stream().forEach(data -> {
             String key = CacheKey.getProductHash((String) data.get("id"));
             redisTemplate.opsForHash().putAll(key, data);
+            log.info(" === 保存 key{}", key);
         });
     }
 
     private void deleteKeysFromHash(List<Map<String, Object>> dataList) {
         List<Object> idList = dataList.stream().map(map -> CacheKey.getProductHash((String) map.get("id"))).distinct().collect(Collectors.toList());
-        redisTemplate.opsForHash().delete(idList);
+        idList.stream().forEach(key->{
+            if (redisTemplate.hasKey(key)) {
+                redisTemplate.opsForHash().delete(key);
+                log.info("==== 删除 key:{}", key);
+                return;
+            }
+            log.info("==== 不存在 key:{}", key);
+        });
     }
 
 

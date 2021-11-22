@@ -14,20 +14,20 @@ import redis.clients.jedis.JedisPoolConfig;
  */
 @Configuration
 public class RedisConfig {
-    @Value("${redis.host}")
+    @Value("${spring.redis.host}")
     private String host;
-    @Value("${redis.port}")
+    @Value("${spring.redis.port}")
     private int port;
-    @Value("${redis.timeout}")
+    @Value("${spring.redis.password}")
+    private String password;
+    @Value("${spring.redis.database}")
+    private int database;
+    @Value("${spring.redis.timeout}")
     private int timeout;
-    @Value("${redis.maxIdle}")
+    @Value("${spring.redis.jedis.pool.max-idle}")
     private int maxIdle;
-    @Value("${redis.maxWaitMillis}")
+    @Value("${spring.redis.jedis.pool.max-wait}")
     private int maxWaitMillis;
-    @Value("${redis.blockWhenExhausted}")
-    private Boolean blockWhenExhausted;
-    @Value("${redis.JmxEnabled}")
-    private Boolean JmxEnabled;
 
     @Bean
     public JedisPool jedisPoolFactory() {
@@ -35,10 +35,10 @@ public class RedisConfig {
         jedisPoolConfig.setMaxIdle(maxIdle);
         jedisPoolConfig.setMaxWaitMillis(maxWaitMillis);
         // 连接耗尽时是否阻塞, false报异常,true阻塞直到超时, 默认true
-        jedisPoolConfig.setBlockWhenExhausted(blockWhenExhausted);
+        jedisPoolConfig.setBlockWhenExhausted(false);
         // 是否启用pool的jmx管理功能, 默认true
-        jedisPoolConfig.setJmxEnabled(JmxEnabled);
-        JedisPool jedisPool = new JedisPool(jedisPoolConfig, host, port, timeout);
+        jedisPoolConfig.setJmxEnabled(true);
+        JedisPool jedisPool = new JedisPool(jedisPoolConfig, host, port, timeout, password, database);
         return jedisPool;
     }
 
