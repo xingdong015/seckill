@@ -13,8 +13,8 @@ https://blog.csdn.net/chen_duochuang/article/details/107211306
 ```
 ## 自定义抽象方法，增加开发效率
 ```textmate
-自定义抽象类，GraphqlBuilderConfig，AbstractRuntimeWiring，
-在graphql构建过程中，手动注入GraphqlBuilderConfig实现类和资源下的定义文档，初始化一个完整的graphql容器，
+自定义抽象类，CustomizerRuntimeWiring，AbstractRuntimeWiring，
+在graphql构建过程中，手动注入CustomizerRuntimeWiring实现类和资源下的定义文档，初始化一个完整的graphql容器，
 然后在初始化一个servlet容器，将graphql的数据暴露出去。（实现不需要实体类，且配置后基础的查询findOne，findList，findPage都会自动实现）
 ``` 
 ## 使用方法
@@ -60,7 +60,7 @@ type Product {
     price: Float
 }
 ```
-### 自动服务之前需要连接es，
+### 启动服务之前需要连接es，
 ```text
  @Bean
     public GraphQL graphql() throws IOException {
