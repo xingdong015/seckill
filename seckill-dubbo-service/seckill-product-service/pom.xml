@@ -28,6 +28,14 @@
                     <artifactId>rocketmq-client</artifactId>
                     <groupId>org.apache.rocketmq</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>rocketmq-acl</artifactId>
+                    <groupId>org.apache.rocketmq</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>rocketmq-srvutil</artifactId>
+                    <groupId>org.apache.rocketmq</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
         <dependency>
