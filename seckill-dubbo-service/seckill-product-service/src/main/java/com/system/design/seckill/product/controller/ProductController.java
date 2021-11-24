@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -29,6 +30,30 @@ public class ProductController {
 
     @PostMapping("/search")
     public MyResponse search(@RequestBody ProductDto productDto){
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
+        //where条件
+//        QueryBuilder type= QueryBuilders.termQuery("type", 1);
+//        RangeQueryBuilder timeRange = QueryBuilders.rangeQuery("time").from(dateStart).to(dateEnd);
+//        BoolQueryBuilder boolQueryBuilder =  QueryBuilders.boolQuery();
+//        boolQueryBuilder.must(type).must(timeRange);
+//        searchSourceBuilder.query(boolQueryBuilder);
+//        searchSourceBuilder.sort("time", SortOrder.ASC);
+        if (productDto != null){
+            if (productDto.getId() != null){
+                boolQuery.must(QueryBuilders.termQuery("id",productDto.getId()));
+            }
+            if (productDto.getPrice() != null){
+                boolQuery.must(QueryBuilders.termQuery("price",productDto.getId()));
+            }
+            if (productDto.getMinPrice() != null){
+                RangeQueryBuilder price = QueryBuilders.rangeQuery("price").gte(productDto.getMinPrice());
+//                price.lte()
+                boolQuery.must(QueryBuilders.rangeQuery("price").gte(productDto.getMinPrice()));
+            }
+            if (productDto.getMinPrice() != null){
+                boolQuery.must(QueryBuilders.rangeQuery("price").gte(productDto.getMinPrice()));
+            }
+        }
 
         QueryBuilder queryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.termQuery("product_name", productDto.getProductName()));
         Optional<Object> optional = null;
@@ -41,11 +66,6 @@ public class ProductController {
         return MyResponse.success(optional);
     }
 
-    @PostMapping("/search/all")
-    public MyResponse searchAll(){
-        //查询所有
-        return MyResponse.success();
-    }
 
 
 
