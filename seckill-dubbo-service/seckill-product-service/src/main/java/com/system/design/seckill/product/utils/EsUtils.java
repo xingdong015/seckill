@@ -22,6 +22,7 @@ import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,7 @@ import org.springframework.util.StringUtils;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * @description:
@@ -41,6 +43,7 @@ import java.util.concurrent.TimeUnit;
 public class EsUtils {
     @Autowired
     RestHighLevelClient restHighLevelClient;
+    private static final int TIMEOUT = 10;
 
     //创建索引
     public CreateIndexResponse createIndex(String indexName) throws IOException {
@@ -121,6 +124,22 @@ public class EsUtils {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    //分页检索
+    public Optional<Object> searchSimple(String tableName, QueryBuilder queryBuilder, Integer page, Integer size) throws Exception {
+        //todo 抽象 包装一个统一的response
+        SearchRequest searchRequest = new SearchRequest(tableName);
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder().trackTotalHits(true);
+        searchSourceBuilder.query(queryBuilder).size(size).from(page * size + 1).timeout(new TimeValue(TIMEOUT, TimeUnit.SECONDS));;
+//        Scroll scroll = new Scroll(TimeValue.timeValueSeconds(10));
+        SearchRequest source = searchRequest.source(searchSourceBuilder);
+        SearchResponse response = restHighLevelClient.search(source, RequestOptions.DEFAULT);
+        SearchHits hits = response.getHits();
+        SearchHit[] resultHits = hits.getHits();
+        int len = resultHits.length;
+        return len <= 0 ? Optional.empty() :
+                Optional.of(Arrays.stream(resultHits).map(SearchHit::getSourceAsMap).collect(Collectors.toList()));
     }
 
     public <T> List<T> search(String idxName, SearchSourceBuilder builder, Class<T> c) {

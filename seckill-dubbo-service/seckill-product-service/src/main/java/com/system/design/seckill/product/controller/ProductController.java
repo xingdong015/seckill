@@ -1,14 +1,17 @@
 package com.system.design.seckill.product.controller;
 
+import com.system.design.seckill.common.dto.ProductDto;
+import com.system.design.seckill.product.constant.EsIndexConstant;
 import com.system.design.seckill.product.entity.MyResponse;
 import com.system.design.seckill.product.utils.EsUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * @description: 进行es检索入口
@@ -23,44 +26,19 @@ public class ProductController {
     @Resource
     private EsUtils esUtils;
 
-    @PostMapping("/save")
-    public MyResponse save(String body){
-        //1.判断是否有索引名称，没有则创建索引
-
-        //2.保存
-        return MyResponse.success();
-    }
-
-    @PostMapping("/saveBatch")
-    public MyResponse saveBatch(String body){
-        //1.判断是否有索引名称，没有则创建索引
-
-        //2.保存
-        return MyResponse.success();
-    }
-
-    @PostMapping("/delete")
-    public MyResponse delete(String body){
-        //1.判断是否有索引名称，有则删除
-
-        //2.没有则抛出信息
-        return MyResponse.success();
-    }
-
-    @PostMapping("/deleteBatch")
-    public MyResponse deleteBatch(String body){
-        //1.判断是否有索引名称，有则删除
-
-        //2.没有则抛出信息
-        return MyResponse.success();
-    }
 
     @PostMapping("/search")
-    public MyResponse search(String body){
-        //1.判断是否有索引名称，有则检索
+    public MyResponse search(@RequestBody ProductDto productDto){
 
+        QueryBuilder queryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.termQuery("product_name", productDto.getProductName()));
+        Optional<Object> optional = null;
+        try {
+            optional = esUtils.searchSimple(EsIndexConstant.getIndexName("t_product"), queryBuilder, productDto.getCurrentPage().intValue(), productDto.getPageSize().intValue());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         //2.分页条件检索，加聚合，加关键词渲染
-        return MyResponse.success();
+        return MyResponse.success(optional);
     }
 
     @PostMapping("/search/all")
