@@ -15,7 +15,8 @@ import java.net.InetSocketAddress;
 import java.util.UUID;
 
 /**
- * @description:
+ * @description:canal应该就是canalserver端复制几份example取不同名字，instance.properties文件修改
+ * canal.mq.topic=example；  然后客户端创建连接的时候，连接不同example就让redis和es分开处理了。canal是将mysql变化的数据缓存在每个example下面的队列了
  * @author: 贾凯
  * @create: 2021-11-09 18:52
  */
