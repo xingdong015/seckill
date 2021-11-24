@@ -22,6 +22,8 @@ public class PuTongSendMessage {
     //1.发送同步消息
     public void SyncSend(){
         SendResult sendResult = rocketMQTemplate.syncSend(TOPIC, "this is my first sync message");
+        //1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h 延迟消息一共18级
+//        SendResult sendResultDelay = rocketMQTemplate.syncSend(TOPIC, "this is my first sync delay message",3000,4);
         log.info("sendResult: {}", sendResult);
     }
 

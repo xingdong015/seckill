@@ -18,7 +18,7 @@ public class ShunXuSendMessage {
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
     private static final String TOPIC = "JK-Topic";
-    private static final String HASH_KEY = "JK-Topic";
+    private static final String HASH_KEY = "JK-Key";
 
     public void sendOrderly(){
         SendResult syncSendOrderly = rocketMQTemplate.syncSendOrderly(TOPIC, "同步顺序发送的消息", HASH_KEY);
