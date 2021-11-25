@@ -26,6 +26,7 @@ import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.BucketOrder;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
+import org.elasticsearch.search.aggregations.metrics.Avg;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
@@ -182,8 +183,15 @@ public class ProductController {
                 log.info("docCountError: " + productNameAgg.getDocCountError());
                 log.info("sumOfOtherDocCounts: " + productNameAgg.getSumOfOtherDocCounts());
                 log.info("------------------------------------");
-                
-
+                productNameAgg.getBuckets().stream().forEach(bucket->{
+                    log.info("key: " + bucket.getKeyAsNumber());
+                    log.info("docCount: " + bucket.getDocCount());
+                    log.info("docCountError: " + bucket.getDocCountError());
+                    //取子聚合
+                    Avg aggAvgPrice = bucket.getAggregations().get("agg_avgPrice");
+                    log.info("average_balance: " + aggAvgPrice.getValue());
+                    log.info("------------------------------------");
+                });
             }
         }catch (Exception e){
             e.printStackTrace();
