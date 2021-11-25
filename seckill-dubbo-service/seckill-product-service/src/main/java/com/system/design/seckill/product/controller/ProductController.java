@@ -20,6 +20,12 @@ import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.aggregations.Aggregation;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.aggregations.BucketOrder;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
@@ -156,11 +162,29 @@ public class ProductController {
     @PostMapping("/aggregation/{productName}")
     public MyResponse aggregation(@PathVariable String productName){
         try {
-            //1.
+            //1.创建search请求
+            SearchRequest searchRequest = new SearchRequest(EsIndexConstant.getIndexName("t_product"));
+            //2.构建searchsourcebuilder查询体，所有查询以及聚合条件都封装在这里
+            SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder().size(0);
+            //2.1加入聚合：按照产品名称分组聚合，内嵌每组价格平均值
+            TermsAggregationBuilder aggregationBuilder = AggregationBuilders.terms("agg_productName").field("product_name").order(BucketOrder.aggregation("agg_avgPrice", true));
+            aggregationBuilder.subAggregation(AggregationBuilders.avg("agg_avgPrice").field("price"));
+            searchSourceBuilder.aggregation(aggregationBuilder);
+            searchRequest.source(searchSourceBuilder);
+            //3.发送请求
+            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            //4.处理响应
+            if (RestStatus.OK.equals(response.status())){
+                //获取聚合结果
+                Aggregations aggregations = response.getAggregations();
+                Terms productNameAgg = aggregations.get("agg_productName");
+                log.info("aggregation agg_productName 结果");
+                log.info("docCountError: " + productNameAgg.getDocCountError());
+                log.info("sumOfOtherDocCounts: " + productNameAgg.getSumOfOtherDocCounts());
+                log.info("------------------------------------");
+                
 
-            //2.
-
-            //3.
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
