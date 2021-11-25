@@ -24,6 +24,7 @@ import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -131,7 +132,10 @@ public class EsUtils {
         //todo 抽象 包装一个统一的response
         SearchRequest searchRequest = new SearchRequest(tableName);
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder().trackTotalHits(true);
-        searchSourceBuilder.query(queryBuilder).size(size).from(page * size + 1).timeout(new TimeValue(TIMEOUT, TimeUnit.SECONDS));;
+        searchSourceBuilder.query(queryBuilder)
+                .size(size).from(page * size + 1)
+                .sort("create_time", SortOrder.DESC)
+                .timeout(new TimeValue(TIMEOUT, TimeUnit.SECONDS));
 //        Scroll scroll = new Scroll(TimeValue.timeValueSeconds(10));
         SearchRequest source = searchRequest.source(searchSourceBuilder);
         SearchResponse response = restHighLevelClient.search(source, RequestOptions.DEFAULT);

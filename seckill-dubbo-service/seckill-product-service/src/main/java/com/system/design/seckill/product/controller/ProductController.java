@@ -5,6 +5,7 @@ import com.system.design.seckill.product.constant.EsIndexConstant;
 import com.system.design.seckill.product.entity.MyResponse;
 import com.system.design.seckill.product.utils.EsUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -31,34 +32,25 @@ public class ProductController {
     @PostMapping("/search")
     public MyResponse search(@RequestBody ProductDto productDto){
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
-        //where条件
-//        QueryBuilder type= QueryBuilders.termQuery("type", 1);
-//        RangeQueryBuilder timeRange = QueryBuilders.rangeQuery("time").from(dateStart).to(dateEnd);
-//        BoolQueryBuilder boolQueryBuilder =  QueryBuilders.boolQuery();
-//        boolQueryBuilder.must(type).must(timeRange);
-//        searchSourceBuilder.query(boolQueryBuilder);
-//        searchSourceBuilder.sort("time", SortOrder.ASC);
         if (productDto != null){
-            if (productDto.getId() != null){
-                boolQuery.must(QueryBuilders.termQuery("id",productDto.getId()));
+            if (StringUtils.isNotEmpty(productDto.getProductName())){
+                boolQuery.must(QueryBuilders.matchQuery("product_name",productDto.getProductName()));
             }
-            if (productDto.getPrice() != null){
-                boolQuery.must(QueryBuilders.termQuery("price",productDto.getId()));
-            }
-            if (productDto.getMinPrice() != null){
-                RangeQueryBuilder price = QueryBuilders.rangeQuery("price").gte(productDto.getMinPrice());
-//                price.lte()
-                boolQuery.must(QueryBuilders.rangeQuery("price").gte(productDto.getMinPrice()));
+            if (StringUtils.isNotEmpty(productDto.getProductDesc())){
+                boolQuery.must(QueryBuilders.matchQuery("product_desc",productDto.getProductDesc()));
             }
             if (productDto.getMinPrice() != null){
                 boolQuery.must(QueryBuilders.rangeQuery("price").gte(productDto.getMinPrice()));
+            }
+            if (productDto.getMaxPrice() != null){
+                boolQuery.must(QueryBuilders.rangeQuery("price").lte(productDto.getMaxPrice()));
             }
         }
 
-        QueryBuilder queryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.termQuery("product_name", productDto.getProductName()));
+
         Optional<Object> optional = null;
         try {
-            optional = esUtils.searchSimple(EsIndexConstant.getIndexName("t_product"), queryBuilder, productDto.getCurrentPage().intValue(), productDto.getPageSize().intValue());
+            optional = esUtils.searchSimple(EsIndexConstant.getIndexName("t_product"), boolQuery, productDto.getCurrentPage().intValue(), productDto.getPageSize().intValue());
         } catch (Exception e) {
             e.printStackTrace();
         }
