@@ -197,7 +197,7 @@ public class ProductController {
             e.printStackTrace();
         }
 
-        return MyResponse.error(Collections.emptyList());
+        return MyResponse.success(Collections.emptyList());
     }
 
 
