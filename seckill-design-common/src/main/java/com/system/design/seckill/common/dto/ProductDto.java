@@ -15,6 +15,7 @@ public class ProductDto {
     private Long currentPage;
     private Long pageSize;
     private Long id;
+    private String keyword;
     private String productName;
     private String productDesc;
     private BigDecimal price;

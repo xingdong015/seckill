@@ -134,7 +134,6 @@ public class EsUtils {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder().trackTotalHits(true);
         searchSourceBuilder.query(queryBuilder)
                 .size(size).from(page * size + 1)
-                .sort("create_time", SortOrder.DESC)
                 .timeout(new TimeValue(TIMEOUT, TimeUnit.SECONDS));
 //        Scroll scroll = new Scroll(TimeValue.timeValueSeconds(10));
         SearchRequest source = searchRequest.source(searchSourceBuilder);
@@ -146,6 +145,39 @@ public class EsUtils {
                 Optional.of(Arrays.stream(resultHits).map(SearchHit::getSourceAsMap).collect(Collectors.toList()));
     }
 
+    //分页检索
+    public Map search(String tableName, QueryBuilder queryBuilder, Integer page, Integer size, String sortField, String... highlightFields) throws Exception {
+        //todo 抽象 包装一个统一的response
+        SearchRequest searchRequest = new SearchRequest(tableName);
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder().trackTotalHits(true);
+        searchSourceBuilder.query(queryBuilder)
+                .size(size).from(page * size + 1)
+                .sort(sortField, SortOrder.DESC)
+                .timeout(new TimeValue(TIMEOUT, TimeUnit.SECONDS));
+        SearchRequest source = searchRequest.source(searchSourceBuilder);
+        SearchResponse response = restHighLevelClient.search(source, RequestOptions.DEFAULT);
+
+        //============计算总数量
+        long totalCount = response.getHits().getTotalHits().value;
+        //============得到总页数:Math.ceil()“向上取整”
+        int totalPage = (int) Math.ceil((float) totalCount / size);
+
+        //============处理检索结果，高亮展示
+        SearchHits hits = response.getHits();
+        SearchHit[] resultHits = hits.getHits();
+        List<Map<String, Object>> data = Arrays.stream(resultHits).map(SearchHit::getSourceAsMap).collect(Collectors.toList());
+
+        //整理返回对象
+        HashMap<String, Object> resMap = new HashMap<>();
+        resMap.put("totalCount",totalCount);
+        resMap.put("totalPage",totalPage);
+        resMap.put("data",data);
+
+        return resMap;
+    }
+
+
+    //默认每次抓取10条
     public <T> List<T> search(String idxName, SearchSourceBuilder builder, Class<T> c) {
         SearchRequest request = new SearchRequest(idxName);
         request.source(builder);
@@ -162,27 +194,6 @@ public class EsUtils {
         }
     }
 
-    public <T> Map<String,Object> searchMap(String idxName, SearchSourceBuilder builder, Class<T> c) {
-        SearchRequest request = new SearchRequest(idxName);
-        request.source(builder);
-        try {
-            SearchResponse response = restHighLevelClient.search(request, RequestOptions.DEFAULT);
-            //此处是我写的，需要验证是否表示检索总条数
-            long value = response.getHits().getTotalHits().value;
-
-            SearchHit[] hits = response.getHits().getHits();
-            List<T> res = new ArrayList<>(hits.length);
-            for (SearchHit hit : hits) {
-                res.add(JSON.parseObject(hit.getSourceAsString(), c));
-            }
-            HashMap<String, Object> map = new HashMap<>();
-            map.put("data",res);
-            map.put("count",value);
-            return map;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public void deleteByQuery(String idxName, QueryBuilder builder) {
         DeleteByQueryRequest request = new DeleteByQueryRequest(idxName);
