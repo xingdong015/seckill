@@ -18,6 +18,7 @@ import org.springframework.data.redis.core.ZSetOperations;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -52,6 +53,11 @@ public class ProductService implements IProductService {
     @Override
     public Product getProductInfo(long productId) {
         return productMapper.selectById(productId);
+    }
+
+    @Override
+    public List<Product> getAll() {
+        return productMapper.selectList(null);
     }
 
     @Override

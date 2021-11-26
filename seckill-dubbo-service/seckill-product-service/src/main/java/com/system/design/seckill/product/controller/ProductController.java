@@ -98,7 +98,7 @@ public class ProductController {
         return MyResponse.error(Collections.emptyList());
     }
 
-    
+
     /**
      * @Description: 多条件检索，按照创建时间倒序，高亮展示结果
     */

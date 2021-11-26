@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.system.design.seckill.common.dto.ProductDto;
 import com.system.design.seckill.common.po.Product;
 
+import java.util.List;
+
 /**
  * @author jack
  * @date 2021/11/8
@@ -36,6 +38,12 @@ public interface IProductService {
      * @return
      */
     Product getProductInfo(long productId);
+
+    /**
+     * 获取所有产品信息
+     * @return
+     */
+    List<Product> getAll();
 
     /**
      * 分页检索产品

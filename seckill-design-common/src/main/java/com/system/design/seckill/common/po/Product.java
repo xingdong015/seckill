@@ -1,6 +1,7 @@
 package com.system.design.seckill.common.po;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,18 +26,22 @@ public class Product {
     private Long id;
 
     @TableField(value = "product_name", jdbcType = JdbcType.VARCHAR)
+    @JsonProperty(value = "product_name")
     private String productName;
 
     @TableField(value = "product_desc", jdbcType = JdbcType.VARCHAR)
+    @JsonProperty(value = "product_desc")
     private String productDesc;
 
     @TableField(value = "price", jdbcType = JdbcType.DECIMAL)
     private BigDecimal price;
 
     @TableField(value = "create_time", fill = INSERT, jdbcType = JdbcType.BIGINT)
+    @JsonProperty(value = "create_time")
     private Long createTime;
 
     @TableField(value = "update_time", fill = INSERT_UPDATE, jdbcType = JdbcType.BIGINT)
+    @JsonProperty(value = "update_time")
     private Long updateTime;
 
 }
