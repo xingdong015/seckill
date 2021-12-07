@@ -43,12 +43,19 @@ public class CanalClient implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        CanalConnector connector = CanalConnectors.newSingleConnector(new InetSocketAddress(host, port), destination, username, password);
+        String destinationExample = destination;
+        String subscribePattern = ".*\\..*";
+        String strategyName = "redisHandleService";  //"sqlHandleService"    "esHandleService"
+        doListen(destinationExample, subscribePattern, strategyName);
+    }
+
+    private void doListen(String destinationExample, String subscribePattern, String strategyName) {
+        CanalConnector connector = CanalConnectors.newSingleConnector(new InetSocketAddress(host, port), destinationExample, username, password);
         try {
             //打开连接
             connector.connect();
             //订阅数据库表,全部表
-            connector.subscribe(".*\\..*");
+            connector.subscribe(subscribePattern);
             //回滚到未进行ack的地方，下次fetch的时候，可以从最后一个没有ack的地方开始拿
             connector.rollback();
             while (true) {
@@ -66,9 +73,7 @@ public class CanalClient implements ApplicationRunner {
                         boolean tryGetDistributedLock = redisUtils.tryGetDistributedLock(jedis, key, value, EXPIRE_TIME);
                         if (tryGetDistributedLock) {
                             //工厂加策略模式，调用异步方法处理
-//                            canalDataHandleFactory.getCanalDataHandleStrategy("esHandleService").CanalDataHandle(message.getEntries());
-                            canalDataHandleFactory.getCanalDataHandleStrategy("redisHandleService").CanalDataHandle(message.getEntries());
-//                            canalDataHandleFactory.getCanalDataHandleStrategy("sqlHandleService").CanalDataHandle(message.getEntries());
+                            canalDataHandleFactory.getCanalDataHandleStrategy(strategyName).CanalDataHandle(message.getEntries());
                             connector.ack(batchId);
                         } else {
                             Thread.sleep(SLEEP_VALUE);
