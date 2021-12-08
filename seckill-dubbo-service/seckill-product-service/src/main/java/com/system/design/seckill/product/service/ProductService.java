@@ -1,5 +1,7 @@
 package com.system.design.seckill.product.service;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -9,6 +11,7 @@ import com.system.design.seckill.common.api.IProductService;
 import com.system.design.seckill.common.po.Product;
 import com.system.design.seckill.common.dto.ProductDto;
 import com.system.design.seckill.product.mapper.ProductMapper;
+import com.system.design.seckill.product.utils.CacheKey;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,26 @@ import java.util.Set;
 public class ProductService implements IProductService {
     @Autowired
     private ProductMapper productMapper;
+    @Resource
+    private RedisTemplate redisTemplate;
+
+    /**
+     * @Description: 缓存中获取产品信息
+     * @param: productId
+     * @return com.system.design.seckill.common.po.Product
+     * @author jiakai
+     * @date 2021/11/19 16:32
+     */
+    public Product getProductFromCache(long productId) {
+        String key = CacheKey.getProductHash(String.valueOf(productId));
+        if (CollectionUtil.isNotEmpty(redisTemplate.opsForHash().entries(key))){
+            return (Product) redisTemplate.opsForHash().entries(key);
+        }
+        //缓存穿透：bloom过滤器   （缓存一致性：先更新db,再删缓存）
+        Product productInfo = getProductInfo(productId);
+        redisTemplate.opsForHash().putAll(CacheKey.getProductHash(String.valueOf(productId)), BeanUtil.beanToMap(productInfo));
+        return productInfo;
+    }
 
     @Override
     public int createProduct(Product product) {
