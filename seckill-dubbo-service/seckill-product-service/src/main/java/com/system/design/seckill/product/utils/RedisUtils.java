@@ -1,5 +1,7 @@
 package com.system.design.seckill.product.utils;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.system.design.seckill.common.po.Product;
 import com.system.design.seckill.product.config.RedisConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +27,13 @@ import java.util.concurrent.TimeUnit;
 public final class RedisUtils {
 
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private static RedisTemplate redisTemplate;
     @Resource
     RedisConfig redisConfig;
     private static final String LOCK_SUCCESS = "OK";
     private static final String SET_IF_NOT_EXIST = "NX";
     private static final String SET_WITH_EXPIRE_TIME = "PX";
     private static final Long RELEASE_SUCCESS = 1L;
-
 
     /**
      * @Description: 获取jedis客户端

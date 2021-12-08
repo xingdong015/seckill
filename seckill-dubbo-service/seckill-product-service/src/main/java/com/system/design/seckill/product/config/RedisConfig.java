@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
@@ -49,8 +50,9 @@ public class RedisConfig {
         return jedisPool;
     }
 
-    @Bean
     @SuppressWarnings("all")
+    @Primary
+    @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
         // 我们为了自己开发方便，一般直接使用 <String, Object>
         RedisTemplate<String, Object> template = new RedisTemplate<String, Object>();
