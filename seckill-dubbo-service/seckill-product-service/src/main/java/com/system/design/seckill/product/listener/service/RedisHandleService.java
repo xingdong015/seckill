@@ -52,9 +52,11 @@ public class RedisHandleService implements CanalDataHandleStrategy {
         } else if (eventType == CanalEntry.EventType.UPDATE) {
             List<Map<String, Object>> beforeDataList = createColumnsObj(rowDatasList, "Before");
             List<Map<String, Object>> afterDataList = createColumnsObj(rowDatasList, "After");
-            //redis进行更新hash:先删除后添加
+            //添加事务(redis进行更新hash:先删除后添加)
+            redisTemplate.multi();
             deleteKeysFromHash(beforeDataList);
             saveMap2Hash(afterDataList);
+            redisTemplate.exec();
         } else if (eventType == CanalEntry.EventType.INSERT) {
             List<Map<String, Object>> dataList = createColumnsObj(rowDatasList, "After");
             //redis进行hash保存所有的map

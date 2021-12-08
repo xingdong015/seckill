@@ -55,6 +55,8 @@ public class RedisConfig {
         // 我们为了自己开发方便，一般直接使用 <String, Object>
         RedisTemplate<String, Object> template = new RedisTemplate<String, Object>();
         template.setConnectionFactory(factory);
+        //打开事务支持
+        template.setEnableTransactionSupport(true);
         // Json序列化配置
         Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
         ObjectMapper om = new ObjectMapper();
