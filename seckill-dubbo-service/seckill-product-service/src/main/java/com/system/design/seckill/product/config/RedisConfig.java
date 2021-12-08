@@ -52,9 +52,8 @@ public class RedisConfig {
         return jedisPool;
     }
 
-    @SuppressWarnings("all")
-//    @Primary
-    @Bean
+ 
+    @Bean(name = "redisTemplate")
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
         // 我们为了自己开发方便，一般直接使用 <String, Object>
         RedisTemplate<String, Object> template = new RedisTemplate<String, Object>();

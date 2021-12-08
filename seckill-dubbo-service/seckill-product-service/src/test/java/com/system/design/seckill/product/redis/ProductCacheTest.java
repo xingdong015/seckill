@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.system.design.seckill.SeckillProductServiceApplicationTests;
 import com.system.design.seckill.common.po.Product;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.annotation.Resource;
@@ -16,6 +17,7 @@ import java.util.List;
  */
 public class ProductCacheTest extends SeckillProductServiceApplicationTests {
     @Resource
+    @Qualifier("redisTemplate")
     private RedisTemplate<String, Object> redisTemplate;
 
     @Test
