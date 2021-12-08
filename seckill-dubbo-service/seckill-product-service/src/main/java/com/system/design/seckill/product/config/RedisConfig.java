@@ -12,6 +12,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.stereotype.Component;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -21,6 +22,7 @@ import redis.clients.jedis.JedisPoolConfig;
  * @create: 2021-11-12 12:55
  */
 @Configuration
+@Component
 public class RedisConfig {
     @Value("${spring.redis.host}")
     private String host;
@@ -51,7 +53,7 @@ public class RedisConfig {
     }
 
     @SuppressWarnings("all")
-    @Primary
+//    @Primary
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
         // 我们为了自己开发方便，一般直接使用 <String, Object>
