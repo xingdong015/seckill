@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableList;
 import com.system.design.seckill.common.dto.ProductDto;
 import com.system.design.seckill.product.constant.EsIndexConstant;
 import com.system.design.seckill.product.entity.MyResponse;
+import com.system.design.seckill.product.service.EsProductService;
 import com.system.design.seckill.product.utils.EsUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.ListUtils;
@@ -39,6 +40,7 @@ import org.elasticsearch.search.suggest.term.TermSuggestionBuilder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -53,44 +55,31 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ProductController {
     @Resource
-    private EsUtils esUtils;
-    @Resource
     private RestHighLevelClient restHighLevelClient;
-    private static final String SUGGEST_NAME = "suggest_productName";
+    @Resource
+    private EsProductService esProductService;
 
     /**
      *  @Description: 产品名称的条件输入框  自动补全，根据用户的输入联想到可能的词或者短语
      */
     @GetMapping("/search/{input}")
     public MyResponse inputSuggest(@PathVariable String input){
+        String tableName = "t_product";
+        String fieldName = "product_name";
+        String suggestName = "suggest_productName";
         try {
             // 1、创建search请求
-            SearchRequest searchRequest = new SearchRequest(EsIndexConstant.getIndexName("t_product"));
+            SearchRequest searchRequest = new SearchRequest(EsIndexConstant.getIndexName(tableName));
             // 2、用SearchSourceBuilder来构造查询请求体 ,请仔细查看它的方法，构造各种查询的方法都在这
             SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
             searchSourceBuilder.size(0);
             //2.1做查询建议 //词项建议
             SuggestBuilder suggestBuilder = new SuggestBuilder();
-            TermSuggestionBuilder termSuggestionBuilder = SuggestBuilders.termSuggestion("product_name").text(input);
-            suggestBuilder.addSuggestion(SUGGEST_NAME, termSuggestionBuilder);
+            TermSuggestionBuilder termSuggestionBuilder = SuggestBuilders.termSuggestion(fieldName).text(input);
+            suggestBuilder.addSuggestion(suggestName, termSuggestionBuilder);
             searchSourceBuilder.suggest(suggestBuilder);
             searchRequest.source(searchSourceBuilder);
-            //3.发送请求
-            SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-            //4.处理相应
-            List sugggestList = new ArrayList();
-            if (RestStatus.OK.equals(searchResponse.status())){
-                //获取建议结果
-                Suggest suggest = searchResponse.getSuggest();
-                TermSuggestion termSuggestion = suggest.getSuggestion(SUGGEST_NAME);
-                termSuggestion.getEntries().stream().forEach(entry -> {
-                    log.info("前台输入---input: {}",entry.getText().toString());
-                    entry.getOptions().stream().forEach(option -> {
-                        sugggestList.add(option.getText().toString());
-                        log.info("词项建议---suggest: {}", option.getText().toString());
-                    });
-                });
-            }
+            List sugggestList = esProductService.doSearchRequest(searchRequest, suggestName);
             return MyResponse.success(sugggestList);
         }catch (Exception e){
             e.printStackTrace();
