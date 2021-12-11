@@ -14,6 +14,7 @@ public class BloomFilterUtils {
     public static void main(String[] args) {
         long expectedInsertions = 100000;
         double fpp = 0.00005;
+
         BloomFilter<CharSequence> bloomFilter = BloomFilter.create(Funnels.stringFunnel(Charsets.UTF_8), expectedInsertions, fpp);
         for(int i=0;i<expectedInsertions;i++){
             bloomFilter.put("test"+i);

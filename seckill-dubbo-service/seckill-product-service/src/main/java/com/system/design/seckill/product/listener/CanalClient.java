@@ -46,7 +46,7 @@ public class CanalClient implements ApplicationRunner {
         String destinationExample = destination;
         String subscribePattern = ".*\\..*";
         String strategyName = "redisHandleService";  //"sqlHandleService"    "esHandleService"
-        doListen(destinationExample, subscribePattern, strategyName);
+//        doListen(destinationExample, subscribePattern, strategyName);
     }
 
     private void doListen(String destinationExample, String subscribePattern, String strategyName) {

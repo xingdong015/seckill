@@ -32,8 +32,8 @@ spring:
       write-dates-as-timestamps: false
   redis:
     database: 0
-    host:
-    port: 16379
+    host: 127.0.0.1
+    port: 6379
     password:
     jedis:
       pool:

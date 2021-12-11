@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * @description:
@@ -22,11 +23,16 @@ public class ProductBaseSearchTest extends SeckillProductServiceApplicationTests
     @Resource
     private ProductService productService;
 
+    public static void main(String[] args) {
+        BigDecimal bigDecimal = new BigDecimal(8550);
+        System.out.println(bigDecimal);
+    }
+
     @Test
     void test_insert(){
         Product build = Product.builder()
                 .id(1L)
-                .price(new BigDecimal(8550))
+                .price(new BigDecimal(8550).setScale(5, RoundingMode.DOWN))
                 .productName("xiaomi-pro")
                 .productDesc("big computer")
                 .build();

@@ -22,7 +22,6 @@ import redis.clients.jedis.JedisPoolConfig;
  * @create: 2021-11-12 12:55
  */
 @Configuration
-@Component
 public class RedisConfig {
     @Value("${spring.redis.host}")
     private String host;

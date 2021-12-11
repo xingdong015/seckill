@@ -10,6 +10,8 @@ import org.apache.ibatis.type.JdbcType;
 import org.springframework.data.annotation.Id;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.util.Date;
 
 import static com.baomidou.mybatisplus.annotation.FieldFill.INSERT;
@@ -43,5 +45,16 @@ public class Product {
     @TableField(value = "update_time", fill = INSERT_UPDATE, jdbcType = JdbcType.BIGINT)
     @JsonProperty(value = "update_time")
     private Long updateTime;
+//
+//    public static void main(String[] args) {
+//        BigDecimal bigDecimal = new BigDecimal(112.334121).setScale(1, RoundingMode.DOWN);
+//        System.out.println(bigDecimal.toString());
+//
+//        BigInteger bigInteger = new BigInteger("112.3341209999999961155481287278234958648681640625");
+//
+//
+//    }
+
+
 
 }
