@@ -17,7 +17,6 @@
     <modules>
         <module>seckill-order-service</module>
         <module>seckill-business-service</module>
-        <module>seckill-stock-service</module>
         <module>seckill-pay-service</module>
         <module>seckill-product-service</module>
         <module>seckill-account-service</module>

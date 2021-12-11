@@ -1,2 +1,8 @@
-1. account模块: 用户成员管理
-2. pay模块
+https://go8vpi.yuque.com/chengzheng-02btl/ebl8br/gf3wim
+1. account模块: 用户成员管理  @贾凯
+2. pay模块  @贾凯
+3. product模块优化----> 参考 gupaoedu-vip-mall  @贾凯
+4. order模块  @程征
+5. business模块包括seckill表的维护  @程征
+6. gateway模块 @徒康正
+7. graphql  @程征波
