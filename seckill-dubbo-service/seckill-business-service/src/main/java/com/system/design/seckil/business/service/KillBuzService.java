@@ -125,7 +125,7 @@ public class KillBuzService implements IKillBuzService {
         urlCheck(killId, userId, md5);
         //重复秒杀校验、一个用户只允许秒杀一次
         repeatKillCheck(killId, userId);
-        //redis中扣减库存
+        //redis中扣减库存 优化 TODO 、缓存script脚本到redis中
         decreaseCacheStock(killId);
         //用户已经秒杀过标记
         redisTemplate.opsForSet().add(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userId);
