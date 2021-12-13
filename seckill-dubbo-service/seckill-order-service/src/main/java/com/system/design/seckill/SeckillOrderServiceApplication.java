@@ -1,6 +1,6 @@
 package com.system.design.seckill;
 
-import com.system.design.seckill.common.config.MyBatisMapperScannerConfig;
+import com.system.design.seckill.order.config.MyBatisMapperScannerConfig;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

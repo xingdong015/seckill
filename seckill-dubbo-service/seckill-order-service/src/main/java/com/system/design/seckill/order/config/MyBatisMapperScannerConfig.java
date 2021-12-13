@@ -1,4 +1,4 @@
-package com.system.design.seckill.common.config;
+package com.system.design.seckill.order.config;
 
 
 import com.baomidou.mybatisplus.annotation.DbType;
