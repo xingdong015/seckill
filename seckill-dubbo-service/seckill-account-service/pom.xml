@@ -9,7 +9,7 @@
     </parent>
 
     <groupId>com.system.design.seckil</groupId>
-    <artifactId>seckill-business-service</artifactId>
+    <artifactId>seckill-account-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>seckill-account-service</name>
     <properties>
