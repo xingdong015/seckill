@@ -7,22 +7,28 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.common.base.Preconditions;
 import com.system.design.seckill.common.api.IProductService;
 import com.system.design.seckill.common.po.Product;
 import com.system.design.seckill.common.dto.ProductDto;
+import com.system.design.seckill.product.config.RedisConfig;
 import com.system.design.seckill.product.mapper.ProductMapper;
+import com.system.design.seckill.product.utils.BloomFilterUtils;
 import com.system.design.seckill.product.utils.CacheKey;
+import com.system.design.seckill.product.utils.RedisUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
+import redis.clients.jedis.Jedis;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * @description:
@@ -35,22 +41,54 @@ public class ProductService implements IProductService {
     private ProductMapper productMapper;
     @Resource
     private RedisTemplate redisTemplate;
+    @Resource
+    private RedisConfig redisConfig;
+    private static final int EXPIRE_TIME = 5000;
+    private static final int SLEEP_VALUE = 50;
 
     /**
-     * @Description: 缓存中获取产品信息
-     * @param: productId
-     * @return com.system.design.seckill.common.po.Product
+     * @Description: 获取产品详情：
+     * 1.bloomFilter前置过滤productId；
+     * 2.缓存中不存在详情时，互斥锁从mysql获取填充redis，返回详情
      * @author jiakai
      * @date 2021/11/19 16:32
      */
     public Product getProductFromCache(long productId) {
-        String key = CacheKey.getProductHash(String.valueOf(productId));
-        if (CollectionUtil.isNotEmpty(redisTemplate.opsForHash().entries(key))){
-            return (Product) redisTemplate.opsForHash().entries(key);
+        // 判断是否为合法id
+        boolean mightContain = BloomFilterUtils.mightContain(String.valueOf(productId));
+        if (!mightContain){
+            return null;
         }
-        //缓存穿透：bloom过滤器   （缓存一致性：先更新db,再删缓存）
-        Product productInfo = getProductInfo(productId);
-        redisTemplate.opsForHash().putAll(CacheKey.getProductHash(String.valueOf(productId)), BeanUtil.beanToMap(productInfo));
+        // 从缓存中获取数据
+        String key = CacheKey.getProductHash(String.valueOf(productId));
+        Product productInfo = (Product) redisTemplate.opsForHash().entries(key);
+        if (productInfo == null) {
+            productInfo = getProductAndSetCache(productId, key, productInfo);
+        }
+        return productInfo;
+    }
+
+    private Product getProductAndSetCache(long productId, String key, Product productInfo) {
+        Jedis jedis = null;
+        String value = UUID.randomUUID().toString();
+        try {
+            jedis = redisConfig.jedisPoolFactory().getResource();
+            boolean tryGetDistributedLock = RedisUtils.tryGetDistributedLock(jedis, key, value, EXPIRE_TIME);
+            if (tryGetDistributedLock) {
+                productInfo = getProductInfo(productId);
+                redisTemplate.opsForHash().putAll(CacheKey.getProductHash(String.valueOf(productId)), BeanUtil.beanToMap(productInfo));
+            } else {
+                Thread.sleep(SLEEP_VALUE);
+                getProductFromCache(productId);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (jedis != null) {
+                RedisUtils.releaseDistributedLock(jedis, key, value);
+                jedis.close();
+            }
+        }
         return productInfo;
     }
 

@@ -3,6 +3,7 @@ package com.system.design.seckill.product.listener;
 import com.alibaba.otter.canal.client.CanalConnector;
 import com.alibaba.otter.canal.client.CanalConnectors;
 import com.alibaba.otter.canal.protocol.Message;
+import com.system.design.seckill.product.config.RedisConfig;
 import com.system.design.seckill.product.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,9 +35,9 @@ public class CanalClient implements ApplicationRunner {
     @Value("${canal.password}")
     private String password;
     @Resource
-    private CanalDataHandleFactory canalDataHandleFactory;
+    private RedisConfig redisConfig;
     @Resource
-    private RedisUtils redisUtils;
+    private CanalDataHandleFactory canalDataHandleFactory;
     private static final int BATCH_SIZE = 1000;
     private static final int SLEEP_VALUE = 2000;
     private static final int EXPIRE_TIME = 20000;
@@ -66,11 +67,12 @@ public class CanalClient implements ApplicationRunner {
                 if (batchId == -1 || size == 0) {
                     Thread.sleep(SLEEP_VALUE);
                 } else {
-                    Jedis jedis = redisUtils.getJedis();
+                    Jedis jedis = null;
                     String key = "key:batchId:" + batchId;
                     String value = UUID.randomUUID().toString();
                     try {
-                        boolean tryGetDistributedLock = redisUtils.tryGetDistributedLock(jedis, key, value, EXPIRE_TIME);
+                        jedis = redisConfig.jedisPoolFactory().getResource();
+                        boolean tryGetDistributedLock = RedisUtils.tryGetDistributedLock(jedis, key, value, EXPIRE_TIME);
                         if (tryGetDistributedLock) {
                             //工厂加策略模式，调用异步方法处理
                             canalDataHandleFactory.getCanalDataHandleStrategy(strategyName).CanalDataHandle(message.getEntries());
@@ -81,7 +83,10 @@ public class CanalClient implements ApplicationRunner {
                     } catch (Exception e) {
                         e.printStackTrace();
                     } finally {
-                        redisUtils.releaseDistributedLock(jedis, key, value);
+                        if (jedis != null) {
+                            RedisUtils.releaseDistributedLock(jedis, key, value);
+                            jedis.close();
+                        }
                     }
                 }
             }
