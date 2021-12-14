@@ -1,4 +1,4 @@
-package com.system.design.seckill.entity;
+package com.system.design.seckill.account.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

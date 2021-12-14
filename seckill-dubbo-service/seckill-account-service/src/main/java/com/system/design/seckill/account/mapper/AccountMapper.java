@@ -1,8 +1,7 @@
-package com.system.design.seckill.mapper;
+package com.system.design.seckill.account.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.system.design.seckill.common.po.Account;
-import com.system.design.seckill.common.po.Product;
 
 /**
  * @description:

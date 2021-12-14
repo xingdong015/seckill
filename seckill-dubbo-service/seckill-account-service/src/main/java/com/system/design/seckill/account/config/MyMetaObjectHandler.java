@@ -1,4 +1,4 @@
-package com.system.design.seckill.config;
+package com.system.design.seckill.account.config;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;

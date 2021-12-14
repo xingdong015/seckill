@@ -1,7 +1,7 @@
-package com.system.design.seckill.controller;
+package com.system.design.seckill.account.controller;
 
-import com.system.design.seckill.entity.MyResponse;
-import com.system.design.seckill.service.AccountService;
+import com.system.design.seckill.account.entity.MyResponse;
+import com.system.design.seckill.account.service.AccountService;
 import com.system.design.seckill.common.dto.AccountDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
