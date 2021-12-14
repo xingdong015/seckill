@@ -18,7 +18,7 @@ import static com.baomidou.mybatisplus.annotation.FieldFill.INSERT;
 @NoArgsConstructor
 @Builder
 public class AccountDto {
-    private Long currentPage;
+    private Long currentPage = 1L;
     private Long pageSize = 10L;
     private Long accountId;
     private String phone;

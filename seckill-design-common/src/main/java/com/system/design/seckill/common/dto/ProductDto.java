@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 public class ProductDto {
-    private Long currentPage;
+    private Long currentPage = 1L;
     private Long pageSize = 10L;
     private Long id;
     private String keyword;

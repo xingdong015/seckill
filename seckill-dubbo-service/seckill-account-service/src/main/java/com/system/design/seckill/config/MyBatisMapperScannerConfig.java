@@ -1,4 +1,4 @@
-package com.system.design.seckill.account.config;
+package com.system.design.seckill.config;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;

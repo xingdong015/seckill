@@ -1,18 +1,18 @@
-package com.system.design.seckill.account.service;
+package com.system.design.seckill.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.system.design.seckill.account.mapper.AccountMapper;
+import com.system.design.seckill.mapper.AccountMapper;
 import com.system.design.seckill.common.api.IAccountService;
 import com.system.design.seckill.common.dto.AccountDto;
 import com.system.design.seckill.common.po.Account;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.sql.Wrapper;
 import java.util.List;
 
 /**
@@ -20,7 +20,7 @@ import java.util.List;
  * @author: 贾凯
  * @create: 2021-11-08 18:33
  */
-@DubboService(version = "1.0.0")
+@Service
 public class AccountService implements IAccountService {
     @Autowired
     private AccountMapper accountMapper;

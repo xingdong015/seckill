@@ -1,4 +1,4 @@
-package com.system.design.seckill.account.mapper;
+package com.system.design.seckill.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.system.design.seckill.common.po.Account;
