@@ -12,9 +12,9 @@
     <artifactId>seckill-account-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>seckill-account-service</name>
-    <properties>
-        <java.version>1.8</java.version>
-    </properties>
+<!--    <properties>-->
+<!--        <java.version>1.8</java.version>-->
+<!--    </properties>-->
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -28,13 +28,13 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+<!--    <build>-->
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </build>-->
 
 </project>
