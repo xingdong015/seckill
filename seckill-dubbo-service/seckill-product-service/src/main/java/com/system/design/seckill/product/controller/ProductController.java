@@ -1,13 +1,16 @@
 package com.system.design.seckill.product.controller;
 
+import cn.hutool.core.map.MapUtil;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.system.design.seckill.common.dto.ProductDto;
 import com.system.design.seckill.product.constant.EsIndexConstant;
 import com.system.design.seckill.product.entity.MyResponse;
 import com.system.design.seckill.product.service.EsProductService;
 import com.system.design.seckill.product.utils.EsUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.search.SearchRequest;
@@ -66,20 +69,14 @@ public class ProductController {
     public MyResponse inputSuggest(@PathVariable String input){
         String tableName = "t_product";
         String fieldName = "product_name";
-        String suggestName = "suggest_productName";
         try {
             // 1、创建search请求
-            SearchRequest searchRequest = new SearchRequest(EsIndexConstant.getIndexName(tableName));
-            // 2、用SearchSourceBuilder来构造查询请求体 ,请仔细查看它的方法，构造各种查询的方法都在这
-            SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-            searchSourceBuilder.size(0);
-            //2.1做查询建议 //词项建议
-            SuggestBuilder suggestBuilder = new SuggestBuilder();
             TermSuggestionBuilder termSuggestionBuilder = SuggestBuilders.termSuggestion(fieldName).text(input);
-            suggestBuilder.addSuggestion(suggestName, termSuggestionBuilder);
-            searchSourceBuilder.suggest(suggestBuilder);
-            searchRequest.source(searchSourceBuilder);
-            List sugggestList = esProductService.doSearchRequest(searchRequest, suggestName);
+            SuggestBuilder suggestBuilder = new SuggestBuilder();
+            suggestBuilder.addSuggestion(fieldName, termSuggestionBuilder);
+            SearchRequest searchRequest = esProductService.createSuggestSearchRequest(input, tableName, fieldName, suggestBuilder);
+            // 2、获取提示内容
+            List sugggestList = esProductService.doSuggestRequest(searchRequest, fieldName);
             return MyResponse.success(sugggestList);
         }catch (Exception e){
             e.printStackTrace();
@@ -94,56 +91,36 @@ public class ProductController {
     @PostMapping("/search")
     public MyResponse searchComplex(@RequestBody ProductDto productDto){
         try {
-            //1.创建searchrequest请求
-            SearchRequest searchRequest = new SearchRequest(EsIndexConstant.getIndexName("t_product"));
-            //2.用searchsourcebuilder构建查询请求体，所有条件都在这里封装
-            SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-            //2.1检索条件
-            BoolQueryBuilder boolQuery = getBoolQueryBuilder(productDto);
-            //2.2列举返回的字段和不返回的字段
-            ImmutableList<String> includes = ImmutableList.of("id","product_name","product_desc");
-            ImmutableList<String> excludes = ImmutableList.of("create_time","update_time");
-            //2.3高亮设置:红色显示产品名称
-            HighlightBuilder.Field productNameField = new HighlightBuilder.Field("product_name").preTags("<span color='red'>").postTags("</span>");
-            HighlightBuilder.Field productDescField = new HighlightBuilder.Field("product_desc").preTags("<strong>").postTags("/strong");
-            HighlightBuilder highlightBuilder = new HighlightBuilder().field(productNameField).field(productDescField);
-            //2.4填充所有条件
-            searchSourceBuilder
-                    .query(boolQuery)
-                    .size(productDto.getPageSize().intValue())
-                    .from(productDto.getPageSize().intValue())
-                    .sort("create_time", SortOrder.DESC)
-                    .fetchSource(includes.toArray(new String[0]),excludes.toArray(new String[0]))
-                    .highlighter(highlightBuilder);
-            searchRequest.source(searchSourceBuilder);
-            //3.发送请求
-            SearchResponse response = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-            //4.处理响应
-            if (RestStatus.OK.equals(response.status())){
-                SearchHits hits = response.getHits();
-                //4.1获取分页信息：命中的总数据条数，总页数
-                long totalCount = hits.getTotalHits().value;
-                int totalPage = (int) Math.ceil(totalCount / productDto.getPageSize().intValue());
-                //4.2处理搜索命中的文档：取高亮结果进行SourceAsMap回填
-                SearchHit[] searchHits = hits.getHits();
-                for (SearchHit searchHit : searchHits) {
-                    Map<String, Object> sourceAsMap = searchHit.getSourceAsMap();
-                    log.info("====== 检索结果：{}", JSON.toJSONString(sourceAsMap));
-                    createHightlightContent(sourceAsMap, searchHit.getHighlightFields(), "product_name");
-                    createHightlightContent(sourceAsMap, searchHit.getHighlightFields(), "product_desc");
-                }
-
-                //5.组装返回值
-                HashMap<String, Object> resMap = new HashMap<>();
-                resMap.put("totalCount", totalCount);
-                resMap.put("totalPage", totalPage);
-                resMap.put("data", Arrays.stream(searchHits).map(SearchHit::getSourceAsMap).collect(Collectors.toList()));
-                return MyResponse.success(resMap);
-            }
+            //查询，获取结果
+            SearchResponse response = getSearchResponse(productDto);
+            //处理结果
+            ArrayList<String> replaceHightlightFields = Lists.newArrayList("product_name", "product_desc");
+            Integer size = productDto.getPageSize().intValue();
+            HashMap<String, Object> resMap = esProductService.createResultMap(response, replaceHightlightFields, size);
+            return MyResponse.success(resMap);
         }catch (Exception e){
             e.printStackTrace();
+            return MyResponse.error(Collections.emptyList());
         }
-        return MyResponse.error(Collections.emptyList());
+    }
+
+    private SearchResponse getSearchResponse(@RequestBody ProductDto productDto) throws IOException {
+        String indexName = EsIndexConstant.getIndexName("t_product");
+        //2.1检索条件
+        BoolQueryBuilder boolQuery = getBoolQueryBuilder(productDto);
+        //2.2列举返回的字段和不返回的字段
+        ImmutableList<String> includes = ImmutableList.of("id","product_name","product_desc");
+        ImmutableList<String> excludes = ImmutableList.of("create_time","update_time");
+        //2.3高亮设置:红色显示产品名称
+        HighlightBuilder.Field productNameField = new HighlightBuilder.Field("product_name").preTags("<span color='red'>").postTags("</span>");
+        HighlightBuilder.Field productDescField = new HighlightBuilder.Field("product_desc").preTags("<strong>").postTags("/strong");
+        HighlightBuilder highlightBuilder = new HighlightBuilder().field(productNameField).field(productDescField);
+        Integer size = productDto.getPageSize().intValue();
+        Integer from = (productDto.getCurrentPage().intValue() - 1) * size;
+        LinkedHashMap<String, SortOrder> sortOrderMap = new LinkedHashMap<>();
+        sortOrderMap.put("create_time", SortOrder.DESC);
+
+        return esProductService.getSearchResponse(indexName, boolQuery, includes, excludes, highlightBuilder, size, from, sortOrderMap);
     }
 
 
@@ -235,20 +212,6 @@ public class ProductController {
         }
         return boolQuery;
     }
-
-    //回填，替换为高亮显示字段的内容
-    private void createHightlightContent(Map<String, Object> sourceAsMap, Map<String, HighlightField> highlightFields, String field) {
-        HighlightField productNameHighlight = highlightFields.get(field);
-        if (productNameHighlight != null){
-            Text[] fragments = productNameHighlight.fragments();
-            StringBuilder stringBuilder = new StringBuilder();
-            for (Text text : fragments) {
-                stringBuilder.append(text.toString());
-            }
-            sourceAsMap.put(field,stringBuilder.toString());
-        }
-    }
-
 
 
 }

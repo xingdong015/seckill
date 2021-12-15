@@ -40,34 +40,32 @@ import java.util.stream.Collectors;
  * @create: 2021-03-18 15:11
  */
 @Slf4j
-@Component
 public class EsUtils {
-    @Autowired
-    RestHighLevelClient restHighLevelClient;
+
     private static final int TIMEOUT = 10;
 
     //创建索引
-    public CreateIndexResponse createIndex(String indexName) throws IOException {
+    public static CreateIndexResponse createIndex(RestHighLevelClient restHighLevelClient, String indexName) throws IOException {
         CreateIndexRequest createIndexRequest = new CreateIndexRequest(indexName);
         return restHighLevelClient.indices().create(createIndexRequest, RequestOptions.DEFAULT);
     }
 
     //判断索引是否存在
-    public boolean existIndex(String indexName) throws IOException {
+    public static boolean existIndex(RestHighLevelClient restHighLevelClient, String indexName) throws IOException {
         GetIndexRequest getIndexRequest = new GetIndexRequest(indexName);
         return restHighLevelClient.indices().exists(getIndexRequest, RequestOptions.DEFAULT);
     }
 
     //删除索引
-    public boolean deleteIndex(String indexName) throws IOException {
+    public static boolean deleteIndex(RestHighLevelClient restHighLevelClient, String indexName) throws IOException {
         DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest(indexName);
         AcknowledgedResponse delete = restHighLevelClient.indices().delete(deleteIndexRequest, RequestOptions.DEFAULT);
         return delete.isAcknowledged();
     }
 
-    public void createIndex(String idxName,String idxSQL){
+    public static void createIndex(RestHighLevelClient restHighLevelClient, String idxName,String idxSQL){
         try {
-            if (this.existIndex(idxName)) {
+            if (existIndex(restHighLevelClient, idxName)) {
                 log.error(" idxName={} 已经存在,idxSql={}",idxName,idxSQL);
                 return;
             }
@@ -90,7 +88,7 @@ public class EsUtils {
         }
     }
 
-    public void insertOrUpdateOne(String idxName, ElasticEntity entity) {
+    public static void insertOrUpdateOne(RestHighLevelClient restHighLevelClient, String idxName, ElasticEntity entity) {
         IndexRequest request = new IndexRequest(idxName);
         request.id(entity.getId());
         request.source(JSON.toJSONString(entity.getData()), XContentType.JSON);
@@ -104,7 +102,7 @@ public class EsUtils {
 
     /** 批量插入数据
      */
-    public void insertBatch(String idxName, List<ElasticEntity> list) {
+    public static void insertBatch(RestHighLevelClient restHighLevelClient, String idxName, List<ElasticEntity> list) {
         BulkRequest request = new BulkRequest();
         list.forEach(item -> request.add(new IndexRequest(idxName).id(item.getId())
                 .source(JSON.toJSONString(item.getData()), XContentType.JSON)));
@@ -117,7 +115,7 @@ public class EsUtils {
 
     /** 批量删除
      */
-    public <T> void deleteBatch(String idxName, Collection<T> idList) {
+    public static <T> void deleteBatch(RestHighLevelClient restHighLevelClient, String idxName, Collection<T> idList) {
         BulkRequest request = new BulkRequest();
         idList.forEach(item -> request.add(new DeleteRequest(idxName, item.toString())));
         try {
@@ -128,7 +126,7 @@ public class EsUtils {
     }
 
     //分页检索
-    public Optional<Object> searchSimple(String tableName, QueryBuilder queryBuilder, Integer page, Integer size) throws Exception {
+    public static Optional<Object> searchSimple(RestHighLevelClient restHighLevelClient, String tableName, QueryBuilder queryBuilder, Integer page, Integer size) throws Exception {
         //todo 抽象 包装一个统一的response
         SearchRequest searchRequest = new SearchRequest(tableName);
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder().trackTotalHits(true);
@@ -146,7 +144,7 @@ public class EsUtils {
     }
 
     //分页检索
-    public Map search(String tableName, QueryBuilder queryBuilder, Integer page, Integer size, String sortField, String... highlightFields) throws Exception {
+    public static Map search(RestHighLevelClient restHighLevelClient, String tableName, QueryBuilder queryBuilder, Integer page, Integer size, String sortField, String... highlightFields) throws Exception {
         //todo 抽象 包装一个统一的response
         SearchRequest searchRequest = new SearchRequest(tableName);
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder().trackTotalHits(true);
@@ -178,7 +176,7 @@ public class EsUtils {
 
 
     //默认每次抓取10条
-    public <T> List<T> search(String idxName, SearchSourceBuilder builder, Class<T> c) {
+    public static <T> List<T> search(RestHighLevelClient restHighLevelClient, String idxName, SearchSourceBuilder builder, Class<T> c) {
         SearchRequest request = new SearchRequest(idxName);
         request.source(builder);
         try {
@@ -195,7 +193,7 @@ public class EsUtils {
     }
 
 
-    public void deleteByQuery(String idxName, QueryBuilder builder) {
+    public static void deleteByQuery(RestHighLevelClient restHighLevelClient, String idxName, QueryBuilder builder) {
         DeleteByQueryRequest request = new DeleteByQueryRequest(idxName);
         request.setQuery(builder);
         //设置批量操作数量,最大为10000
