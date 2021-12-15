@@ -8,8 +8,8 @@ import com.system.design.seckill.product.entity.ElasticEntity;
 import com.system.design.seckill.product.listener.CanalDataHandleStrategy;
 import com.system.design.seckill.product.utils.EsUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -25,9 +25,8 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component(value = "esHandleService")
 public class ESHandleService implements CanalDataHandleStrategy {
-
     @Resource
-    private EsUtils esUtils;
+    private RestHighLevelClient restHighLevelClient;
 
     @Override
     public void CanalDataHandle(List<CanalEntry.Entry> entrys) {
@@ -53,7 +52,7 @@ public class ESHandleService implements CanalDataHandleStrategy {
             //自动创建index
             if(eventType == CanalEntry.EventType.CREATE) {
                 String idxMapper = createColumnsMapper(rowChange);
-                esUtils.createIndex(tableName, idxMapper);
+                EsUtils.createIndex(restHighLevelClient, tableName, idxMapper);
             }
         } else {
             // dml
@@ -61,17 +60,17 @@ public class ESHandleService implements CanalDataHandleStrategy {
             if(eventType == CanalEntry.EventType.DELETE) {
                 elasticEntities = createColumnsObj(rowDatasList, "Before");
                 //调用es接口进行删除
-                esUtils.deleteBatch(EsIndexConstant.getIndexName(tableName), elasticEntities.stream().map(ElasticEntity::getId).collect(Collectors.toList()));
+                EsUtils.deleteBatch(restHighLevelClient, EsIndexConstant.getIndexName(tableName), elasticEntities.stream().map(ElasticEntity::getId).collect(Collectors.toList()));
             } else if(eventType == CanalEntry.EventType.UPDATE) {
                 List<ElasticEntity> elasticEntitiesBefore = createColumnsObj(rowDatasList, "Before");
                 elasticEntities = createColumnsObj(rowDatasList, "After");
                 //调用es接口进行更新:先删除后添加
-                esUtils.deleteBatch(EsIndexConstant.getIndexName(tableName), elasticEntitiesBefore.stream().map(ElasticEntity::getId).collect(Collectors.toList()));
-                esUtils.insertBatch(EsIndexConstant.getIndexName(tableName), elasticEntities);
+                EsUtils.deleteBatch(restHighLevelClient, EsIndexConstant.getIndexName(tableName), elasticEntitiesBefore.stream().map(ElasticEntity::getId).collect(Collectors.toList()));
+                EsUtils.insertBatch(restHighLevelClient, EsIndexConstant.getIndexName(tableName), elasticEntities);
             } else if(eventType == CanalEntry.EventType.INSERT) {
                 elasticEntities = createColumnsObj(rowDatasList, "After");
                 //调用es接口进行保存
-                esUtils.insertBatch(EsIndexConstant.getIndexName(tableName), elasticEntities);
+                EsUtils.insertBatch(restHighLevelClient, EsIndexConstant.getIndexName(tableName), elasticEntities);
             }
             log.info("### {}, elasticEntities:{} ###", eventType, JSON.toJSONString(elasticEntities));
         }
