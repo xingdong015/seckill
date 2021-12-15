@@ -42,7 +42,7 @@
 
 <div>
     <form action=""  method="">
-        <img border="1" src="/images/product.jpg"  width="600" height="500" id="productPictureUrl">
+        <img border="1" src="img/product.jpg" width="600" height="500" id="productPictureUrl">
         <p id="productName"></p>
         <br>
 
@@ -93,7 +93,7 @@
     function queryActivity(productId){
 
          $.ajax({
-            url: "http://localhost:7081/activity/query?productId="+productId,
+            url: "http://localhost:8089/activity/query?productId="+productId,
             method: "post",
             xhrFields: { withCredentials: true }
          }).done(function(data,status,xhr) {
