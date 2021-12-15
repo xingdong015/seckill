@@ -17,5 +17,13 @@ spring:
       # Nacos 服务发现与注册配置
       discovery:
         server-addr: 127.0.0.1:8848
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+    mode: HTML5
 server:
   port: 8089
