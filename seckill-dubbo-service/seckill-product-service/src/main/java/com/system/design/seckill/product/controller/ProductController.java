@@ -104,7 +104,7 @@ public class ProductController {
         }
     }
 
-    private SearchResponse getSearchResponse(@RequestBody ProductDto productDto) throws IOException {
+    private SearchResponse getSearchResponse(ProductDto productDto) throws IOException {
         String indexName = EsIndexConstant.getIndexName("t_product");
         //2.1检索条件
         BoolQueryBuilder boolQuery = getBoolQueryBuilder(productDto);
@@ -169,7 +169,7 @@ public class ProductController {
 
 
     //封装检索条件
-    private BoolQueryBuilder getBoolQueryBuilder(@RequestBody ProductDto productDto) {
+    private BoolQueryBuilder getBoolQueryBuilder(ProductDto productDto) {
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
         if (productDto != null){
             if (StringUtils.isNotEmpty(productDto.getKeyword())){
