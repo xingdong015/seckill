@@ -64,31 +64,8 @@
 
     $(document).ready(function(){
       var productId = getParameterByName('productId');
-      initData(productId);
+        queryActivity(productId);
     });
-
-    function initData(productId){
-       $.post("/mock/product",
-          {
-            'productId':productId
-          },
-          function(data,status){
-            if(!status){
-              alert("数据加载异常");
-              return;
-            }
-
-            if(data.tag == 1){
-              $("#price").append(data.productPrice);
-              $("#productPictureUrl").attr("src",data.productPictureUrl);
-              $("#productName").html(data.productName);
-              return ;
-            }
-
-            queryActivity(productId);
-
-          },'json');
-    }
 
     function queryActivity(productId){
 

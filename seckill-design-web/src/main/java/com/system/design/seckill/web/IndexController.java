@@ -1,11 +1,8 @@
 package com.system.design.seckill.web;
 
-import com.system.design.seckill.common.api.IKillBuzService;
-import com.system.design.seckill.common.dto.SeckillDto;
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @author chengzhengzheng
@@ -15,7 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class IndexController {
 
     @RequestMapping("/index")
+    @ResponseBody
     public String index() {
+        //1. 下发所有活动中的 product
+        //2. 端上根据倒计时开始执行秒杀活动
+        //3.
         return "product";
     }
 
