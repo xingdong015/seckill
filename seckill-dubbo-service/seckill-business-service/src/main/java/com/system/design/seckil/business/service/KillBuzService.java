@@ -7,10 +7,10 @@ import com.system.design.seckill.common.api.IKillBuzService;
 import com.system.design.seckill.common.bean.Exposer;
 import com.system.design.seckill.common.bean.RocketMqMessageBean;
 import com.system.design.seckill.common.dto.SeckillDto;
-import com.system.design.seckill.common.po.Account;
 import com.system.design.seckill.common.exception.NoStockException;
 import com.system.design.seckill.common.exception.RepeatKillException;
 import com.system.design.seckill.common.exception.SeckillCloseException;
+import com.system.design.seckill.common.po.Account;
 import com.system.design.seckill.common.utils.CacheKey;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
  * @author chengzhengzheng
  * @date 2021/9/19
  */
-@DubboService
+@DubboService(protocol = "dubbo", version = "1.0.0")
 @Slf4j
 public class KillBuzService implements IKillBuzService {
     @Resource

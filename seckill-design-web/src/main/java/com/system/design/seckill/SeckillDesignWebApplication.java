@@ -10,4 +10,6 @@ public class SeckillDesignWebApplication {
         SpringApplication.run(SeckillDesignWebApplication.class, args);
     }
 
+
+
 }
