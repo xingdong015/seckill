@@ -12,6 +12,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @date 2021/12/30
  * <p>
  * 提供一种内存线程安全的buffer队列
+ *
+ * 参考文章: https://segmentfault.com/a/1190000021962190
  */
 public class MemoryBufferPool<K, V> {
 
@@ -25,6 +27,7 @@ public class MemoryBufferPool<K, V> {
 
         rwl.readLock().lock();
 
+
         try {
             if (!MEMORY_BUFFER.containsKey(key)) {
                 //开始写之前先释放读锁
@@ -37,11 +40,11 @@ public class MemoryBufferPool<K, V> {
                         queue = new ConcurrentLinkedDeque<>();
                         MEMORY_BUFFER.put(key, queue);
                     }
+                    //通过在释放写锁之前获取读锁来进行锁的降级
+                    rwl.readLock().lock();
                 } finally {
                     rwl.writeLock().unlock();
                 }
-                //这里写完之后需要降级为读锁、否则
-                rwl.readLock().lock();
             }
             //这里没有加写锁的原因
             MEMORY_BUFFER.get(key).offer(value);
