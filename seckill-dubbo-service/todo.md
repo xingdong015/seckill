@@ -8,3 +8,4 @@ https://go8vpi.yuque.com/chengzheng-02btl/ebl8br/gf3wim
 7. graphql  @程征波
 8. 单元测试用例、模拟秒杀、压测  @程征波
 9. 环境搭建 rocketmq/redis/nacos/mysql等环境搭建  @樊科
+10. hbase-rowkey设计以及引入hbase
