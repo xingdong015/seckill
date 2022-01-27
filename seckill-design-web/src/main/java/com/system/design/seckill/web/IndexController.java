@@ -1,5 +1,6 @@
 package com.system.design.seckill.web;
 
+import com.alibaba.fastjson.JSON;
 import com.system.design.seckill.common.api.IAccountService;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Controller;
@@ -26,7 +27,7 @@ public class IndexController {
         //2. 端上根据倒计时开始执行秒杀活动
         //3.
 //        return JSON.toJSONString(killBuzService.getSeckillList());
-        return "";
+        return JSON.toJSONString(accountService.findById(1));
     }
 
 

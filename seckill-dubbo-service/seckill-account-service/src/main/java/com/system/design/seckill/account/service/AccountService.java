@@ -50,7 +50,7 @@ public class AccountService implements IAccountService {
         return accountMapper.selectList(null);
     }
 
-    @Override
+//    @Override
     public IPage selectByPage(AccountDto accountDto) {
         Page<Account> objectPage = new Page<>();
         LambdaQueryWrapper<Account> lambdaQueryWrapper = Wrappers.lambdaQuery();

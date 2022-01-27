@@ -21,5 +21,5 @@ public interface IAccountService {
 
     List<Account> getAll();
 
-    IPage selectByPage(AccountDto accountDto);
+//    IPage selectByPage(AccountDto accountDto);
 }
