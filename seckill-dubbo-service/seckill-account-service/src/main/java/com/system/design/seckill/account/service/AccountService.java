@@ -9,6 +9,7 @@ import com.system.design.seckill.common.api.IAccountService;
 import com.system.design.seckill.common.dto.AccountDto;
 import com.system.design.seckill.common.po.Account;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ import java.util.List;
  * @author: 贾凯
  * @create: 2021-11-08 18:33
  */
-@Service
+@DubboService(protocol = "dubbo", version = "1.0.0")
 public class AccountService implements IAccountService {
     @Autowired
     private AccountMapper accountMapper;

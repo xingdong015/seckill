@@ -1,4 +1,4 @@
-package com.system.design.seckil.business.service;
+package com.system.design.seckill.business.service;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -14,6 +14,7 @@ import com.system.design.seckill.common.po.Account;
 import com.system.design.seckill.common.utils.CacheKey;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.apache.rocketmq.client.producer.SendCallback;
 import org.apache.rocketmq.client.producer.SendResult;
@@ -50,7 +51,7 @@ public class KillBuzService implements IKillBuzService {
     @Resource
     private RocketMQTemplate rocketMQTemplate;
 
-    @Resource
+//    @DubboReference
     private IAccountService accountService;
 
     @Value("${kill.url.salt}")

@@ -1,0 +1,3 @@
+DubboReference 注解的引用可以参考 ReferenceAnnotationBeanPostProcessor ，此类的父类AbstractAnnotationBeanPostProcessor提供了通用的注解类后置处理器。
+
+解析最终会走到ReferenceConfig
