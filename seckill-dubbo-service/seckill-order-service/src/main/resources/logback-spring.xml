@@ -31,7 +31,7 @@
 
     <!--定义一个将日志输出到文件的appender，名称为FILE_LOG -->
     <appender name="FILE_LOG" class="ch.qos.logback.core.FileAppender">
-        <file>/Users/chengzheng/logs/seckill.log</file>
+        <file>./logs/seckill.log</file>
         <append>true</append>
         <encoder>
             <pattern>%date [%thread %line] %level  %msg  %logger{10}%n</pattern>

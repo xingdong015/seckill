@@ -36,14 +36,14 @@ dubbo:
   # dubbo.cloud 配置项，Spring Cloud Alibaba Dubbo 专属配置项，对应 DubboCloudProperties 类。
   cloud:
     # subscribed-services 配置项，设置订阅的应用列表，默认为 * 订阅所有应用。这里，设置为 '' 表示空，不订阅任何的应用。
-    subscribed-services: 'seckill-account-server' # 设置订阅的应用列表，默认为 * 订阅所有应用
+    subscribed-services: '' # 设置订阅的应用列表，默认为 * 订阅所有应用
 
 kill:
   #加入一个混淆字符串(秒杀接口)的salt，为了我避免用户猜出我们的md5值，值任意给，越复杂越好
   url:
     salt: cjy20200922czz0708
 rocketmq:
-  name-server: 4814i260e4.zicp.vip:39938
+  name-server: 127.0.0.1:9876
   producer:
     group: business-group-producer
     topic: redisKillSuccess

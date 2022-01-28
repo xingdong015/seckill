@@ -6,7 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 
-@SpringBootApplication(scanBasePackages = "com.system.design.seckill.account.*")
+@SpringBootApplication
 @MapperScan(basePackages = {"com.system.design.seckill.account.mapper"})
 @Import({MyBatisMapperScannerConfig.class})
 public class SeckillAccountServiceApplication {

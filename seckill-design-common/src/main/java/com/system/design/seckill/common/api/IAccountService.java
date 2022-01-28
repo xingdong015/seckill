@@ -12,14 +12,9 @@ import java.util.List;
  */
 public interface IAccountService {
     Account findById(long id);
-
     int createAccount(Account account);
-
     int deleteAccount(long accountId);
-
     int updateAccount(Account account);
-
     List<Account> getAll();
-
-//    IPage selectByPage(AccountDto accountDto);
+    IPage selectByPage(AccountDto accountDto);
 }
