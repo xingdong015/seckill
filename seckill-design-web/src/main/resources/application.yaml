@@ -18,6 +18,17 @@ spring:
     servlet:
       content-type: text/html
     mode: HTML5
+  # 静态资源缓存配置
+  resources:
+    add-mappings: true
+    cache:
+      cachecontrol:
+        max-age: 3600
+    chain:
+      cache: true
+      enabled: true
+      html-application-cache: true
+    static-locations: classpath:/static/
 
 dubbo:
   registry:
