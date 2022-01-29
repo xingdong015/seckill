@@ -63,6 +63,12 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-gateway -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-gateway</artifactId>
+                <version>2.2.6.RELEASE</version>
+            </dependency>
             <!-- 数据库 -->
             <dependency>
                 <groupId>mysql</groupId>

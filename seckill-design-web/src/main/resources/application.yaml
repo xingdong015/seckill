@@ -1,7 +1,7 @@
 spring:
   application:
     # Dubbo 应用名称
-    name: seckill-app-consumer
+    name: seckill-web
   main:
     # Spring Boot 2.1 需要设定
     allow-bean-definition-overriding: true

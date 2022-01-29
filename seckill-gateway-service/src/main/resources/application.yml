@@ -9,6 +9,18 @@ spring:
   cloud:
     nacos:
       discovery:
+        enabled: true
+        register-enabled: true
         server-addr: rgb-fk.com:8848
-        username: nacos
-        password: nacos
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: seckill_web_route
+          uri: lb://seckill-web
+          predicates:
+            - Path=/seckill-api/**
+          filters:
+            - StripPrefix=1
+
