@@ -1,4 +1,4 @@
-package com.system.design.seckill.web;
+package com.system.design.seckill.web.backend;
 
 import com.alibaba.fastjson.JSON;
 import com.system.design.seckill.common.api.IAccountService;

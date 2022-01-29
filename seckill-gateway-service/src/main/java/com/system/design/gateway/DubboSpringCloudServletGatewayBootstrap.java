@@ -24,6 +24,8 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * Dubbo Spring Cloud Servlet Gateway Bootstrap.
  *
  * @author <a href="mailto:mercyblitz@gmail.com">Mercy</a>
+ *
+ * https://juejin.cn/post/6996852203755405326
  */
 @EnableDiscoveryClient
 @SpringBootApplication(scanBasePackages = "com.system.design.gateway")
