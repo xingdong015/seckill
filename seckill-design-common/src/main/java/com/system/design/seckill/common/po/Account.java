@@ -8,6 +8,8 @@ import lombok.Data;
 import org.apache.ibatis.type.JdbcType;
 import org.springframework.data.annotation.Id;
 
+import java.io.Serializable;
+
 import static com.baomidou.mybatisplus.annotation.FieldFill.INSERT;
 
 /**
@@ -17,7 +19,7 @@ import static com.baomidou.mybatisplus.annotation.FieldFill.INSERT;
 @SuppressWarnings("all")
 @Data
 @TableName("t_account")
-public class Account {
+public class Account implements Serializable {
     @Id
     @TableId(value = "account_id", type = IdType.AUTO)
     private Long accountId;

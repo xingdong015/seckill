@@ -16,5 +16,4 @@ public interface IAccountService {
     int deleteAccount(long accountId);
     int updateAccount(Account account);
     List<Account> getAll();
-    IPage selectByPage(AccountDto accountDto);
 }

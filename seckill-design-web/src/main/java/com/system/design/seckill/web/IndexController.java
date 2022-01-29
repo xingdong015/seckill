@@ -1,6 +1,7 @@
 package com.system.design.seckill.web;
 
 import com.alibaba.fastjson.JSON;
+import com.system.design.seckill.common.api.IAccountService;
 import com.system.design.seckill.common.api.IKillBuzService;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Controller;
@@ -14,8 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class IndexController {
 
-//    @DubboReference(version = "1.0.0")
-    private IKillBuzService killBuzService;
+    @DubboReference(version = "1.0.0")
+    private IAccountService accountService;
 
     @RequestMapping("/index")
     @ResponseBody
@@ -23,7 +24,7 @@ public class IndexController {
         //1. 下发所有活动中的 product
         //2. 端上根据倒计时开始执行秒杀活动
         //3.
-        return JSON.toJSONString(killBuzService.getSeckillList());
+        return JSON.toJSONString(accountService.getAll());
     }
 
 
