@@ -21,6 +21,12 @@ spring:
     time-zone: GMT+8
     serialization:
       write-dates-as-timestamps: false
+  cache:
+    type: caffeine
+    cache-names:
+      - killProductsCache
+    caffeine:
+      spec: maximumSize=1024,refreshAfterWrite=60s
 
 # dubbo 配置项，Dubbo 配置项，对应 DubboConfigurationProperties 类，由 Dubbo Spring Boot 项目定义。
 dubbo:
