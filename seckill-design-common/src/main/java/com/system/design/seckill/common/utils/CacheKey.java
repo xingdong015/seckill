@@ -7,11 +7,8 @@ package com.system.design.seckill.common.utils;
 public interface CacheKey {
 
     interface StockInfo {
-        String STOCK_COUNT = "sock_count";
-        String STOCK_ID    = "stock_id";
-        String STOCK_NAME  = "stock_name";
-        String START_TIME  = "startTime";
-        String END_TIME    = "endTime";
+        String START_TIME = "startTime";
+        String END_TIME   = "endTime";
     }
 
 
@@ -39,6 +36,7 @@ public interface CacheKey {
 
     /**
      * 用户已经抢购过的商品
+     *
      * @param id
      * @return
      */

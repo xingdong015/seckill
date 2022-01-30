@@ -45,23 +45,19 @@ import java.util.stream.Collectors;
 @Slf4j
 public class KillBuzService implements IKillBuzService {
     @Resource
-    private RedisTemplate redisTemplate;
-
+    private RedisTemplate    redisTemplate;
     @Resource
     private RocketMQTemplate rocketMQTemplate;
-
     @Resource
-    private IAccountService accountService;
-
+    private IAccountService  accountService;
     @Value("${kill.url.salt}")
-    private String salt;
-
+    private String           salt;
     @Value("${kill.rocketmq.producer.topic}")
-    private String topic;
+    private String           topic;
 
     @Override
     public List<Map<String, Object>> getSeckillList() {
-        //获取所有的秒杀id
+        //获取所有的秒杀id  TODO 添加内存缓存 guava Cache或者caffeine缓存框架支持
         final Set<String> members = redisTemplate.opsForZSet().reverseRange(CacheKey.allSeckillIdZset(), 0, -1);
         final List<Object> killInfos = redisTemplate.executePipelined((RedisCallback<String>) connection -> {
             for (String member : members) {
@@ -167,13 +163,13 @@ public class KillBuzService implements IKillBuzService {
 
     private void repeatKillCheck(long killId, long userId) {
         if (redisTemplate.opsForSet().isMember(CacheKey.getSeckillBuyPhones(String.valueOf(killId)), userId)) {
-            throw new RepeatKillException(String.join("|",String.valueOf(killId),String.valueOf(userId)));
+            throw new RepeatKillException(String.join("|", String.valueOf(killId), String.valueOf(userId)));
         }
     }
 
     private void urlCheck(long killId, long userId, String md5) {
         if (md5 == null || !md5.equals(getMD5(killId, userId))) {
-            throw new SeckillCloseException(String.join("|",String.valueOf(killId),String.valueOf(userId)));
+            throw new SeckillCloseException(String.join("|", String.valueOf(killId), String.valueOf(userId)));
         }
     }
 

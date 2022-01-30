@@ -1,25 +1,43 @@
 package com.system.design.seckill.web;
 
+import com.alibaba.fastjson.JSON;
+import com.system.design.seckill.common.api.IKillBuzService;
+import com.system.design.seckill.common.api.IProductService;
+import com.system.design.seckill.common.po.Product;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author chengzhengzheng
  * @date 2022/1/29
  */
-@Controller
+@RestController
 @RequestMapping("/seckill")
 @SuppressWarnings("all")
 public class SeckillController {
+
+    @DubboReference(version = "1.0.0")
+    private IProductService productService;
+    @DubboReference(version = "1.0.0")
+    private IKillBuzService killBuzService;
+
     /**
      * 查询秒杀商品列表
      *
      * @return
      */
-    @RequestMapping("/product/list")
-    public String productList() {
-        return "";
+    @RequestMapping("/kill/list")
+    public String kilList() {
+        //TODO 改造为分页情况 @贾凯
+        return JSON.toJSONString(killBuzService.getSeckillList());
     }
 
     /**
@@ -28,9 +46,9 @@ public class SeckillController {
      * @param id
      * @return
      */
-    @RequestMapping("/product/detail")
-    public String productDetail(@RequestParam("id") String id) {
-        return "";
+    @RequestMapping("/kill/detail")
+    public String killDetail(@RequestParam("id") String id) {
+        return JSON.toJSONString(killBuzService.getById(id));
     }
 
     /**
@@ -52,8 +70,8 @@ public class SeckillController {
      * @return
      */
     @RequestMapping("/url/query")
-    public String getSkillUrl(@RequestParam("id") String productId, @RequestParam("id") String id) {
-        return "";
+    public String getSkillUrl(@RequestParam("id") Long productId, @RequestParam("id") Long id) {
+        return JSON.toJSONString(killBuzService.exportKillUrl(productId, id));
     }
 
     /**
@@ -62,8 +80,14 @@ public class SeckillController {
      * @return
      */
     @RequestMapping("/execute/do")
-    public String executeSeckill(@RequestParam("id") String productId, @RequestParam("id") String id) {
-        return "";
+    public String executeSeckill(@RequestParam("id") String productId, @RequestParam("id") String id, @RequestParam("md5") String md5) {
+        try {
+            killBuzService.executeKill(productId, id, md5);
+        }catch (Exception e){
+            e.printStackTrace();
+            return "秒杀失败";
+        }
+        return "正在排队";
     }
 
     /**
