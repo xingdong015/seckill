@@ -1,7 +1,0 @@
-spring:
-  datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: localhost:3306?seckill
-    data-username: root
-    data-password: root
-

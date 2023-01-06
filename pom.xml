@@ -16,12 +16,10 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>seckill-design-service</module>
-        <module>seckill-design-db</module>
         <module>seckill-dubbo-service</module>
-        <module>seckill-dubbo-api</module>
         <module>seckill-design-common</module>
         <module>seckill-design-web</module>
+        <module>seckill-gateway-service</module>
     </modules>
 
     <properties>
@@ -62,20 +60,9 @@
 
     <dependencyManagement>
         <dependencies>
-            <!--  模块依赖-->
-            <dependency>
-                <groupId>com.system.design.seckill</groupId>
-                <artifactId>seckill-design-common</artifactId>
-                <version>${project.version}</version>
-            </dependency>
             <dependency>
                 <groupId>com.system.design.seckill</groupId>
                 <artifactId>seckill-design-service</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.system.design.seckill</groupId>
-                <artifactId>seckill-design-db</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -296,6 +283,12 @@
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>1.2.76</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.system.design.seckill</groupId>
+                <artifactId>seckill-design-common</artifactId>
+                <version>0.0.1-SNAPSHOT</version>
             </dependency>
         </dependencies>
 
