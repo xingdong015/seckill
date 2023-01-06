@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 <!--    <parent>-->
 <!--        <groupId>com.system.design.seckill</groupId>-->
-<!--        <artifactId>seckill-system-design</artifactId>-->
+<!--        <artifactId>seckill</artifactId>-->
 <!--        <version>0.0.1-SNAPSHOT</version>-->
 <!--    </parent>-->
     <parent>
