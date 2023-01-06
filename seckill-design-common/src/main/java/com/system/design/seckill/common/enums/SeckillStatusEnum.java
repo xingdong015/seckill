@@ -2,11 +2,12 @@ package com.system.design.seckill.common.enums;
 
 public enum SeckillStatusEnum {
 
-    SUCCESS(1,"进入候选队列，秒杀结果等待后续通知"),
-    END(0,"秒杀结束"),
-    REPEAT_KILL(-1,"重复秒杀"),
-    INNER_ERROR(-2,"系统异常"),
-    DATE_REWRITE(-3,"数据篡改");
+    SUCCESS(1001,"进入候选队列，秒杀结果等待后续通知"),
+    END(1002,"秒杀结束"),
+    REPEAT_KILL(1003,"重复秒杀"),
+    INNER_ERROR(1004,"系统异常"),
+    NO_STOCK(1005,"系统异常"),
+    DATE_REWRITE(1006,"数据篡改");
 
     private int state;
     private String info;

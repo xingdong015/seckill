@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 一般根节点不需要写属性了，使用默认的就好 -->
+<configuration>
+
+    <contextName>seckill</contextName>
+
+    <!-- 该变量代表日志文件存放的目录名 -->
+    <property name="log.dir" value="logs"/>
+
+    <!--定义一个将日志输出到控制台的appender，名称为STDOUT -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date [%thread %line] %level  %msg  %logger{10}%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ROL-FILE-LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--滚动策略，按照时间滚动 TimeBasedRollingPolicy-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>~/logs/seckill.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!-- 只保留近七天的日志 -->
+            <maxHistory>7</maxHistory>
+            <!-- 用来指定日志文件的上限大小，那么到了这个值，就会删除旧的日志 -->
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%date [%thread %line] %level  %msg  %logger{10}%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--定义一个将日志输出到文件的appender，名称为FILE_LOG -->
+    <appender name="FILE_LOG" class="ch.qos.logback.core.FileAppender">
+        <file>./logs/seckill.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%date [%thread %line] %level  %msg  %logger{10}%n</pattern>
+        </encoder>
+    </appender>
+    <!--异步写日志-->
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->
+        <discardingThreshold>0</discardingThreshold>
+        <!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
+        <queueSize>512</queueSize>
+        <!-- 添加附加的appender,最多只能添加一个 -->
+        <appender-ref ref="FILE_LOG"/>
+    </appender>
+
+    <logger name="com.system.design.seckill" level="debug">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="ASYNC" />
+    </logger>
+
+    <!-- 指定最基础的日志输出级别为DEBUG，并且绑定了名为STDOUT的appender，表示将日志信息输出到控制台 -->
+    <root level="debug">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

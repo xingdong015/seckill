@@ -1,14 +1,18 @@
 package com.system.design.seckill.common.exception;
 
+import com.system.design.seckill.common.enums.SeckillStatusEnum;
+
 /**
  * 秒杀相关的所有业务异常
  */
 public class SeckillException extends RuntimeException {
-    public SeckillException(String message) {
+    private SeckillStatusEnum statusEnum;
+    public SeckillException(String message, SeckillStatusEnum statusEnum) {
         super(message);
+        this.statusEnum = statusEnum;
     }
 
-    public SeckillException(String message, Throwable cause) {
-        super(message, cause);
+    public SeckillStatusEnum getStatusEnum() {
+        return statusEnum;
     }
 }

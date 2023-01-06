@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <title>秒杀商品列表页</title>
+</head>
+<body>
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>商品名称</th>
+            <th>商品价格</th>
+            <th>倒计时</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="good:${goods}">
+            <td th:text="${good.productName}"></td>
+            <td th:text="${good.price}"></td>
+            <td th:text="${good.time}"></td>
+            <td><a th:href="'/product_detail.htm?goodsId='+${good.id}">详情</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

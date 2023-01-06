@@ -1,19 +1,15 @@
 dubbo:
-  cloud:
-    subscribed-services: ${spring.application.name}
   scan:
-    base-packages: com.system.design.seckill.common.api.service
+    base-packages: com.system.design.seckill
   protocol:
     name: dubbo
     port: 20882
   registry:
     # 挂载到 Spring Cloud 注册中心
-    address: spring-cloud://localhost
-# http://127.0.0.1:8848/nacos/v1/ns/catalog/instances?serviceName=seckill-app-server&clusterName=DEFAULT&pageSize=10&pageNo=1&namespaceId=
-# http://127.0.0.1:8848/nacos/#/configurationManagement?dataId=&group=&appName=&namespace=&pageSize=&pageNo=
+    address: spring-cloud://rgb-fk.com:8848
 spring:
   application:
-    name: seckill-app-server
+    name: seckill-order-server
   main:
     allow-bean-definition-overriding: true
   cloud:
@@ -21,4 +17,67 @@ spring:
       username: nacos
       password: nacos
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: rgb-fk.com:8848
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://rgb-fk.com:3306/seckill?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: blogo
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      stat-view-servlet:
+        enabled: true
+      #配置监控统计拦截的filters，stat:监控统计、log4j：日志记录、wall：防御sql注入
+      #如果允许时报错  java.lang.ClassNotFoundException: org.apache.log4j.Priority
+      #则导入 log4j 依赖即可，Maven 地址：https://mvnrepository.com/artifact/log4j/log4j
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，比如不配置stat,我们在Druid的监控页面中就拿不到想要的信息。
+      #      filters: stat,wall,log4j
+      # 合并多个DruidDataSource的监控数据
+      useGlobalDataSourceStat: true
+      # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization:
+      write-dates-as-timestamps: false
+  profiles:
+    active: dev
+server:
+  port: 8082
+rocketmq:
+  name-server: 127.0.0.1:9876
+  producer:
+    group: business-group-producer
+seata:
+  ## 是否开启seata，默认true
+  enabled: true
+  application-id: ${spring.application.name}
+  tx-service-group: ${spring.application.name}-tx-group
+  registry:
+    type: Nacos
+    nacos:
+      application: seata-server
+      server-addr: rgb-fk.com:8848
+      group: SEATA_GROUP
+      username: nacos
+      password: nacos
+  config:
+    type: nacos
+    nacos:
+      server-addr: rgb-fk.com:8848
+      group: SEATA_GROUP
+      username: nacos
+      password: nacos
+#      此配置可以参考  SysMysqlCreateTableManagerImpl 这个源码类来了解配置
+mybatis:
+  table:
+    auto: none
+  model:
+    pack: com.system.design.seckill.common.po
+  database:
+    type: mysql
+mybatis-plus:
+  #1.如果是mybatis 直接在mybatis下增加该配置。
+  #2.如果使用properties配置方式,要写成mapperLocations
+  mapper-locations: classpath*:com/gitee/sunchenbin/mybatis/actable/mapping/*/*.xml

@@ -1,14 +1,7 @@
-dubbo:
-  registry:
-    # 挂载到 Spring Cloud 注册中心
-    address: spring-cloud://localhost
-  cloud:
-    subscribed-services: seckill-app-server
-
 spring:
   application:
     # Dubbo 应用名称
-    name: seckill-app-client
+    name: seckill-web
   main:
     # Spring Boot 2.1 需要设定
     allow-bean-definition-overriding: true
@@ -16,4 +9,37 @@ spring:
     nacos:
       # Nacos 服务发现与注册配置
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: rgb-fk.com:8848
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+    mode: HTML5
+  # 静态资源缓存配置
+  resources:
+    add-mappings: true
+    cache:
+      cachecontrol:
+        max-age: 3600
+    chain:
+      cache: true
+      enabled: true
+      html-application-cache: true
+    static-locations: classpath:/static/
+
+dubbo:
+  registry:
+    # 挂载到 Spring Cloud 注册中心
+    address: spring-cloud://rgb-fk.com:8848
+  # Spring Cloud Alibaba Dubbo 专属配置项，对应 DubboCloudProperties 类
+  cloud:
+    subscribed-services: "*"  # 设置订阅的应用列表，默认为 * 订阅所有应用。
+server:
+  port: 8990
+
+logging:
+  level:
+    root: debug

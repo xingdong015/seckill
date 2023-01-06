@@ -1,0 +1,42 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: seckill-gateway
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      discovery:
+        enabled: true
+        register-enabled: true
+        server-addr: rgb-fk.com:8848
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: seckill_web_route
+          uri: lb://seckill-web
+          predicates:
+            - Path=/seckill-api/**
+            - Query=id, \d+
+          filters:
+            - StripPrefix=1
+            - Log=true
+
+#https://juejin.cn/post/6996852203755405326#heading-8
+#我们可以配置如下规则、那么我们部署方式就是将 seckill-design-web部署在多台机器上、然后通过如下方式进行不同程度的负载均衡路由
+#spring:
+#  cloud:
+#    gateway:
+#      routes:
+#        - id: weight_high
+#          uri: https://weighthigh.org
+#          predicates:
+#            - Weight=group1, 8
+#        - id: weight_low
+#          uri: https://weightlow.org
+#          predicates:
+#            - Weight=group1, 2

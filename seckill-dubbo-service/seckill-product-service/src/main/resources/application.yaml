@@ -1,0 +1,64 @@
+dubbo:
+  scan:
+    base-packages: com.system.design.seckill
+  protocol:
+    name: dubbo
+    port: 20884
+  registry:
+    # 挂载到 Spring Cloud 注册中心
+    address: spring-cloud://rgb-fk.com:8848
+  cloud:
+    subscribed-services: 'seckill-order-server'
+spring:
+  application:
+    name: seckill-product-server
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      username: nacos
+      password: nacos
+      discovery:
+        server-addr: rgb-fk.com:8848
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://rgb-fk.com:3306/seckill?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: blogo
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    serialization:
+      write-dates-as-timestamps: false
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password:
+    jedis:
+      pool:
+        max-active: 200
+        max-wait: 10
+        max-idle: 10
+        min-idle: 0
+    timeout: 10000
+
+
+server:
+  port: 8084
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志
+
+canal:
+  host: 8.141.57.79
+  port: 11111
+  destination: example
+  username:
+  password:
+
+rocketmq:
+  name-server: 127.0.0.1:9876
+  producer:
+    group: product-group-producer
