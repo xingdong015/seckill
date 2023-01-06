@@ -11,17 +11,17 @@
     </parent>
 
     <groupId>com.system.design.seckill</groupId>
-    <artifactId>seckill-system-design</artifactId>
+    <artifactId>seckill</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>seckill-system-design</name>
+    <name>seckill</name>
     <packaging>pom</packaging>
 
     <modules>
         <module>seckill-dubbo-service</module>
-        <module>seckill-design-common</module>
-        <module>seckill-design-web</module>
+        <module>seckill-common</module>
+        <module>seckill-web</module>
         <module>seckill-gateway-service</module>
-        <module>seckill-design-dependency</module>
+        <module>seckill-dependency</module>
         <module>seckill-canal-graphql</module>
     </modules>
 
