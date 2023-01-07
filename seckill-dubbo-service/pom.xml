@@ -3,12 +3,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.system.design.seckill</groupId>
+        <groupId>com.xingdong.seckill</groupId>
         <artifactId>seckill</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.system.design.seckill</groupId>
+    <groupId>com.xingdong.seckill</groupId>
     <artifactId>seckill-dubbo-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -78,8 +78,8 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.system.design.seckill</groupId>
-            <artifactId>seckill-design-common</artifactId>
+            <groupId>com.xingdong.seckill</groupId>
+            <artifactId>seckill-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
         <dependency>
