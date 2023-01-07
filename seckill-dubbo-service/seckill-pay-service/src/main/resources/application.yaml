@@ -1,6 +1,6 @@
 dubbo:
   scan:
-    base-packages: com.system.design.seckill
+    base-packages: com.xingdong.seckill
   protocol:
     name: dubbo
     port: 20883

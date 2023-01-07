@@ -10,7 +10,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>com.system.design.seckill</groupId>
+    <groupId>com.xingdong.seckill</groupId>
     <artifactId>seckill</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>seckill</name>
@@ -28,8 +28,8 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.system.design.seckill</groupId>
-                <artifactId>seckill-design-dependency</artifactId>
+                <groupId>com.xingdong.seckill</groupId>
+                <artifactId>seckill-dependency</artifactId>
                 <version>0.0.1-SNAPSHOT</version>
                 <scope>import</scope>
                 <type>pom</type>

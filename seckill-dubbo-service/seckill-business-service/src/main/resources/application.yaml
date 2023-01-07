@@ -31,7 +31,7 @@ spring:
 # dubbo 配置项，Dubbo 配置项，对应 DubboConfigurationProperties 类，由 Dubbo Spring Boot 项目定义。
 dubbo:
   scan:
-    base-packages: com.system.design.seckill.business
+    base-packages: com.xingdong.seckill.business
   protocol:
     name: dubbo
     port: -1 # 协议端口，-1 表示自增端口，从 20880 开始

@@ -27,7 +27,7 @@ spring:
             - Log=true
 
 #https://juejin.cn/post/6996852203755405326#heading-8
-#我们可以配置如下规则、那么我们部署方式就是将 seckill-design-web部署在多台机器上、然后通过如下方式进行不同程度的负载均衡路由
+#我们可以配置如下规则、那么我们部署方式就是将 seckill-web部署在多台机器上、然后通过如下方式进行不同程度的负载均衡路由
 #spring:
 #  cloud:
 #    gateway:

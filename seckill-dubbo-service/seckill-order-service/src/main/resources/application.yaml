@@ -1,6 +1,6 @@
 dubbo:
   scan:
-    base-packages: com.system.design.seckill
+    base-packages: com.xingdong.seckill
   protocol:
     name: dubbo
     port: 20882
@@ -74,7 +74,7 @@ mybatis:
   table:
     auto: none
   model:
-    pack: com.system.design.seckill.common.po
+    pack: com.xingdong.seckill.common.po
   database:
     type: mysql
 mybatis-plus:

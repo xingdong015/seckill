@@ -8,11 +8,11 @@
         <version>2.2.6.RELEASE</version>
         <relativePath/>
     </parent>
-    <groupId>com.system.design.seckill</groupId>
-    <artifactId>seckill-design-dependency</artifactId>
+    <groupId>com.xingdong.seckill</groupId>
+    <artifactId>seckill-dependency</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>seckill-design-dependency</name>
+    <name>seckill-dependency</name>
     <description>项目中依赖的公共部分</description>
 
     <properties>

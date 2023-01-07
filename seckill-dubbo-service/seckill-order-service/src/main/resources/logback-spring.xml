@@ -47,7 +47,7 @@
         <appender-ref ref="FILE_LOG"/>
     </appender>
 
-    <logger name="com.system.design.seckill" level="debug">
+    <logger name="com.xingdong.seckill" level="debug">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="ASYNC" />
     </logger>
